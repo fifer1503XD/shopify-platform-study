@@ -135,6 +135,19 @@
         </li>
 
         <li class="nav-item">
+          <a href="#modulo-exploring-extending-data" class="nav-link">
+            <span style="color: var(--accent-amber); font-weight: 700;">🧩 Módulo: Exploring & Extending Data Model</span>
+          </a>
+          <ul class="nav-sub-menu">
+            <li><a href="#dm-sec1-model" class="nav-sub-link">1. Shopify's Data Model & Core Objects</a></li>
+            <li><a href="#dm-sec2-quiz" class="nav-sub-link">2. Knowledge Check: Niche & B2B</a></li>
+            <li><a href="#dm-sec3-custom-data" class="nav-sub-link">3. Building Custom Data (Metafields/Metaobjects)</a></li>
+            <li><a href="#dm-sec4-quiz" class="nav-sub-link">4. Knowledge Check: ¿Metafield o Metaobject?</a></li>
+            <li><a href="#dm-sec5-lab-models" class="nav-sub-link">5. Lab: Medidas de Modelos (Model Info)</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
           <a href="#modulo-5-lab" class="nav-link">
             <span style="color: var(--accent-purple); font-weight: 700;">★ 5. Laboratorio Práctico Sandbox</span>
           </a>
@@ -1743,6 +1756,542 @@ class CollectionFilters {
                 <li>En el panel lateral derecho, en <strong>Theme template</strong>, selecciona <code>seasonal-collection</code> y guarda los cambios.</li>
                 <li>Ve a <strong>Online Store &gt; Navigation &gt; Main menu</strong> y añade el enlace hacia <code>All Collections</code> o la colección de verano directamente para que los clientes puedan acceder desde el menú principal.</li>
               </ol>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+      <!-- ========================================================= -->
+      <!-- MODULO: EXPLORING AND EXTENDING SHOPIFY'S DATA MODEL      -->
+      <!-- ========================================================= -->
+      <section class="module-section" id="modulo-exploring-extending-data">
+        <div class="section-header">
+          <span class="section-badge" style="background: rgba(251, 191, 36, 0.2); color: var(--accent-amber);">Módulo Avanzado • Data Architecture</span>
+          <h2 class="section-title">Exploring and Extending Shopify’s Data Model</h2>
+          <p style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 1.05rem;">
+            Aprende cómo Shopify modela las transacciones de e-commerce, explora los objetos fundamentales y de nicho (B2B / Retail), y domina la extensión del esquema de datos mediante Metafields y Metaobjects con prácticas reales.
+          </p>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SECCIÓN 1: SHOPIFY'S DATA MODEL                           -->
+        <!-- ========================================================= -->
+        <div class="subtopic" id="dm-sec1-model">
+          <h3 class="subtopic-title">Sección 1: Shopify’s Data Model & Core Ecommerce Concepts</h3>
+          
+          <p>
+            El modelo de datos de Shopify está diseñado para respaldar todo el ciclo de vida de una transacción de comercio unificado. Para entender cómo interactúan los objetos en la base de datos, examinemos las <strong>5 fases del flujo de compra</strong>:
+          </p>
+
+          <!-- 5 Fases de la experiencia de compra -->
+          <div class="cards-grid">
+            <div class="concept-card">
+              <div class="card-icon icon-cyan">1️⃣</div>
+              <h4>1. Navegación en un Canal (Channel)</h4>
+              <p>
+                El cliente explora productos en un canal de venta (Online Store, POS o app móvil). Cada <strong>Product</strong> posee al menos una <strong>Variant</strong> por defecto y puede agruparse en <strong>Collections</strong> para facilitar el merchandising.
+              </p>
+            </div>
+
+            <div class="concept-card">
+              <div class="card-icon icon-green">2️⃣</div>
+              <h4>2. Carrito de Compras (Cart)</h4>
+              <p>
+                El carrito es específico del canal. En la tienda online se compone de <strong>Cart Line Items</strong> que registran la cantidad de cada variante, calculando el subtotal antes de impuestos, envíos o descuentos.
+              </p>
+            </div>
+
+            <div class="concept-card">
+              <div class="card-icon icon-purple">3️⃣</div>
+              <h4>3. Inicio de Checkout</h4>
+              <p>
+                Flujo optimizado de 1 a 3 páginas donde el comprador ingresa su dirección de envío, método de despacho y cupones de descuento.
+              </p>
+            </div>
+
+            <div class="concept-card">
+              <div class="card-icon icon-amber">4️⃣</div>
+              <h4>4. Pago y Creación de la Orden (Order)</h4>
+              <p>
+                La captura exitosa del pago crea la entidad <strong>Order</strong> y genera las páginas de confirmación (<em>Thank You Page</em> y <em>Order Status Page</em>) con número de pedido y fecha estimada de entrega.
+              </p>
+            </div>
+
+            <div class="concept-card">
+              <div class="card-icon icon-cyan">5️⃣</div>
+              <h4>5. Fulfillment y Despacho</h4>
+              <p>
+                La tienda prepara los productos para despacho. El inventario se actualiza automáticamente en tiempo real a través de todas las ubicaciones físicas (<em>Locations</em>) y se genera el código de seguimiento para el cliente.
+              </p>
+            </div>
+          </div>
+
+          <!-- Tabla de Objetos Core y Recursos Conectados -->
+          <h4 style="color: var(--text-primary); font-size: 1.1rem; margin-top: 2rem; margin-bottom: 0.75rem;">Objetos Fundamentales de E-Commerce en Shopify</h4>
+          <div class="table-wrapper">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Objeto</th>
+                  <th>Descripción del Objeto</th>
+                  <th>Recursos Conectados en el Modelo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Products</strong></td>
+                  <td>Artículos individuales o digitales disponibles para la venta.</td>
+                  <td><code>Collections</code>, <code>Locations</code>, <code>ProductVariants</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Collections</strong></td>
+                  <td>Agrupaciones de productos para navegación y merchandising.</td>
+                  <td><code>Products</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Customers</strong></td>
+                  <td>Compradores registrados o que realizaron pedidos.</td>
+                  <td><code>Orders</code>, <code>Gift cards</code>, <code>Companies</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Companies (B2B)</strong></td>
+                  <td>Entidades corporativas asociadas a clientes para compras B2B al por mayor.</td>
+                  <td><code>Customers</code>, <code>CompanyLocations</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Locations</strong></td>
+                  <td>Ubicaciones físicas donde se almacena stock (almacenes, tiendas minoristas).</td>
+                  <td><code>Products</code>, <code>InventoryLevels</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Orders</strong></td>
+                  <td>Transacciones completadas con detalles de productos y pagos.</td>
+                  <td><code>Products</code>, <code>Locations</code>, <code>Customers</code>, <code>Markets</code>, <code>Companies</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Discounts</strong></td>
+                  <td>Promociones y reducciones de precio para productos o colecciones.</td>
+                  <td><code>Products</code>, <code>Collections</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Markets</strong></td>
+                  <td>Segmentos geográficos con reglas de precios, divisas e idiomas locales.</td>
+                  <td><code>Prices</code>, <code>Catalogs</code>, <code>Orders</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Fulfillment orders</strong></td>
+                  <td>Tareas y etapas necesarias para empaquetar y despachar partes de una orden.</td>
+                  <td><code>Orders</code>, <code>FulfillmentServices</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Fulfillment services</strong></td>
+                  <td>Proveedores logísticos externos (3PL) para almacenamiento y envío.</td>
+                  <td><code>Products</code>, <code>FulfillmentOrders</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Gift cards</strong></td>
+                  <td>Emisión y canje de crédito de tienda en formato de tarjetas de regalo.</td>
+                  <td><code>Customers</code>, <code>Orders</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Selling plan</strong></td>
+                  <td>Configuraciones predefinidas de compra: suscripciones, preventas o cuotas.</td>
+                  <td><code>Products</code>, <code>SellingPlanGroups</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Objetos de Nicho y B2B -->
+          <div class="callout callout-architect" style="margin-top: 1.5rem;">
+            <div class="callout-icon">🏢</div>
+            <div class="callout-content">
+              <h4>Objetos de Nicho para B2B y Retail</h4>
+              <p>
+                Para clientes con requerimientos corporativos (B2B) o tiendas físicas con retiro en sucursal (Retail), Shopify dispone de objetos especializados en Liquid y GraphQL:
+              </p>
+              <ul style="margin-left: 1.25rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                <li><code>customer.b2b?</code>: Booleano que valida si el cliente actual pertenece a una empresa B2B aprobada.</li>
+                <li><code>customer.company_available_locations</code>: Lista de sucursales autorizadas de la empresa compradora.</li>
+                <li><code>customer.current_company</code>: Empresa B2B activa durante la sesión del comprador.</li>
+                <li><code>store_availability</code>: Objeto que consulta el inventario local para retiro en tienda física (<em>Pickup in store</em>).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SECCIÓN 2: KNOWLEDGE CHECK (OBJETOS DE NICHO)             -->
+        <!-- ========================================================= -->
+        <div class="subtopic" id="dm-sec2-quiz">
+          <h3 class="subtopic-title">Sección 2: Knowledge Check (Objetos de Nicho y Casos de Uso)</h3>
+
+          <!-- Pregunta 1: Pickup Availability -->
+          <div class="quiz-container" style="border-color: var(--accent-cyan); margin-bottom: 2rem;">
+            <span class="quiz-badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan);">Pregunta 1 de 2 • Retail & Pickup</span>
+            <h3 class="quiz-question-title">¿Cuáles 3 objetos se necesitan para implementar la disponibilidad de retiro en tienda física (Pickup Availability) para un cliente minorista?</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Selecciona exactamente las 3 respuestas correctas:</p>
+
+            <form id="pickupQuizForm">
+              <div class="quiz-options-list">
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="puOptMarket">
+                  <span>El objeto <code>market</code></span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="puOptLocation">
+                  <span>El objeto <code>location</code></span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="puOptVariant">
+                  <span>El objeto <code>variant</code></span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="puOptStoreAvail">
+                  <span>El objeto <code>store_availability</code></span>
+                </label>
+              </div>
+              <button type="submit" class="quiz-submit-btn" style="background: linear-gradient(135deg, #0284c7, #0369a1);">Verificar Respuesta</button>
+            </form>
+            <div class="quiz-feedback-box" id="pickupQuizFeedback"></div>
+          </div>
+
+          <!-- Pregunta 2: Try Before You Buy -->
+          <div class="quiz-container" style="border-color: var(--accent-purple);">
+            <span class="quiz-badge" style="background: rgba(168, 85, 247, 0.15); color: var(--accent-purple);">Pregunta 2 de 2 • Selling Plans & Bundles</span>
+            <h3 class="quiz-question-title">¿Cuáles 3 objetos necesitarás para implementar un plan de venta "Probar antes de comprar" (Try Before You Buy) para una marca de cosmética que vende paquetes de productos (bundles)?</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Selecciona exactamente las 3 respuestas correctas:</p>
+
+            <form id="tbybQuizForm">
+              <div class="quiz-options-list">
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="tbOptInventory">
+                  <span>El objeto <code>inventory</code></span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="tbOptVariant">
+                  <span>El objeto <code>variant</code></span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="tbOptGroup">
+                  <span>El objeto <code>selling_plan_group</code></span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="tbOptPlan">
+                  <span>El objeto <code>selling_plan</code></span>
+                </label>
+              </div>
+              <button type="submit" class="quiz-submit-btn" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">Verificar Respuesta</button>
+            </form>
+            <div class="quiz-feedback-box" id="tbybQuizFeedback"></div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SECCIÓN 3: BUILDING CUSTOM DATA OBJECTS                   -->
+        <!-- ========================================================= -->
+        <div class="subtopic" id="dm-sec3-custom-data">
+          <h3 class="subtopic-title">Sección 3: Building Custom Data Objects (Metafields & Metaobjects)</h3>
+          
+          <p>
+            Cuando los clientes demandan desplegar información especializada (guías de cuidado de plantas vivas, tablas de medidas de modelos, o certificaciones ecológicas), los <strong>Metafields</strong> y <strong>Metaobjects</strong> permiten extender el esquema relacional nativo sin requerir un CMS externo ni apps pesadas.
+          </p>
+
+          <!-- Beneficios de Custom Data -->
+          <div class="cards-grid">
+            <div class="concept-card">
+              <div class="card-icon icon-green">✨</div>
+              <h4>Mayor Personalización & UX</h4>
+              <p>Permite enriquecer las fichas de producto con información visualmente estructurada y relevante para aumentar la conversión.</p>
+            </div>
+            <div class="concept-card">
+              <div class="card-icon icon-cyan">🧩</div>
+              <h4>Funcionalidad Extendida</h4>
+              <p>Admite propiedades complejas como selectores de color hexadecimal, descargas de PDFs e integración con ERPs para lead times.</p>
+            </div>
+            <div class="concept-card">
+              <div class="card-icon icon-purple">🔄</div>
+              <h4>Disponibilidad Omnicanal</h4>
+              <p>Accesibles tanto en el frontend (Liquid y Storefront API) como en el backend mediante la GraphQL Admin API para sincronización bidireccional.</p>
+            </div>
+          </div>
+
+          <!-- Anatomía de Metafields y Metaobjects -->
+          <h4 style="color: var(--text-primary); font-size: 1.1rem; margin-top: 2rem; margin-bottom: 0.75rem;">Anatomía de los Metafields</h4>
+          <div class="table-wrapper">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Componente</th>
+                  <th>Propósito</th>
+                  <th>Ejemplo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Namespace</strong></td>
+                  <td>Contenedor o categoría para agrupar campos con funciones similares.</td>
+                  <td><code>custom</code>, <code>specs</code>, <code>seo</code>, <code>model</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Key</strong></td>
+                  <td>Nombre identificador único del campo dentro del namespace.</td>
+                  <td><code>wearing_size</code>, <code>battery_life</code>, <code>care_pdf</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Value</strong></td>
+                  <td>El dato persistido fuertemente tipado.</td>
+                  <td><code>"Talla M"</code>, <code>14</code>, <code>#16a34a</code>, referencia GID</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Tipos de Metafields Estándar -->
+          <div class="callout callout-pro-tip" style="margin-top: 1.5rem;">
+            <div class="callout-icon">🏷️</div>
+            <div class="callout-content">
+              <h4>Tipos de Datos Estándar Soportados en Metafields</h4>
+              <p>
+                <code>Color picker</code> (swatches), <code>Measurement</code> (longitud, peso, ancho de manga), <code>Reference</code> (size charts, bundles, productos recomendados, metaobjects), <code>Date & Time</code>, <code>Money</code>, <code>Text</code> (single/multi-line), <code>File</code> (PDFs, imágenes en CDN), <code>Number</code> (integer/decimal), <code>True/False</code> (switches booleanos), <code>JSON</code>, <code>Rating</code> (estrellas/reseñas) y <code>URL</code>.
+              </p>
+            </div>
+          </div>
+
+          <!-- Metaobjects -->
+          <h4 style="color: var(--text-primary); font-size: 1.1rem; margin-top: 2rem; margin-bottom: 0.75rem;">¿Qué son los Metaobjects?</h4>
+          <p>
+            Un <strong>Metaobject</strong> es una entidad de datos completa compuesta por múltiples campos estructurados. Posee dos elementos esenciales:
+          </p>
+          <ul>
+            <li><strong>Definition (Definición):</strong> El esquema que declara la estructura (ej. <code>Model Info</code> con campos nombre, estatura, busto, cintura, caderas).</li>
+            <li><strong>Entries (Entradas):</strong> Los registros o filas individuales de datos cargados (ej. Entrada para <em>Jasmine</em>, Entrada para <em>Shakira</em>).</li>
+          </ul>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SECCIÓN 4: KNOWLEDGE CHECK (METAFIELD VS METAOBJECT)       -->
+        <!-- ========================================================= -->
+        <div class="subtopic" id="dm-sec4-quiz">
+          <h3 class="subtopic-title">Sección 4: Knowledge Check (¿Metafield o Metaobject?)</h3>
+
+          <div class="quiz-container" style="border-color: var(--accent-amber);">
+            <span class="quiz-badge" style="background: rgba(251, 191, 36, 0.15); color: var(--accent-amber);">Evaluación de Arquitectura de Datos</span>
+            <h3 class="quiz-question-title">Determina para cada uno de los 3 casos prácticos si corresponde utilizar un Metafield o un Metaobject:</h3>
+
+            <form id="mfVsMoQuizForm">
+              
+              <!-- Caso 1 -->
+              <div style="background: var(--bg-primary); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                <p style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">
+                  1. Una tienda de joyería artesanal desea incluir notas especiales de envío, tiempos de despacho e instrucciones de manejo dinámicas para productos específicos hechos a mano.
+                </p>
+                <div style="display: flex; gap: 1.5rem;">
+                  <label><input type="radio" name="case1_choice" value="metafield" required> <strong>Metafield</strong></label>
+                  <label><input type="radio" name="case1_choice" value="metaobject"> <strong>Metaobject</strong></label>
+                </div>
+              </div>
+
+              <!-- Caso 2 -->
+              <div style="background: var(--bg-primary); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                <p style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">
+                  2. Una boutique de cuidado capilar masculino desea promocionar varias cajas de suscripción. Desean construir un elemento reutilizable en la página de inicio y el blog que incluya una imagen, descripción temática y conteo de productos de la caja.
+                </p>
+                <div style="display: flex; gap: 1.5rem;">
+                  <label><input type="radio" name="case2_choice" value="metafield" required> <strong>Metafield</strong></label>
+                  <label><input type="radio" name="case2_choice" value="metaobject"> <strong>Metaobject</strong></label>
+                </div>
+              </div>
+
+              <!-- Caso 3 -->
+              <div style="background: var(--bg-primary); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem;">
+                <p style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">
+                  3. Un proveedor de artículos para el hogar desea agregar metadatos a sus artículos de blog para mejorar UX y SEO, incluyendo la biografía del autor, tiempo estimado de lectura y región de publicación.
+                </p>
+                <div style="display: flex; gap: 1.5rem;">
+                  <label><input type="radio" name="case3_choice" value="metafield" required> <strong>Metafield</strong></label>
+                  <label><input type="radio" name="case3_choice" value="metaobject"> <strong>Metaobject</strong></label>
+                </div>
+              </div>
+
+              <button type="submit" class="quiz-submit-btn" style="background: linear-gradient(135deg, #d97706, #b45309);">Verificar Respuestas</button>
+            </form>
+
+            <div class="quiz-feedback-box" id="mfVsMoFeedback"></div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SECCIÓN 5: LAB: BUILDING CUSTOM DATA OBJECTS              -->
+        <!-- ========================================================= -->
+        <div class="subtopic" id="dm-sec5-lab-models">
+          <h3 class="subtopic-title">Sección 5: Lab: Building Custom Data Objects (Model Info para Lily)</h3>
+
+          <div class="callout callout-architect" style="border-left: 4px solid var(--brand-shopify);">
+            <div class="callout-icon">📏</div>
+            <div class="callout-content">
+              <h4>Escenario de Cliente: Medidas de Modelos y Tallas en "Stylish Stitches"</h4>
+              <p>
+                Lily desea que su marca apele a todas las complexiones físicas y contrata a dos modelos con medidas corporales diferentes (*Jasmine* y *Shakira*) para su campaña de moda. En cada ficha de producto (PDP), Lily desea mostrar las medidas exactas de la modelo que viste la prenda y la talla correspondiente que lleva puesta.
+              </p>
+
+              <!-- Tabla de Modelos de Lily -->
+              <div class="table-wrapper" style="margin-top: 1rem;">
+                <table class="comparison-table">
+                  <thead>
+                    <tr>
+                      <th>Nombre de Modelo</th>
+                      <th>Estatura (Height)</th>
+                      <th>Busto (Bust)</th>
+                      <th>Cintura (Waist)</th>
+                      <th>Caderas (Hips)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Jasmine</strong></td>
+                      <td>165 cm (5 ft)</td>
+                      <td>84 cm (33 in)</td>
+                      <td>66 cm (26 in)</td>
+                      <td>91 cm (36 in)</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Shakira</strong></td>
+                      <td>183 cm (6 ft)</td>
+                      <td>112 cm (44 in)</td>
+                      <td>76 cm (37 in)</td>
+                      <td>122 cm (48 in)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pasos de Ejecución del Laboratorio -->
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">1</div>
+              <h4 class="step-title">Paso 1: Crear Metafield para la Talla que Viste la Modelo (Wearing Size)</h4>
+            </div>
+            <div class="step-content">
+              <p>En el Shopify Admin, navega a <strong>Settings &gt; Custom data &gt; Products &gt; Add definition</strong>:</p>
+              <ul>
+                <li><strong>Name:</strong> <code>Wearing Size</code></li>
+                <li><strong>Namespace and key:</strong> <code>model.wearing_size</code></li>
+                <li><strong>Description:</strong> <code>Talla de la prenda que la modelo viste en la campaña</code></li>
+                <li><strong>Type:</strong> <code>Single line text</code></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">2</div>
+              <h4 class="step-title">Paso 2: Crear Definición de Metaobject <code>Model Info</code></h4>
+            </div>
+            <div class="step-content">
+              <p>En <strong>Settings &gt; Custom data &gt; Metaobjects &gt; Add definition</strong> (o en <em>Content &gt; Metaobjects</em>):</p>
+              <ul>
+                <li><strong>Name:</strong> <code>Model Info</code></li>
+                <li><strong>Type:</strong> <code>model_info</code></li>
+                <li><strong>Campos a incorporar:</strong>
+                  <ul>
+                    <li><code>name</code> (Tipo: Single line text)</li>
+                    <li><code>height</code> (Tipo: Dimension)</li>
+                    <li><code>bust</code> (Tipo: Dimension)</li>
+                    <li><code>waist</code> (Tipo: Dimension)</li>
+                    <li><code>hips</code> (Tipo: Dimension)</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">3</div>
+              <h4 class="step-title">Paso 3: Crear las Entradas (Entries) para Jasmine y Shakira</h4>
+            </div>
+            <div class="step-content">
+              <p>Ve a <strong>Content &gt; Metaobjects &gt; Model Info &gt; Add entry</strong>:</p>
+              <ol>
+                <li>Crea la entrada para <strong>Jasmine</strong> con sus medidas (165 cm, Busto 84 cm, Cintura 66 cm, Caderas 91 cm) y guarda.</li>
+                <li>Crea la entrada para <strong>Shakira</strong> con sus medidas (183 cm, Busto 112 cm, Cintura 76 cm, Caderas 122 cm) y guarda.</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">4</div>
+              <h4 class="step-title">Paso 4: Crear Metafield de Referencia a Metaobject en Productos</h4>
+            </div>
+            <div class="step-content">
+              <p>En <strong>Settings &gt; Custom data &gt; Products &gt; Add definition</strong>:</p>
+              <ul>
+                <li><strong>Name:</strong> <code>Model Info</code></li>
+                <li><strong>Namespace and key:</strong> <code>models.model_info</code></li>
+                <li><strong>Type:</strong> <code>Metaobject Reference</code> &gt; Selecciona <code>Model Info</code> (1 entrada).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">5</div>
+              <h4 class="step-title">Paso 5: Asignar Datos en las Fichas de Producto</h4>
+            </div>
+            <div class="step-content">
+              <p>
+                Abre un producto en el Admin (ej. <em>"Classic varsity top"</em>) y en la sección inferior de <strong>Metafields</strong> selecciona a <strong>Jasmine</strong> en <code>models.model_info</code> y escribe <code>Talla S</code> en <code>model.wearing_size</code>.
+              </p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">6</div>
+              <h4 class="step-title">Paso 6: Vincular en el Theme Editor con Dynamic Sources</h4>
+            </div>
+            <div class="step-content">
+              <p>
+                Abre <em>Online Store &gt; Themes &gt; Customize</em> y navega a la plantilla de producto:
+              </p>
+              <ol>
+                <li>En la sección <strong>Product information</strong>, agrega un bloque <strong>Collapsible Row (Fila desplegable)</strong>.</li>
+                <li>Título del bloque: <code>Medidas de la Modelo & Guía de Talla</code>.</li>
+                <li>En el contenido de la fila, haz clic en el icono de <strong>Dynamic Source (Fuente dinámica)</strong> y vincula los campos de <code>Product &gt; models.model_info</code> y <code>model.wearing_size</code>.</li>
+                <li>Guarda y previsualiza en el Storefront.</li>
+              </ol>
+
+              <!-- Snippet Liquid equivalente -->
+              <div class="code-block-container" style="margin-top: 1rem;">
+                <div class="code-header">
+                  <div class="code-meta">
+                    <span class="lang-badge">Liquid</span>
+                    <span class="code-filename">snippets/model-measurements-card.liquid</span>
+                  </div>
+                  <button class="copy-btn">Copiar</button>
+                </div>
+                <pre><code class="language-liquid">{% assign model_entry = product.metafields.models.model_info.value %}
+{% assign wearing_size = product.metafields.model.wearing_size.value %}
+
+{% if model_entry != blank %}
+  &lt;div class="model-fit-card" style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 1.25rem; background: #fafafa; margin: 1rem 0;"&gt;
+    &lt;h4 style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 0.5rem;"&gt;
+      Referencia de Talla: La modelo {{ model_entry.name }} viste talla &lt;strong&gt;{{ wearing_size }}&lt;/strong&gt;
+    &lt;/h4&gt;
+    &lt;ul style="list-style: none; padding: 0; font-size: 0.85rem; color: #4b5563; display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem;"&gt;
+      &lt;li&gt;&lt;strong&gt;Estatura:&lt;/strong&gt; {{ model_entry.height.value }} {{ model_entry.height.unit }}&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;Busto:&lt;/strong&gt; {{ model_entry.bust.value }} {{ model_entry.bust.unit }}&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;Cintura:&lt;/strong&gt; {{ model_entry.waist.value }} {{ model_entry.waist.unit }}&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;Caderas:&lt;/strong&gt; {{ model_entry.hips.value }} {{ model_entry.hips.unit }}&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+{% endif %}</code></pre>
+              </div>
             </div>
           </div>
 

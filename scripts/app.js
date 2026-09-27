@@ -218,4 +218,102 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // Knowledge Check: Pickup Availability
+  const pickupQuizForm = document.getElementById('pickupQuizForm');
+  const pickupQuizFeedback = document.getElementById('pickupQuizFeedback');
+  if (pickupQuizForm && pickupQuizFeedback) {
+    pickupQuizForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const optMarket = document.getElementById('puOptMarket').checked;
+      const optLocation = document.getElementById('puOptLocation').checked; // True
+      const optVariant = document.getElementById('puOptVariant').checked; // True
+      const optStoreAvail = document.getElementById('puOptStoreAvail').checked; // True
+
+      if (!optMarket && optLocation && optVariant && optStoreAvail) {
+        pickupQuizFeedback.className = 'quiz-feedback-box success';
+        pickupQuizFeedback.innerHTML = `
+          <strong>🎉 ¡Excelente! Exactamente:</strong><br>
+          Para consultar y desplegar la disponibilidad de retiro en tienda física se requieren:
+          <ul style="margin-top: 0.5rem; margin-left: 1.25rem;">
+            <li><code>variant</code>: La variante específica seleccionada por el cliente.</li>
+            <li><code>location</code>: La sucursal física donde se almacena el inventario.</li>
+            <li><code>store_availability</code>: El objeto de Liquid que consulta en tiempo real si esa variante está disponible para pickup en dicha ubicación.</li>
+          </ul>
+        `;
+      } else {
+        pickupQuizFeedback.className = 'quiz-feedback-box error';
+        pickupQuizFeedback.innerHTML = `
+          <strong>❌ Revisa tus selecciones:</strong><br>
+          Debes seleccionar exactamente los 3 objetos requeridos: <code>location</code>, <code>variant</code> y <code>store_availability</code>. (El objeto <code>market</code> se utiliza para localización geográfica y divisas, no para pickup físico).
+        `;
+      }
+    });
+  }
+
+  // Knowledge Check: Try Before You Buy (Selling Plans)
+  const tbybQuizForm = document.getElementById('tbybQuizForm');
+  const tbybQuizFeedback = document.getElementById('tbybQuizFeedback');
+  if (tbybQuizForm && tbybQuizFeedback) {
+    tbybQuizForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const optInventory = document.getElementById('tbOptInventory').checked;
+      const optVariant = document.getElementById('tbOptVariant').checked; // True
+      const optGroup = document.getElementById('tbOptGroup').checked; // True
+      const optPlan = document.getElementById('tbOptPlan').checked; // True
+
+      if (!optInventory && optVariant && optGroup && optPlan) {
+        tbybQuizFeedback.className = 'quiz-feedback-box success';
+        tbybQuizFeedback.innerHTML = `
+          <strong>🎉 ¡Correcto!</strong><br>
+          Los 3 objetos necesarios para implementar "Try Before You Buy" o compras con planes de suscripción son:
+          <ul style="margin-top: 0.5rem; margin-left: 1.25rem;">
+            <li><code>variant</code>: La variante del producto asociada a la opción de compra.</li>
+            <li><code>selling_plan_group</code>: Agrupa los diferentes planes de venta aplicables a los productos.</li>
+            <li><code>selling_plan</code>: Define las reglas específicas del plan (período de prueba, frecuencia de cobro, descuentos).</li>
+          </ul>
+        `;
+      } else {
+        tbybQuizFeedback.className = 'quiz-feedback-box error';
+        tbybQuizFeedback.innerHTML = `
+          <strong>❌ Revisa tus respuestas:</strong><br>
+          Los 3 objetos son <code>variant</code>, <code>selling_plan_group</code> y <code>selling_plan</code>.
+        `;
+      }
+    });
+  }
+
+  // Knowledge Check: Metafield vs Metaobject (3 Casos)
+  const mfVsMoQuizForm = document.getElementById('mfVsMoQuizForm');
+  const mfVsMoFeedback = document.getElementById('mfVsMoFeedback');
+  if (mfVsMoQuizForm && mfVsMoFeedback) {
+    mfVsMoQuizForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const case1 = document.querySelector('input[name="case1_choice"]:checked')?.value;
+      const case2 = document.querySelector('input[name="case2_choice"]:checked')?.value;
+      const case3 = document.querySelector('input[name="case3_choice"]:checked')?.value;
+
+      const isC1Ok = case1 === 'metafield';
+      const isC2Ok = case2 === 'metaobject';
+      const isC3Ok = case3 === 'metafield';
+
+      if (isC1Ok && isC2Ok && isC3Ok) {
+        mfVsMoFeedback.className = 'quiz-feedback-box success';
+        mfVsMoFeedback.innerHTML = `
+          <strong>🎉 ¡Perfecto! Dominas la distinción de arquitectura:</strong><br>
+          <ul style="margin-top: 0.5rem; margin-left: 1.25rem;">
+            <li><strong>Caso 1 (Joyería artesanal): Metafield.</strong> Son datos específicos de cada producto (notas de envío, tiempos de despacho individuales).</li>
+            <li><strong>Caso 2 (Cajas de suscripción reutilizables): Metaobject.</strong> Es una entidad estructurada completa (imagen, descripción, conteo de items) que se reutiliza a lo largo de varias páginas y blogs.</li>
+            <li><strong>Caso 3 (Metadatos en Blog Posts): Metafield.</strong> Son campos adicionales asignados directamente al recurso existente (Article / Blog post) para bio de autor y tiempo de lectura.</li>
+          </ul>
+        `;
+      } else {
+        mfVsMoFeedback.className = 'quiz-feedback-box error';
+        mfVsMoFeedback.innerHTML = `
+          <strong>❌ Hay respuestas que revisar:</strong><br>
+          Recordá: Los <strong>Metafields</strong> extienden entidades existentes con campos puntuales (Productos, Artículos). Los <strong>Metaobjects</strong> definen estructuras de datos independientes con múltiples campos que se pueden reutilizar e instanciar muchas veces.
+        `;
+      }
+    });
+  }
 });
