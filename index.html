@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopify Data Architecture & Advanced Liquid Masterclass</title>
+  
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Prism.js Syntax Highlighting Styles -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  
+  <!-- Local Styles -->
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/modules.css">
+  <link rel="stylesheet" href="styles/project-preview.css">
+  <link rel="stylesheet" href="styles/practice-lab.css">
+</head>
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress-bar" id="readingProgress"></div>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <button class="menu-toggle-btn" id="mobileMenuBtn" aria-label="Abrir Menú">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <a href="#" class="nav-brand">
+        <span class="brand-badge">Shopify Dev</span>
+        <span class="brand-title">Data Architecture & Liquid Masterclass</span>
+      </a>
+    </div>
+
+    <div class="nav-actions">
+      <div class="badge-architect">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+        <span>Architect Level</span>
+        <span class="extra-text">• Production Ready</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- App Main Layout Container -->
+  <div class="app-container">
+
+    <!-- Sticky Navigation Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-heading">Módulos del Curso</div>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="#modulo-1" class="nav-link">
+            <span>1. Modelo de Datos de Productos</span>
+          </a>
+          <ul class="nav-sub-menu">
+            <li><a href="#m1-arquitectura" class="nav-sub-link">Products vs. Variants</a></li>
+            <li><a href="#m1-opciones" class="nav-sub-link">Opciones y Restricciones</a></li>
+            <li><a href="#m1-colecciones" class="nav-sub-link">Colecciones Manuales vs Smart</a></li>
+            <li><a href="#m1-apis" class="nav-sub-link">Admin API (GraphQL / REST)</a></li>
+            <li><a href="#m1-csv" class="nav-sub-link">Importación Masiva CSV</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a href="#modulo-2" class="nav-link">
+            <span>2. Metafields y Metaobjects</span>
+          </a>
+          <ul class="nav-sub-menu">
+            <li><a href="#m2-tipos-datos" class="nav-sub-link">Tipos de Datos y Referencias</a></li>
+            <li><a href="#m2-liquid" class="nav-sub-link">Metafields en Liquid</a></li>
+            <li><a href="#m2-metaobjects" class="nav-sub-link">Metaobjects Reutilizables</a></li>
+            <li><a href="#m2-theme-editor" class="nav-sub-link">Theme Editor & Dynamic Sources</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a href="#modulo-3" class="nav-link">
+            <span>3. Filtrado y Búsqueda</span>
+          </a>
+          <ul class="nav-sub-menu">
+            <li><a href="#m3-search-discovery" class="nav-sub-link">Search & Discovery App</a></li>
+            <li><a href="#m3-storefront-api" class="nav-sub-link">Storefront Filtering API</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a href="#modulo-4-proyecto" class="nav-link">
+            <span>4. Proyecto Práctico Portafolio</span>
+          </a>
+          <ul class="nav-sub-menu">
+            <li><a href="#p4-modelo" class="nav-sub-link">Diseño del Modelo Tech</a></li>
+            <li><a href="#p4-liquid-code" class="nav-sub-link">Código Liquid de Producción</a></li>
+            <li><a href="#p4-simulador" class="nav-sub-link">Simulador Mobile/Desktop</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a href="#modulo-lab-dev-store" class="nav-link">
+            <span style="color: var(--brand-shopify); font-weight: 700;">🛍️ Lab: Tienda Dev & Transacción</span>
+          </a>
+          <ul class="nav-sub-menu">
+            <li><a href="#lab-scenario" class="nav-sub-link">Escenario: Stylish Stitches</a></li>
+            <li><a href="#lab-step1" class="nav-sub-link">Paso 1: Crear Dev Store</a></li>
+            <li><a href="#lab-step2" class="nav-sub-link">Paso 2: Shopify Admin & Sidekick</a></li>
+            <li><a href="#lab-step3" class="nav-sub-link">Paso 3: Unified Commerce</a></li>
+            <li><a href="#lab-step4" class="nav-sub-link">Paso 4: Importar CSV Apparel</a></li>
+            <li><a href="#lab-step5" class="nav-sub-link">Paso 5: Tema Horizon</a></li>
+            <li><a href="#lab-step6" class="nav-sub-link">Paso 6: Bogus Gateway</a></li>
+            <li><a href="#lab-quiz" class="nav-sub-link">Knowledge Check (Quiz)</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a href="#modulo-customizing-themes" class="nav-link">
+            <span style="color: var(--accent-cyan); font-weight: 700;">🎨 Módulo: Customizing Themes</span>
+          </a>
+          <ul class="nav-sub-menu">
+            <li><a href="#sec1-storefronts" class="nav-sub-link">1. Storefronts & Tipos de Temas</a></li>
+            <li><a href="#sec2-horizon" class="nav-sub-link">2. Horizon & Theme Editor</a></li>
+            <li><a href="#sec3-building-blocks" class="nav-sub-link">3. Building Blocks & Carpetas</a></li>
+            <li><a href="#sec4-lab-collection" class="nav-sub-link">4. Lab: Colección & CTA Liquid</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a href="#modulo-5-lab" class="nav-link">
+            <span style="color: var(--accent-purple); font-weight: 700;">★ 5. Laboratorio Práctico Sandbox</span>
+          </a>
+          <ul class="nav-sub-menu">
+            <li><a href="#lab-creator" class="nav-sub-link">Creador de Producto & Metafields</a></li>
+            <li><a href="#lab-pdp-render" class="nav-sub-link">Renderizador PDP & Liquid</a></li>
+          </ul>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content-area">
+
+      <!-- Hero Header -->
+      <section class="hero-banner">
+        <div class="hero-tag">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+          Ingeniería de E-Commerce & Arquitectura Shopify
+        </div>
+        <h1 class="hero-title">Dominio de Modelos de Datos, Metaobjects y Liquid</h1>
+        <p class="hero-desc">
+          Guía técnica exhaustiva para desarrolladores y agencias. Aprende a estructurar catálogos enterprise, manipular APIs GraphQL, extender modelos mediante Metaobjects y construir secciones dinámicas ultra-optimizadas para mobile y desktop.
+        </p>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- MODULO 1: MODELO DE DATOS DE PRODUCTOS                    -->
+      <!-- ========================================================= -->
+      <section class="module-section" id="modulo-1">
+        <div class="section-header">
+          <span class="section-badge">Módulo 01</span>
+          <h2 class="section-title">1. Modelo de Datos de Productos en Shopify</h2>
+        </div>
+
+        <p>
+          Antes de escribir una sola línea de Liquid o realizar llamadas a la Admin API, es imprescindible comprender cómo Shopify normaliza y almacena sus entidades de catálogo en su base de datos relacional subyacente.
+        </p>
+
+        <!-- Subtopic: Products vs Variants -->
+        <div class="subtopic" id="m1-arquitectura">
+          <h3 class="subtopic-title">Arquitectura del Producto: Products vs. Variants</h3>
+          <p>
+            En Shopify, la entidad <strong>Product</strong> no es un artículo vendible directamente por sí mismo en el checkout; actúa como un <em>contenedor padre</em> o paraguas conceptual que agrupa metadatos globales (título, descripción HTML, proveedor, tipo de producto, etiquetas y lista de imágenes generales).
+          </p>
+          <p>
+            La entidad <strong>ProductVariant</strong> representa la unidad de inventario comercializable real (relación <strong>1 a N</strong>). Cada variante posee su propio precio, precio de comparación (compare_at_price), SKU, código de barras (barcode), peso físico y puntero directo al inventario.
+          </p>
+
+          <!-- Diagrama de Entidad -->
+          <div class="schema-diagram">
+            <div class="diagram-header">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+              Estructura Relacional del Catálogo (1:N)
+            </div>
+            <div class="tree-flow">
+              <div class="tree-node">
+                <div class="tree-node-title">
+                  <span>Product (Contenedor Padre)</span>
+                  <span class="badge-tag" style="background: rgba(56, 189, 248, 0.2); color: var(--accent-cyan);">Entidad Global</span>
+                </div>
+                <ul class="tree-node-props">
+                  <li><span class="key">id:</span> <span class="type">ID (GID)</span></li>
+                  <li><span class="key">title:</span> <span class="type">String</span></li>
+                  <li><span class="key">handle:</span> <span class="type">String (Slug URL)</span></li>
+                  <li><span class="key">vendor:</span> <span class="type">String</span></li>
+                  <li><span class="key">options:</span> <span class="type">Array&lt;ProductOption&gt;</span></li>
+                  <li><span class="key">media:</span> <span class="type">Array&lt;Media&gt;</span></li>
+                </ul>
+              </div>
+
+              <div class="tree-connector"></div>
+
+              <div class="tree-node">
+                <div class="tree-node-title">
+                  <span>ProductVariant (Item Vendible en Checkout)</span>
+                  <span class="badge-tag" style="background: rgba(149, 191, 71, 0.2); color: var(--brand-shopify);">1 a N Variantes</span>
+                </div>
+                <ul class="tree-node-props">
+                  <li><span class="key">id:</span> <span class="type">ID (GID)</span></li>
+                  <li><span class="key">sku:</span> <span class="type">String</span></li>
+                  <li><span class="key">price:</span> <span class="type">Money</span></li>
+                  <li><span class="key">inventory_item_id:</span> <span class="type">ID</span></li>
+                  <li><span class="key">selected_options:</span> <span class="type">[ {name, value} ]</span></li>
+                  <li><span class="key">requires_shipping:</span> <span class="type">Boolean</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic: Opciones y Valores -->
+        <div class="subtopic" id="m1-opciones">
+          <h3 class="subtopic-title">Opciones y Valores (Options & Values)</h3>
+          <p>
+            Las opciones definen las dimensiones de variación del producto (por ejemplo: <em>Talla</em>, <em>Color</em>, <em>Material</em>). En Liquid se accede mediante el objeto iterativo <code>product.options_with_values</code>.
+          </p>
+
+          <div class="callout callout-warning">
+            <div class="callout-icon">⚠️</div>
+            <div class="callout-content">
+              <h4>Restricción Nativa: 3 Opciones / 100 Variantes</h4>
+              <p>
+                Shopify impone un límite estricto de máximo <strong>3 opciones</strong> por producto y un total combinado de <strong>100 variantes</strong> (ej: 4 tallas x 5 colores x 6 materiales = 120 combinaciones, lo cual excedería el límite). 
+                <strong>Solución de Arquitectura:</strong> Para catálogos complejos, se implementa arquitectura de "Productos Vinculados" (Linked Products) conectados vía Metafields de referencia, o personalizaciones vía <em>Line Item Properties</em>.
+              </p>
+            </div>
+          </div>
+
+          <div class="code-block-container">
+            <div class="code-header">
+              <div class="code-meta">
+                <span class="lang-badge">Liquid</span>
+                <span class="code-filename">snippets/product-option-selector.liquid</span>
+              </div>
+              <button class="copy-btn">Copiar</button>
+            </div>
+            <pre><code class="language-liquid">{% comment %} Renderizado de opciones y valores con control de estado {% endcomment %}
+&lt;div class="product-form-options"&gt;
+  {% for option in product.options_with_values %}
+    &lt;fieldset class="option-fieldset"&gt;
+      &lt;legend class="option-name"&gt;{{ option.name }}: &lt;span class="selected-value"&gt;{{ option.selected_value }}&lt;/span&gt;&lt;/legend&gt;
+      &lt;div class="option-values-list"&gt;
+        {% for value in option.values %}
+          &lt;label class="option-pill {% if option.selected_value == value %}is-active{% endif %}"&gt;
+            &lt;input 
+              type="radio" 
+              name="option-{{ option.name | handleize }}" 
+              value="{{ value | escape }}"
+              {% if option.selected_value == value %}checked{% endif %}
+              data-option-position="{{ option.position }}"
+            &gt;
+            &lt;span&gt;{{ value }}&lt;/span&gt;
+          &lt;/label&gt;
+        {% endfor %}
+      &lt;/div&gt;
+    &lt;/fieldset&gt;
+  {% endfor %}
+&lt;/div&gt;</code></pre>
+          </div>
+        </div>
+
+        <!-- Subtopic: Colecciones -->
+        <div class="subtopic" id="m1-colecciones">
+          <h3 class="subtopic-title">Colecciones: Manuales vs. Automatizadas (Smart Collections)</h3>
+          
+          <div class="table-wrapper">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Característica</th>
+                  <th>Colecciones Manuales (CustomCollections)</th>
+                  <th>Colecciones Automatizadas (SmartCollections)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Mecanismo de Inclusión</strong></td>
+                  <td>Asignación estática 1 por 1 por el administrador.</td>
+                  <td>Reglas dinámicas booleanas (AND / OR).</td>
+                </tr>
+                <tr>
+                  <td><strong>Condiciones Soportadas</strong></td>
+                  <td>No aplica (lista explícita).</td>
+                  <td>Tags, Product Type, Vendor, Price, Compare Price, Inventory Stock.</td>
+                </tr>
+                <tr>
+                  <td><strong>Mantenimiento Operativo</strong></td>
+                  <td>Alto. Requiere intervención manual con nuevos SKUs.</td>
+                  <td>Bajo / Automático en tiempo real al indexar productos.</td>
+                </tr>
+                <tr>
+                  <td><strong>Uso Recomendado</strong></td>
+                  <td>Curaduría editorial, promociones especiales, lookbooks.</td>
+                  <td>Catálogos masivos por categorías, marcas o estado de inventario.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Subtopic: Admin API (GraphQL / REST) -->
+        <div class="subtopic" id="m1-apis">
+          <h3 class="subtopic-title">Creación de Productos vía Código: GraphQL vs. REST Admin API</h3>
+          <p>
+            Shopify recomienda <strong>GraphQL Admin API</strong> como estándar exclusivo para desarrollos modernos debido al costo de consulta medido por complejidad (query cost) en lugar de rate limits ciegos, y a la capacidad de crear productos y variantes anidadas en un solo llamado atómico.
+          </p>
+
+          <div class="tabbed-code-container">
+            <div class="tab-nav">
+              <button class="tab-btn active" data-tab="graphql-create">GraphQL: productCreate</button>
+              <button class="tab-btn" data-tab="graphql-inventory">GraphQL: Inventory Adjustment</button>
+              <button class="tab-btn" data-tab="rest-create">REST API (Legacy Reference)</button>
+            </div>
+
+            <!-- Tab 1: GraphQL Create -->
+            <div class="tab-pane active" data-pane="graphql-create">
+              <div class="code-header">
+                <div class="code-meta">
+                  <span class="lang-badge">GraphQL</span>
+                  <span class="code-filename">mutations/productCreate.graphql</span>
+                </div>
+                <button class="copy-btn">Copiar</button>
+              </div>
+              <pre><code class="language-graphql"># Creación atómica de Producto con Variantes, SKU e Inventario
+mutation CreateCompleteProduct($input: ProductInput!) {
+  productCreate(input: $input) {
+    product {
+      id
+      title
+      handle
+      status
+      variants(first: 5) {
+        nodes {
+          id
+          sku
+          price
+          inventoryItem {
+            id
+            tracked
+          }
+        }
+      }
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+
+# Variables de la petición:
+# {
+#   "input": {
+#     "title": "Auriculares Noise-Cancelling Pro X900",
+#     "vendor": "AcousticLab",
+#     "productType": "Audio Profesional",
+#     "status": "ACTIVE",
+#     "tags": ["audio", "bluetooth-5.3", "pro-audio"]
+#   }
+# }</code></pre>
+            </div>
+
+            <!-- Tab 2: GraphQL Inventory -->
+            <div class="tab-pane" data-pane="graphql-inventory">
+              <div class="code-header">
+                <div class="code-meta">
+                  <span class="lang-badge">GraphQL</span>
+                  <span class="code-filename">mutations/inventoryAdjustQuantities.graphql</span>
+                </div>
+                <button class="copy-btn">Copiar</button>
+              </div>
+              <pre><code class="language-graphql"># Ajuste de niveles de stock en ubicación específica (InventoryLevel)
+mutation AdjustStock($input: InventoryAdjustQuantitiesInput!) {
+  inventoryAdjustQuantities(input: $input) {
+    inventoryAdjustmentGroup {
+      createdAt
+      reason
+      changes {
+        name
+        delta
+        quantityAfterChange
+      }
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+
+# Variables:
+# {
+#   "input": {
+#     "reason": "correction",
+#     "name": "available",
+#     "changes": [
+#       {
+#         "inventoryItemId": "gid://shopify/InventoryItem/4920192849",
+#         "locationId": "gid://shopify/Location/7821903",
+#         "delta": 25
+#       }
+#     ]
+#   }
+# }</code></pre>
+            </div>
+
+            <!-- Tab 3: REST -->
+            <div class="tab-pane" data-pane="rest-create">
+              <div class="code-header">
+                <div class="code-meta">
+                  <span class="lang-badge">HTTP / JSON</span>
+                  <span class="code-filename">POST /admin/api/2024-01/products.json</span>
+                </div>
+                <button class="copy-btn">Copiar</button>
+              </div>
+              <pre><code class="language-json">{
+  "product": {
+    "title": "Auriculares Noise-Cancelling Pro X900",
+    "body_html": "&lt;strong&gt;Audio de alta fidelidad profesional&lt;/strong&gt;",
+    "vendor": "AcousticLab",
+    "product_type": "Audio Profesional",
+    "variants": [
+      {
+        "option1": "Midnight Black",
+        "price": "349.00",
+        "sku": "AC-X900-BLK",
+        "inventory_management": "shopify"
+      }
+    ]
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic: CSV Import/Export -->
+        <div class="subtopic" id="m1-csv">
+          <h3 class="subtopic-title">Importación y Exportación Masiva vía CSV</h3>
+          <p>
+            Para cargas masivas y migraciones de catálogo, el archivo CSV nativo de Shopify requiere una estructura de columnas estrictamente normalizada. La columna <strong>Handle</strong> actúa como clave de agrupación: múltiples filas con el mismo handle representan las variantes de un único producto.
+          </p>
+
+          <div class="code-block-container">
+            <div class="code-header">
+              <div class="code-meta">
+                <span class="lang-badge">CSV</span>
+                <span class="code-filename">products_export_sample.csv</span>
+              </div>
+              <button class="copy-btn">Copiar</button>
+            </div>
+            <pre><code class="language-none">Handle,Title,Body (HTML),Vendor,Type,Tags,Option1 Name,Option1 Value,Option2 Name,Option2 Value,Variant SKU,Variant Price,Variant Inventory Tracker,Variant Inventory Qty
+pro-x900,Auriculares Pro X900,"<p>Driver 45mm</p>",AcousticLab,Audio,"bluetooth,anc",Color,Midnight Black,Edición,Standard,AC-X900-BLK,349.00,shopify,45
+pro-x900,,,,,,Color,Midnight Black,Edición,Studio DAC,AC-X900-BLK-DAC,429.00,shopify,20
+pro-x900,,,,,,Color,Arctic Silver,Edición,Standard,AC-X900-SLV,349.00,shopify,30</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- MODULO 2: METAFIELDS Y METAOBJECTS                        -->
+      <!-- ========================================================= -->
+      <section class="module-section" id="modulo-2">
+        <div class="section-header">
+          <span class="section-badge">Módulo 02</span>
+          <h2 class="section-title">2. Dominio Total de Metafields y Metaobjects</h2>
+        </div>
+
+        <p>
+          Los <strong>Metafields</strong> permiten extender el esquema de datos nativo asociando pares clave-valor fuertemente tipados a productos, variantes, clientes o pedidos. Los <strong>Metaobjects</strong> son entidades completas y reutilizables compuestas por múltiples campos, equivalentes a tablas relacionales personalizadas en Shopify.
+        </p>
+
+        <!-- Subtopic: Tipos de Datos -->
+        <div class="subtopic" id="m2-tipos-datos">
+          <h3 class="subtopic-title">Tipos de Datos en Metafields</h3>
+          
+          <div class="cards-grid">
+            <div class="concept-card">
+              <div class="card-icon icon-green">📄</div>
+              <h4>Texto y Primitivos</h4>
+              <p><code>single_line_text_field</code>, <code>multi_line_text_field</code>, <code>number_integer</code>, <code>number_decimal</code>, <code>boolean</code>, <code>date</code> y <code>color</code>.</p>
+            </div>
+            <div class="concept-card">
+              <div class="card-icon icon-cyan">🔗</div>
+              <h4>Referencias (References)</h4>
+              <p><code>file_reference</code> (PDFs, videos, imágenes en CDN), <code>product_reference</code>, <code>page_reference</code> y <code>metaobject_reference</code>.</p>
+            </div>
+            <div class="concept-card">
+              <div class="card-icon icon-purple">📚</div>
+              <h4>Listas (Lists)</h4>
+              <p>Array tipado: <code>list.single_line_text_field</code> o <code>list.file_reference</code> para galerías de demostración y listas de características.</p>
+            </div>
+            <div class="concept-card">
+              <div class="card-icon icon-amber">⚙️</div>
+              <h4>Estructuras JSON</h4>
+              <p><code>json</code>: Permite persistir estructuras anidadas arbitrarias cuando se requiere flexibilidad no soportada por tipos estándar.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic: Liquid Syntax -->
+        <div class="subtopic" id="m2-liquid">
+          <h3 class="subtopic-title">Metafields en Liquid: Sintaxis y Filtros</h3>
+          <p>
+            En Liquid, el acceso canónico se realiza a través de la notación de objeto <code>{{ resource.metafields.namespace.key.value }}</code>. <strong>Regla de oro:</strong> Siempre incluir la propiedad <code>.value</code> para desempaquetar el objeto tipado subyacente.
+          </p>
+
+          <div class="code-block-container">
+            <div class="code-header">
+              <div class="code-meta">
+                <span class="lang-badge">Liquid</span>
+                <span class="code-filename">snippets/render-metafields.liquid</span>
+              </div>
+              <button class="copy-btn">Copiar</button>
+            </div>
+            <pre><code class="language-liquid">{% comment %} 1. Acceso a Campo Simple de Texto {% endcomment %}
+{% if product.metafields.custom.fabric_origin.value != blank %}
+  &lt;p class="origin-info"&gt;Fabricación: {{ product.metafields.custom.fabric_origin.value }}&lt;/p&gt;
+{% endif %}
+
+{% comment %} 2. Renderizado de Referencia a Archivo (File Reference - PDF / Imagen) {% endcomment %}
+{% assign spec_sheet = product.metafields.custom.spec_sheet_pdf.value %}
+{% if spec_sheet != blank %}
+  &lt;a href="{{ spec_sheet.url }}" target="_blank" class="btn-download"&gt;
+    Descargar Documento Técnico ({{ spec_sheet.file_size | file_size }})
+  &lt;/a&gt;
+{% endif %}
+
+{% comment %} 3. Iteración sobre Lista de Referencias de Imágenes {% endcomment %}
+{% assign tech_diagrams = product.metafields.custom.exploded_view_images.value %}
+{% if tech_diagrams != blank %}
+  &lt;div class="technical-gallery"&gt;
+    {% for image in tech_diagrams %}
+      {{ image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'tech-img' }}
+    {% endfor %}
+  &lt;/div&gt;
+{% endif %}</code></pre>
+          </div>
+        </div>
+
+        <!-- Subtopic: Metaobjects -->
+        <div class="subtopic" id="m2-metaobjects">
+          <h3 class="subtopic-title">Metaobjects: Modelado Reutilizable y Páginas Dinámicas</h3>
+          <p>
+            Un <strong>Metaobject</strong> es un registro estructurado con una definición formal (Schema). Son ideales para entidades que se repiten a lo largo de múltiples productos, como tablas de medidas (Size Charts), perfiles de autores/diseñadores o <em>guías de cuidado y garantía</em>.
+          </p>
+
+          <div class="code-block-container">
+            <div class="code-header">
+              <div class="code-meta">
+                <span class="lang-badge">Liquid</span>
+                <span class="code-filename">sections/metaobject-warranty-block.liquid</span>
+              </div>
+              <button class="copy-btn">Copiar</button>
+            </div>
+            <pre><code class="language-liquid">{% comment %} Consumo de Metaobject referenciado desde el Producto {% endcomment %}
+{% assign warranty_entry = product.metafields.custom.warranty_and_care.value %}
+
+{% if warranty_entry != blank %}
+  &lt;div class="warranty-card" style="border-left: 4px solid #95bf47; padding: 1.5rem; background: #f8fafc;"&gt;
+    &lt;h3&gt;{{ warranty_entry.policy_name }}&lt;/h3&gt;
+    &lt;p class="coverage"&gt;<strong>Plazo de Cobertura:</strong> {{ warranty_entry.duration_months }} meses&lt;/p&gt;
+    
+    {% comment %} Iterar lista interna dentro del metaobject {% endcomment %}
+    &lt;h4&gt;Protocolo de Mantenimiento:&lt;/h4&gt;
+    &lt;ul&gt;
+      {% for tip in warranty_entry.maintenance_tips.value %}
+        &lt;li&gt;{{ tip }}&lt;/li&gt;
+      {% endfor %}
+    &lt;/ul&gt;
+  &lt;/div&gt;
+{% endif %}</code></pre>
+          </div>
+        </div>
+
+        <!-- Subtopic: Theme Editor & Dynamic Sources -->
+        <div class="subtopic" id="m2-theme-editor">
+          <h3 class="subtopic-title">Conexión con el Theme Editor (Dynamic Sources)</h3>
+          <p>
+            En la arquitectura <strong>Online Store 2.0 (OS 2.0)</strong>, los esquemas de secciones y bloques (`schema JSON`) permiten definir configuraciones que se pueden conectar dinámicamente con Metafields y Metaobjects sin alterar código.
+          </p>
+          <div class="callout callout-architect">
+            <div class="callout-icon">💡</div>
+            <div class="callout-content">
+              <h4>Arquitectura sin Código para Clientes</h4>
+              <p>
+                Al vincular Metafields como <em>Dynamic Sources</em> en el Theme Editor, los editores y gestores de catálogo de la tienda pueden cambiar especificaciones o asociar tablas de cuidado desde la interfaz visual nativa de Shopify, garantizando un acoplamiento limpio entre contenido y diseño.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- MODULO 3: FILTRADO Y BUSQUEDA                             -->
+      <!-- ========================================================= -->
+      <section class="module-section" id="modulo-3">
+        <div class="section-header">
+          <span class="section-badge">Módulo 03</span>
+          <h2 class="section-title">3. Filtrado y Búsqueda con Datos Personalizados</h2>
+        </div>
+
+        <p>
+          Las tiendas enterprise demandan sistemas de filtrado por facetas (Facet Filtering) avanzados, como filtrar colecciones por rango de frecuencia, tipo de material o compatibilidad, alimentados directamente por Metafields.
+        </p>
+
+        <!-- Subtopic: Search & Discovery -->
+        <div class="subtopic" id="m3-search-discovery">
+          <h3 class="subtopic-title">Shopify Search & Discovery App</h3>
+          <p>
+            La aplicación oficial <em>Shopify Search & Discovery</em> permite activar filtros nativos basados en:
+          </p>
+          <ul style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-secondary);">
+            <li>Disponibilidad de stock (`filter.v.availability`).</li>
+            <li>Rango de precios (`filter.v.price.gte` / `filter.v.price.lte`).</li>
+            <li>Opciones de producto (`filter.v.option.color`).</li>
+            <li><strong>Metafields personalizados</strong> (`filter.p.m.custom.material` o `filter.p.m.custom.connectivity`).</li>
+          </ul>
+        </div>
+
+        <!-- Subtopic: Storefront Filtering API -->
+        <div class="subtopic" id="m3-storefront-api">
+          <h3 class="subtopic-title">Storefront Filtering API & AJAX Rendering</h3>
+          <p>
+            Para crear una experiencia de filtrado instantánea sin recargar la página completa, consumimos la <strong>Shopify Section Rendering API</strong> pasando los parámetros de filtro mediante JavaScript (Fetch).
+          </p>
+
+          <div class="code-block-container">
+            <div class="code-header">
+              <div class="code-meta">
+                <span class="lang-badge">JavaScript (ES6+)</span>
+                <span class="code-filename">assets/collection-filters.js</span>
+              </div>
+              <button class="copy-btn">Copiar</button>
+            </div>
+            <pre><code class="language-javascript">// Implementación de Facet Filter reactivo con Section Rendering API
+class CollectionFilters {
+  constructor(formElement, gridContainerId) {
+    this.form = formElement;
+    this.gridContainer = document.getElementById(gridContainerId);
+    this.bindEvents();
+  }
+
+  bindEvents() {
+    this.form.addEventListener('change', () => this.applyFilters());
+  }
+
+  async applyFilters() {
+    const formData = new FormData(this.form);
+    const params = new URLSearchParams(formData);
+    
+    // Indicamos a Shopify que solo re-renderice la sección de grilla de productos
+    params.set('section_id', 'main-collection-product-grid');
+    
+    // Actualizamos URL en el navegador sin recargar
+    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
+
+    try {
+      this.gridContainer.classList.add('is-loading');
+      
+      const response = await fetch(`${window.location.pathname}?${params.toString()}`);
+      const htmlText = await response.text();
+      
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlText, 'text/html');
+      const newGridContent = doc.getElementById('main-collection-product-grid');
+
+      if (newGridContent) {
+        this.gridContainer.innerHTML = newGridContent.innerHTML;
+      }
+    } catch (error) {
+      console.error('Error al aplicar filtros de colección:', error);
+    } finally {
+      this.gridContainer.classList.remove('is-loading');
+    }
+  }
+}</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- MODULO 4: PROYECTO PRACTICO DE PORTAFOLIO                 -->
+      <!-- ========================================================= -->
+      <section class="module-section" id="modulo-4-proyecto">
+        <div class="section-header">
+          <span class="section-badge" style="background: rgba(168, 85, 247, 0.15); color: var(--accent-purple);">Módulo 04 • Proyecto Práctico</span>
+          <h2 class="section-title">4. Proyecto de Portafolio: Ficha de Producto Ultra-Técnica</h2>
+        </div>
+
+        <p>
+          En este proyecto construimos una solución integral para productos de alta gama (tecnología/audio). Integramos especificaciones de ingeniería con Metafields, soporte de manuales en PDF y un Metaobject de Garantía y Cuidados con validaciones Liquid condicionales y diseño 100% adaptable para Desktop y Mobile.
+        </p>
+
+        <!-- Subtopic: Modelo de Datos -->
+        <div class="subtopic" id="p4-modelo">
+          <h3 class="subtopic-title">Esquema del Proyecto Práctico</h3>
+          
+          <div class="cards-grid">
+            <div class="concept-card">
+              <div class="card-icon icon-cyan">🧩</div>
+              <h4>Metafields del Producto</h4>
+              <ul style="font-size: 0.85rem; color: var(--text-secondary); margin-left: 1rem; line-height: 1.6;">
+                <li><code>custom.tech_specs</code> (JSON estructurado)</li>
+                <li><code>custom.specs_pdf</code> (file_reference para manual PDF)</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <div class="card-icon icon-green">🛡️</div>
+              <h4>Metaobject: warranty_and_care</h4>
+              <ul style="font-size: 0.85rem; color: var(--text-secondary); margin-left: 1rem; line-height: 1.6;">
+                <li><code>title</code> (Single line text)</li>
+                <li><code>coverage_period</code> (Single line text)</li>
+                <li><code>cleaning_instructions</code> (List of text)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic: Código Liquid -->
+        <div class="subtopic" id="p4-liquid-code">
+          <h3 class="subtopic-title">Código Liquid de Producción: sections/product-tech-specs.liquid</h3>
+          
+          <div class="code-block-container">
+            <div class="code-header">
+              <div class="code-meta">
+                <span class="lang-badge">Liquid</span>
+                <span class="code-filename">sections/product-tech-specs.liquid</span>
+              </div>
+              <button class="copy-btn">Copiar</button>
+            </div>
+            <pre><code class="language-liquid">{% comment %}
+  Section: Product Technical Specs & Warranty Metaobject
+  Solo se renderiza si el producto posee datos de especificaciones cargados.
+{% endcomment %}
+
+{% assign specs = product.metafields.custom.tech_specs.value %}
+{% assign pdf_doc = product.metafields.custom.specs_pdf.value %}
+{% assign warranty = product.metafields.custom.warranty_and_care.value %}
+
+{% if specs != blank or warranty != blank %}
+  &lt;section class="shopify-section-tech-specs page-width" id="TechSpecs-{{ section.id }}"&gt;
+    &lt;div class="tech-specs-container"&gt;
+      
+      &lt;div class="tech-specs-header"&gt;
+        &lt;span class="tech-subheading"&gt;{{ section.settings.subheading | default: 'Ingeniería y Rendimiento' }}&lt;/span&gt;
+        &lt;h2 class="tech-title"&gt;{{ section.settings.heading | default: 'Especificaciones Técnicas' }}&lt;/h2&gt;
+      &lt;/div&gt;
+
+      &lt;div class="tech-specs-grid"&gt;
+        
+        {% comment %} Columna 1: Especificaciones Técnicas (JSON Metafield) {% endcomment %}
+        {% if specs != blank %}
+          &lt;div class="tech-card specs-box"&gt;
+            &lt;h3 class="card-headline"&gt;Detalles del Hardware&lt;/h3&gt;
+            &lt;dl class="specs-definition-list"&gt;
+              {% for item in specs %}
+                &lt;div class="spec-row"&gt;
+                  &lt;dt class="spec-term"&gt;{{ item[0] | replace: '_', ' ' | capitalize }}&lt;/dt&gt;
+                  &lt;dd class="spec-desc"&gt;{{ item[1] }}&lt;/dd&gt;
+                &lt;/div&gt;
+              {% endfor %}
+            &lt;/dl&gt;
+
+            {% if pdf_doc != blank %}
+              &lt;a href="{{ pdf_doc.url }}" class="btn-download-pdf" target="_blank" rel="noopener noreferrer"&gt;
+                &lt;svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;
+                  &lt;path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"&gt;&lt;/path&gt;
+                  &lt;polyline points="14 2 14 8 20 8"&gt;&lt;/polyline&gt;
+                &lt;/svg&gt;
+                &lt;span&gt;Descargar Manual Oficial en PDF ({{ pdf_doc.file_size | file_size }})&lt;/span&gt;
+              &lt;/a&gt;
+            {% endif %}
+          &lt;/div&gt;
+        {% endif %}
+
+        {% comment %} Columna 2: Metaobject de Garantía y Cuidado {% endcomment %}
+        {% if warranty != blank %}
+          &lt;div class="tech-card warranty-box"&gt;
+            &lt;span class="badge-warranty"&gt;Garantía Oficial&lt;/span&gt;
+            &lt;h3 class="card-headline"&gt;{{ warranty.title }}&lt;/h3&gt;
+            &lt;p class="warranty-coverage"&gt;{{ warranty.coverage_period }}&lt;/p&gt;
+
+            &lt;div class="care-instructions-block"&gt;
+              &lt;h4 class="care-subtitle"&gt;Guía de Mantenimiento:&lt;/h4&gt;
+              &lt;ul class="care-list"&gt;
+                {% for tip in warranty.cleaning_instructions.value %}
+                  &lt;li&gt;{{ tip }}&lt;/li&gt;
+                {% endfor %}
+              &lt;/ul&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        {% endif %}
+
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+{% endif %}
+
+{% schema %}
+{
+  "name": "Especificaciones Técnicas",
+  "tag": "section",
+  "class": "section-tech-specs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título de la Sección",
+      "default": "Especificaciones y Cuidados"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subtítulo",
+      "default": "Ingeniería de Audio"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Especificaciones Técnicas (Metafields)"
+    }
+  ]
+}
+{% endschema %}</code></pre>
+          </div>
+        </div>
+
+        <!-- Subtopic: Simulador Interactivo Mobile / Desktop -->
+        <div class="subtopic" id="p4-simulador">
+          <h3 class="subtopic-title">Simulador Interactivo de Renderizado en Vivo</h3>
+          <p>
+            Prueba cómo reacciona la sección en pantallas de escritorio vs. smartphones, y valida cómo la directiva condicional Liquid <code>{% if specs != blank %}</code> previene la inyección de HTML vacío cuando un producto no tiene metafields asignados.
+          </p>
+
+          <!-- Componente Simulador -->
+          <div class="project-simulator-container">
+            <div class="simulator-toolbar">
+              <div class="simulator-title-group">
+                <div class="simulator-status-dot"></div>
+                <strong style="font-size: 0.9rem; color: #ffffff;">Live Section Preview: product-tech-specs.liquid</strong>
+              </div>
+
+              <div class="viewport-controls">
+                <button class="viewport-btn active" id="viewDesktopBtn">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                  </svg>
+                  <span>Desktop (100%)</span>
+                </button>
+                <button class="viewport-btn" id="viewMobileBtn">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                  </svg>
+                  <span>Mobile (375px)</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Escenario interactivo -->
+            <div class="simulator-stage">
+              <div class="device-frame mode-desktop" id="deviceFrame">
+                <div id="shopifyLivePreview">
+                  <!-- Rendered dynamically by scripts/preview-engine.js -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Barra de Control de Estado de Datos -->
+            <div class="data-mock-toggle-bar">
+              <div id="dataStateStatus">
+                <span style="color: #95bf47; font-weight: 700;">● Metafields Poblados</span> (Renderizado Activo)
+              </div>
+              <button class="mock-state-btn" id="toggleDataStateBtn">
+                Vaciar Metafields (Simular null)
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- LAB: CREAR DEV STORE CON DATOS Y SIMULAR TRANSACCIÓN              -->
+      <!-- ================================================================= -->
+      <section class="module-section" id="modulo-lab-dev-store">
+        <div class="section-header">
+          <span class="section-badge" style="background: rgba(149, 191, 71, 0.2); color: var(--brand-shopify);">Laboratorio Guiado • Fundamentos</span>
+          <h2 class="section-title">Lab: Build a dev store with product data and simulate a transaction</h2>
+          <p style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 1.05rem;">
+            Construcción de una tienda de desarrollo para indumentaria ("Stylish Stitches"), exploración del Shopify Admin, importación masiva de catálogo y simulación de transacciones con pasarela de prueba.
+          </p>
+        </div>
+
+        <!-- Escenario del Proyecto -->
+        <div class="subtopic" id="lab-scenario">
+          <div class="callout callout-architect" style="border-left: 4px solid var(--accent-cyan);">
+            <div class="callout-icon">👗</div>
+            <div class="callout-content">
+              <h4>Escenario de Cliente: "Stylish Stitches"</h4>
+              <p>
+                Un negocio de indumentaria y moda de autor llamado <strong>"Stylish Stitches"</strong>, propiedad de la diseñadora Lily, está iniciando su transformación digital para expandir su alcance mediante una tienda online en Shopify. Ante el desafío de llevar sus prendas de alta confección al mundo virtual, Lily recurre a vos para construir y configurar su tienda desde las bases.
+              </p>
+              <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
+                <em>Nota de arquitectura:</em> Nunca utilices una tienda real de producción para estas actividades prácticas. Crearemos una <strong>Development Store (Tienda de Desarrollo)</strong> en Shopify Partners para ejecutar personalizaciones de tema, scripts Liquid y pruebas backend sin costos ni riesgos.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 1: Crear Dev Store -->
+        <div class="subtopic" id="lab-step1">
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">1</div>
+              <h3 class="step-title">Paso 1: Registro en Shopify Partners y Creación de la Tienda de Desarrollo</h3>
+            </div>
+            <div class="step-content">
+              <p>Sigue estos pasos en el portal de partners de Shopify:</p>
+              <ol>
+                <li>Crea una cuenta en <strong><a href="https://www.shopify.com/partners" target="_blank" style="color: var(--accent-cyan);">Shopify Partners</a></strong> (si aún no posees una).</li>
+                <li>Haz clic en tu nombre en la esquina superior derecha y selecciona <strong>Dev Dashboard</strong>.</li>
+                <li>En el menú lateral izquierdo, haz clic en <strong>Dev stores (Tiendas de desarrollo)</strong>.</li>
+                <li>Haz clic en el botón <strong>Create dev store (Crear tienda de desarrollo)</strong>.</li>
+                <li>Asigna un nombre a tu tienda (por ejemplo: <code>stylish-stitches-lab</code>) y selecciona el propósito de la tienda (Build a new store for a client).</li>
+                <li><strong style="color: var(--accent-amber);">IMPORTANTE:</strong> <em>No selecciones "Generate test data for store"</em>. Dejaremos la tienda limpia para importar nuestro propio catálogo de indumentaria en el Paso 4.</li>
+                <li>Haz clic en <strong>Create store</strong>. ¡Listo! Serás redirigido directamente al panel principal de administración (Shopify Admin).</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 2: Shopify Admin y Sidekick -->
+        <div class="subtopic" id="lab-step2">
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">2</div>
+              <h3 class="step-title">Paso 2: Familiarización con los Elementos Clave del Shopify Admin</h3>
+            </div>
+            <div class="step-content">
+              <p>
+                El <strong>Shopify Admin</strong> es el centro neurálgico donde gestionarás todo el negocio. En la barra superior encontrarás a <strong>Shopify Sidekick</strong>, el asistente de inteligencia artificial nativo capaz de asistirte en la configuración de la tienda, generación de copys de producto y resolución de dudas técnicas.
+              </p>
+
+              <!-- Grid de Entidades Fundamentales -->
+              <div class="cards-grid" style="margin-top: 1rem;">
+                <div class="concept-card">
+                  <div class="card-icon icon-green">📦</div>
+                  <h4>Products & Variants</h4>
+                  <p>
+                    Las mercancías físicas o digitales que vendes. Una prenda como una remera de Lily se compone de opciones (Talla: S, M, L; Color: Azul, Verde). Cada combinación específica (ej. "Talla M en Color Azul") conforma una <strong>Variant</strong> con su propio inventario y SKU. Los productos también se vinculan a <em>Locations</em> (ubicaciones físicas de inventario), modelos de suscripción y <em>Shopify Markets</em> para localización internacional.
+                  </p>
+                </div>
+
+                <div class="concept-card">
+                  <div class="card-icon icon-cyan">🗂️</div>
+                  <h4>Collections (Colecciones)</h4>
+                  <p>
+                    Agrupaciones de productos para facilitar el descubrimiento y aplicar descuentos:
+                    <br><strong>• Automated (Smart) Collections:</strong> Se pueblan solas en tiempo real según condiciones (tags, precio, tipo o stock).
+                    <br><strong>• Manual Collections:</strong> Curaduría estática donde seleccionas manualmente los ítems.
+                  </p>
+                </div>
+
+                <div class="concept-card">
+                  <div class="card-icon icon-purple">👥</div>
+                  <h4>Customers (Clientes)</h4>
+                  <p>
+                    El objeto <code>Customer</code> almacena nombres, contactos, historial de órdenes y direcciones. Permite crear cuentas de cliente para autocompletado en checkout y segmentación para campañas de retención.
+                  </p>
+                </div>
+
+                <div class="concept-card">
+                  <div class="card-icon icon-amber">🧾</div>
+                  <h4>Orders (Pedidos)</h4>
+                  <p>
+                    El eslabón relacional que conecta clientes con productos vendidos, gestionando el ciclo de vida del pago, autorización bancaria y estados de fulfillment (despacho).
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 3: Unified Commerce -->
+        <div class="subtopic" id="lab-step3">
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">3</div>
+              <h3 class="step-title">Paso 3: Explorando el Resto del Admin & Unified Commerce</h3>
+            </div>
+            <div class="step-content">
+              <p>Debajo de las entidades de e-commerce principales, dispones de módulos clave:</p>
+              <ul>
+                <li><strong>Content (Contenido):</strong> Repositorio centralizado de archivos multimedia en CDN y el gestor de <em>Metaobjects</em>.</li>
+                <li><strong>Discounts (Descuentos):</strong> Reglas de monto fijo, porcentaje, "Compra X y lleva Y" (BXGY), envíos gratis y reglas avanzadas programadas con <em>Shopify Functions</em>.</li>
+                <li><strong>Finance, Analytics & Marketing:</strong> Reportes de margen bruto, valor promedio del pedido (AOV), embudos de conversión y sesiones web.</li>
+                <li><strong>Sales Channels (Comercio Unificado):</strong>
+                  <ul>
+                    <li><em>Online Store:</em> Gestión de temas Liquid, páginas estáticas y blogs.</li>
+                    <li><em>Point of Sale (POS):</em> Para ventas presenciales en tiendas físicas, ferias o pop-ups de moda.</li>
+                    <li><em>Shop App:</em> Canal móvil con más de 100 millones de compradores activos con checkout acelerado (Shop Pay).</li>
+                  </ul>
+                </li>
+                <li><strong>Settings (Configuración):</strong> Configuración de monedas, impuestos, pasarelas de pago, shipping zones y permisos.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 4: Importar Datos Apparel CSV -->
+        <div class="subtopic" id="lab-step4">
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">4</div>
+              <h3 class="step-title">Paso 4: Importar Datos de Indumentaria de Muestra (Apparel CSV)</h3>
+            </div>
+            <div class="step-content">
+              <p>Démosle vida a la tienda de Lily cargando el catálogo de prueba:</p>
+              <ol>
+                <li>Descarga el archivo oficial de prueba: <strong><a href="https://github.com/shopifypartners/product-csvs/blob/master/apparel.csv" target="_blank" style="color: var(--brand-shopify); font-weight: 600;">apparel.csv en GitHub de Shopify Partners</a></strong>.</li>
+                <li>En el Shopify Admin, ve a <strong>Products</strong> y haz clic en el botón superior <strong>Import</strong>.</li>
+                <li>Sube el archivo <code>apparel.csv</code> y confirma la importación.</li>
+                <li>Verifica que los productos aparezcan en la grilla con sus respectivos precios, fotos y etiquetas (tags).</li>
+                <li>Abre el producto <strong>"Classic varsity top"</strong> e inspecciona cómo se estructuran las opciones y variantes de tallas y colores.</li>
+                <li><em>Opcional:</em> Ve a <strong>Products &gt; Collections &gt; Add collection</strong> y crea una colección manual "Colección Destacada" y una colección inteligente "Ropa en Stock" con la condición <code>Inventory stock &gt; 0</code>.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 5: Tema Horizon -->
+        <div class="subtopic" id="lab-step5">
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">5</div>
+              <h3 class="step-title">Paso 5: Previsualizar la Tienda y Explorar el Tema Horizon</h3>
+            </div>
+            <div class="step-content">
+              <p>
+                Al crear una nueva tienda de desarrollo, Shopify instala automáticamente el tema <strong>Horizon</strong> (o el tema estándar Dawn/OS 2.0). 
+              </p>
+              <p>
+                Dirígete a <strong>Online Store &gt; Themes</strong> y haz clic en <strong>View your store</strong> para ver cómo luce la tienda en el frontend con las prendas y colecciones recién importadas.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 6: Simular Transacción Bogus Gateway -->
+        <div class="subtopic" id="lab-step6">
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">6</div>
+              <h3 class="step-title">Paso 6: Simular una Transacción de Compra Completa (Bogus Gateway)</h3>
+            </div>
+            <div class="step-content">
+              <p>
+                Para probar el flujo integral de checkout y generación de órdenes sin realizar cobros reales con tarjeta de crédito:
+              </p>
+              <ol>
+                <li><strong>Obtén la contraseña de la tienda:</strong> En el Admin, ve a <em>Online Store &gt; Preferences &gt; Password protection</em> para ver la contraseña de acceso público.</li>
+                <li><strong>Activa la pasarela de prueba (Bogus Gateway):</strong> Ve a <em>Settings &gt; Payments</em>. En la sección de proveedores, selecciona <em>(for testing) Bogus Gateway</em> y activa la pasarela.</li>
+                <li><strong>Realiza una compra de prueba en el Storefront:</strong> Navega a la tienda, añade una prenda al carrito y procede al Checkout.</li>
+              </ol>
+
+              <div class="bogus-gateway-card">
+                <h4 style="color: var(--accent-cyan); font-size: 0.95rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                  💳 Datos Oficiales para Bogus Gateway Test
+                </h4>
+                <div class="bogus-param-row">
+                  <span style="color: #94a3b8;">Nombre en la tarjeta:</span>
+                  <span style="color: #f8fafc; font-family: var(--font-mono); font-weight: 600;">Bogus Gateway</span>
+                </div>
+                <div class="bogus-param-row">
+                  <span style="color: #94a3b8;">Número de tarjeta (Transacción exitosa):</span>
+                  <span style="color: #4ade80; font-family: var(--font-mono); font-weight: 700;">1</span>
+                </div>
+                <div class="bogus-param-row">
+                  <span style="color: #94a3b8;">Número de tarjeta (Simular fallo):</span>
+                  <span style="color: #f87171; font-family: var(--font-mono); font-weight: 700;">2</span>
+                </div>
+                <div class="bogus-param-row">
+                  <span style="color: #94a3b8;">Fecha de Vencimiento:</span>
+                  <span style="color: #f8fafc; font-family: var(--font-mono);">Cualquier fecha futura (ej: 12/28)</span>
+                </div>
+                <div class="bogus-param-row">
+                  <span style="color: #94a3b8;">Código de Seguridad (CVV):</span>
+                  <span style="color: #f8fafc; font-family: var(--font-mono); font-weight: 600;">111</span>
+                </div>
+              </div>
+
+              <p style="margin-top: 0.75rem;">
+                4. Al completar el pedido, regresa a <strong>Orders</strong> en el Shopify Admin. Verás la orden creada con su respectivo cliente, total facturado y estado listo para preparar.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Knowledge Check Interactivo -->
+        <div class="subtopic" id="lab-quiz">
+          <div class="quiz-container">
+            <span class="quiz-badge">Control de Conocimientos • Knowledge Check</span>
+            <h3 class="quiz-question-title">¿Qué acciones hacen que una tienda de desarrollo (Dev Store) sea NO transferible a un cliente?</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">
+              Selecciona todas las opciones correctas y presiona "Verificar Respuesta".
+            </p>
+
+            <form id="devStoreQuizForm">
+              <div class="quiz-options-list">
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="quizOpt1">
+                  <span>Habilitar funciones de vista previa para desarrolladores (Developer Preview features).</span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="quizOpt2">
+                  <span>Elegir usar los datos de prueba autogenerados por Shopify al crear la tienda.</span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="quizOpt3">
+                  <span>Elegir construir una tienda de desarrollo específica para Shopify Plus (Plus dev store).</span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="quizOpt4">
+                  <span>Usar e instalar el tema Horizon de Shopify.</span>
+                </label>
+              </div>
+
+              <button type="submit" class="quiz-submit-btn">Verificar Respuesta</button>
+            </form>
+
+            <div class="quiz-feedback-box" id="quizFeedback"></div>
+          </div>
+        </div>
+
+      <!-- ========================================================= -->
+      <!-- MODULO: CUSTOMIZING THEMES (PERSONALIZACIÓN DE TEMAS)     -->
+      <!-- ========================================================= -->
+      <section class="module-section" id="modulo-customizing-themes">
+        <div class="section-header">
+          <span class="section-badge" style="background: rgba(56, 189, 248, 0.2); color: var(--accent-cyan);">Módulo Avanzado • Storefronts & Themes</span>
+          <h2 class="section-title">Customizing Themes (Personalización de Temas en Shopify)</h2>
+          <p style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 1.05rem;">
+            Aprende sobre las distintas opciones de storefronts en el ecosistema de Shopify, la arquitectura Online Store 2.0, personalización sin código con el Theme Editor y desarrollo de secciones Liquid personalizadas para colecciones estacionales.
+          </p>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SECCIÓN 1: STOREFRONTS & TIPOS DE TEMAS                   -->
+        <!-- ========================================================= -->
+        <div class="subtopic" id="sec1-storefronts">
+          <h3 class="subtopic-title">Sección 1: Shopify Storefront Customization and Themes</h3>
+          <p>
+            Los <strong>Storefronts (escaparates de venta)</strong> permiten brindar experiencias de compra únicas en cualquier punto de contacto donde se encuentren los clientes: sitios web, aplicaciones móviles, terminales de punto de venta e incluso videojuegos. La tienda online basada en web es la variante más popular, pero no es la única.
+          </p>
+          <p>
+            Todas las variantes se conectan con la lógica de negocio y los datos centralizados de Shopify mediante el Shopify Admin o las APIs públicas:
+          </p>
+
+          <!-- Tabla Comparativa de Variantes de Storefront -->
+          <div class="table-wrapper">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Tipo de Storefront</th>
+                  <th>Online Store (Clásica)</th>
+                  <th>Custom Storefront (Hydrogen)</th>
+                  <th>Custom Storefront (Self-Hosted)</th>
+                  <th>Mobile Apps (Nativas)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Resumen del Stack</strong></td>
+                  <td>Web construida con Liquid, hosteada 100% por Shopify.</td>
+                  <td>Web construida con Hydrogen (React/Remix), hosteada en Shopify Oxygen.</td>
+                  <td>Web construida con frameworks JS (Next.js, Angular), auto-alojada.</td>
+                  <td>Apps nativas iOS y Android con SDKs móviles de Shopify.</td>
+                </tr>
+                <tr>
+                  <td><strong>Ejemplo Real</strong></td>
+                  <td><span class="badge-tag" style="background: rgba(239, 68, 68, 0.2); color: #f87171;">Netflix Shop</span></td>
+                  <td><span class="badge-tag" style="background: rgba(56, 189, 248, 0.2); color: var(--accent-cyan);">Nour Hammour</span></td>
+                  <td><span class="badge-tag" style="background: rgba(168, 85, 247, 0.2); color: var(--accent-purple);">YouFoodz</span></td>
+                  <td><span class="badge-tag" style="background: rgba(251, 191, 36, 0.2); color: var(--accent-amber);">Fashion Nova App</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Infraestructura de Hosting</strong></td>
+                  <td>Shopify Global Cloud</td>
+                  <td>Shopify Oxygen (Edge global)</td>
+                  <td>Plataforma a elección (AWS, Vercel, Azure)</td>
+                  <td>App Store / Google Play</td>
+                </tr>
+                <tr>
+                  <td><strong>Tecnologías de Desarrollo</strong></td>
+                  <td>Liquid, HTML5, CSS3, Vanilla JS</td>
+                  <td>Hydrogen, React, Remix, Tailwind</td>
+                  <td>Next.js, Nuxt, Angular, Ruby, etc.</td>
+                  <td>Swift, Kotlin, React Native, Flutter</td>
+                </tr>
+                <tr>
+                  <td><strong>Acceso a Datos de Shopify</strong></td>
+                  <td>Motor de renderizado Liquid nativo</td>
+                  <td>Storefront API (GraphQL)</td>
+                  <td>Storefront API (GraphQL)</td>
+                  <td>Storefront API & Mobile Checkout SDKs</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Tipos de Temas y Casos Comunes -->
+          <h4 style="color: var(--text-primary); font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Tipos de Temas de Shopify</h4>
+          <div class="cards-grid">
+            <div class="concept-card">
+              <div class="card-icon icon-green">🛍️</div>
+              <h4>1. Temas Preconstruidos (Shopify Theme Store)</h4>
+              <p>
+                Opciones gratuitas y de pago creadas por Shopify y partners certificados. Todos los temas de la Theme Store son rigurosamente auditados en rendimiento (Core Web Vitals), accesibilidad y seguridad. Se pueden personalizar sin código mediante el Theme Editor o editando su código Liquid.
+              </p>
+            </div>
+            <div class="concept-card">
+              <div class="card-icon icon-purple">⚡</div>
+              <h4>2. Temas Custom a Medida</h4>
+              <p>
+                Desarrollados desde cero para marcas con requerimientos de UX/UI complejos, integraciones ERP avanzadas o flujos B2B únicos que exceden las capacidades de un tema genérico.
+              </p>
+            </div>
+          </div>
+
+          <!-- Casos Comunes de Clientes en Agencias -->
+          <div class="callout callout-architect">
+            <div class="callout-icon">💼</div>
+            <div class="callout-content">
+              <h4>Peticiones Habituales de Clientes en el Mundo Real</h4>
+              <ul style="margin-left: 1.25rem; font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">
+                <li><strong>Expansión Global y Multidivisa:</strong> Configurar selectores de idiomas y divisas nativos con <em>Shopify Markets</em>.</li>
+                <li><strong>Nuevas Líneas de Productos:</strong> Adaptar la ficha de producto para desplegar tablas de medidas en indumentaria versus especificaciones en accesorios.</li>
+                <li><strong>Migración a Online Store 2.0:</strong> Modernizar temas heredados a plantillas JSON modulares para admitir fuentes dinámicas de Metafields.</li>
+                <li><strong>Expansión B2B:</strong> Implementar el tema oficial <em>Trade</em> de Shopify diseñado para listas de precios al por mayor y pedidos masivos.</li>
+                <li><strong>Headless Enterprise:</strong> Desacoplar el frontend con <em>Hydrogen & Oxygen</em> para empresas con stacks tecnológicos heterogéneos.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Principios Rectores -->
+          <div class="callout callout-pro-tip">
+            <div class="callout-icon">⭐</div>
+            <div class="callout-content">
+              <h4>Mejores Prácticas de Desarrollo de Temas (Shopify Best Practices)</h4>
+              <p>
+                <strong>1. Performance ante todo:</strong> Mínimo JavaScript bloqueante y carga diferida de imágenes.
+                <br><strong>2. Propósito definido (Purpose-built):</strong> Evitar sobrecargar temas con opciones innecesarias.
+                <br><strong>3. UX de primer nivel y Mobile First:</strong> El 75%+ de las transacciones ocurren en smartphones.
+                <br><strong>4. Accesibilidad (WCAG):</strong> Estructuras semánticas y contrastes legibles.
+                <br><strong>5. Simplicidad de personalización:</strong> Diseñar esquemas intuitivos para administradores no técnicos.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SECCIÓN 2: HORIZON & THEME EDITOR                         -->
+        <!-- ========================================================= -->
+        <div class="subtopic" id="sec2-horizon">
+          <h3 class="subtopic-title">Sección 2: Customizing Horizon with the Theme Editor</h3>
+          <p>
+            Comprender la jerarquía visual de un tema es indispensable antes de realizar personalizaciones. Una página típica de e-commerce en Online Store 2.0 se organiza en 5 capas:
+          </p>
+
+          <div class="table-wrapper">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Nivel</th>
+                  <th>Componente</th>
+                  <th>Descripción Técnica</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>1</strong></td>
+                  <td><strong>The Layout</strong></td>
+                  <td>La base estructural del tema (ej. <code>layout/theme.liquid</code>). Aloja elementos persistentes globales como encabezados (Header) y pies de página (Footer).</td>
+                </tr>
+                <tr>
+                  <td><strong>2</strong></td>
+                  <td><strong>The Template</strong></td>
+                  <td>Controla lo que se renderiza en una página específica (ej. <code>templates/product.json</code>, <code>templates/index.json</code>).</td>
+                </tr>
+                <tr>
+                  <td><strong>3</strong></td>
+                  <td><strong>Section Groups</strong></td>
+                  <td>Contenedores modulares de grupos de secciones y app blocks (ej. <code>sections/header-group.json</code>).</td>
+                </tr>
+                <tr>
+                  <td><strong>4</strong></td>
+                  <td><strong>The Sections</strong></td>
+                  <td>Módulos de contenido reutilizables y reordenables que se inyectan en plantillas JSON (archivos <code>.liquid</code> en <code>/sections</code>).</td>
+                </tr>
+                <tr>
+                  <td><strong>5</strong></td>
+                  <td><strong>The Blocks</strong></td>
+                  <td>Micro-componentes anidados dentro de una sección (títulos, botones, textos, ratings) que pueden agregarse, borrarse o reordenarse libremente.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Introducción a Horizon -->
+          <div class="step-card" style="margin-top: 1.5rem;">
+            <div class="step-header">
+              <div class="step-number" style="background: var(--accent-cyan);">H</div>
+              <h4 class="step-title">El Tema Horizon: El Estándar de Referencia OS 2.0</h4>
+            </div>
+            <div class="step-content">
+              <p>
+                <strong>Horizon</strong> es una plantilla ultra-optimizada diseñada por Shopify para demostrar las mejores prácticas de la arquitectura Online Store 2.0:
+              </p>
+              <ul>
+                <li>Plantillas 100% JSON en todas las páginas para admitir <em>App Blocks</em> y <em>Theme Blocks</em>.</li>
+                <li>Enfoque <em>Mobile-First</em> con uso mínimo de JavaScript para garantizar tiempos de carga instantáneos.</li>
+                <li>Máxima accesibilidad y facilidad de personalización drag-and-drop.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Práctica Theme Editor -->
+          <div class="callout callout-architect">
+            <div class="callout-icon">🛠️</div>
+            <div class="callout-content">
+              <h4>Práctica: Personalización con el Theme Editor</h4>
+              <ol style="margin-left: 1.25rem; font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">
+                <li><strong>Confirmar instalación de Horizon:</strong> En <em>Online Store &gt; Themes</em>, verifica que Horizon esté añadido a tu biblioteca.</li>
+                <li><strong>Explorar Secciones:</strong> Haz clic en <strong>Customize (Personalizar)</strong>. Navega por las páginas (Home, Catalog, Contact, Featured Collections) y experimenta añadiendo secciones de formulario de contacto o artículos de blog.</li>
+                <li><strong>Explorar Theme Settings:</strong> En la barra lateral izquierda, abre <em>Theme Settings</em> para configurar la tipografía corporativa, paleta de colores y enlaces a redes sociales.</li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Knowledge Check Quiz: Métodos de Acceso al Theme Editor -->
+          <div class="quiz-container" style="border-color: var(--accent-cyan);">
+            <span class="quiz-badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan);">Knowledge Check • Theme Editor</span>
+            <h3 class="quiz-question-title">Según la documentación de Shopify, ¿cuáles de los siguientes son métodos válidos para acceder al Theme Editor durante el desarrollo? (Selecciona todas las correctas)</h3>
+
+            <form id="themeEditorQuizForm">
+              <div class="quiz-options-list">
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="teQuizOpt1">
+                  <span>Ejecutar tu tema como un tema de desarrollo utilizando Shopify CLI (<code>shopify theme dev</code>).</span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="teQuizOpt2">
+                  <span>Utilizar la integración integrada de Theme Editor dentro de Visual Studio Code.</span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="teQuizOpt3">
+                  <span>Conectar una rama de GitHub a tu tienda utilizando la app oficial de integración de Shopify con GitHub.</span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="teQuizOpt4">
+                  <span>Subir tu tema empaquetado como archivo <code>.zip</code> a la tienda de Shopify.</span>
+                </label>
+              </div>
+
+              <button type="submit" class="quiz-submit-btn" style="background: linear-gradient(135deg, #0284c7, #0369a1);">Verificar Respuesta</button>
+            </form>
+
+            <div class="quiz-feedback-box" id="themeEditorFeedback"></div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SECCIÓN 3: THEME BUILDING BLOCKS & CARPETAS               -->
+        <!-- ========================================================= -->
+        <div class="subtopic" id="sec3-building-blocks">
+          <h3 class="subtopic-title">Sección 3: Theme Building Blocks & Directory Structure</h3>
+          <p>
+            Todos los temas de Shopify siguen una estructura estandarizada de directorios obligatoria. Esta organización divide el código en archivos de marcado Liquid, recursos de soporte (assets), configuración JSON y snippets reutilizables:
+          </p>
+
+          <!-- Estructura de Directorios Árbol -->
+          <div class="code-block-container">
+            <div class="code-header">
+              <div class="code-meta">
+                <span class="lang-badge">File Tree</span>
+                <span class="code-filename">Estructura Estándar de un Tema Shopify OS 2.0</span>
+              </div>
+            </div>
+            <pre><code class="language-none">📦 shopify-theme/
+├── 📁 assets/       # CSS, JavaScript compilado, fuentes e imágenes estáticas del tema
+├── 📁 blocks/       # Theme Blocks reutilizables independientes
+├── 📁 config/       # settings_schema.json y settings_data.json (configuración del theme editor)
+├── 📁 layout/       # theme.liquid (plantilla base de layout global)
+├── 📁 locales/      # Archivos de traducción y localización multi-idioma (es.json, en.default.json)
+├── 📁 sections/     # Módulos Liquid y grupos JSON de secciones (header, footer, banners)
+├── 📁 snippets/     # Micro-trozos de Liquid reutilizables incluidos vía {% render 'snippet' %}
+└── 📁 templates/    # Plantillas de páginas (.json o .liquid)
+    └── 📁 customers/ # Plantillas específicas de clientes (account, login, register, addresses)</code></pre>
+          </div>
+
+          <!-- Tabla de Componentes y Ubicaciones -->
+          <div class="table-wrapper">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Componente</th>
+                  <th>Tipo de Archivo</th>
+                  <th>Ubicación en el Tema</th>
+                  <th>Propósito Principal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Layout</strong></td>
+                  <td><code>.liquid</code></td>
+                  <td><code>/layout</code></td>
+                  <td>Esqueleto HTML envolvente (encabezados, scripts globales, footer).</td>
+                </tr>
+                <tr>
+                  <td><strong>Template</strong></td>
+                  <td><code>.json</code> / <code>.liquid</code></td>
+                  <td><code>/templates</code></td>
+                  <td>Estructura y secciones de páginas (Home, Producto, Colección, Carrito).</td>
+                </tr>
+                <tr>
+                  <td><strong>Section Groups</strong></td>
+                  <td><code>.json</code></td>
+                  <td><code>/sections</code></td>
+                  <td>Contenedores para encabezados (header-group) y pies de página (footer-group).</td>
+                </tr>
+                <tr>
+                  <td><strong>Sections</strong></td>
+                  <td><code>.liquid</code></td>
+                  <td><code>/sections</code></td>
+                  <td>Módulos de UI con lógica Liquid y esquema de configuración <code>{% schema %}</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong>Blocks</strong></td>
+                  <td>Declarados en <code>schema</code></td>
+                  <td>Dentro de Sections / Blocks</td>
+                  <td>Sub-elementos dinámicos configurables por el comerciante.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Páginas Esenciales -->
+          <h4 style="color: var(--text-primary); font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Páginas Clave en un E-Commerce de Shopify</h4>
+          <div class="cards-grid">
+            <div class="concept-card">
+              <h4><code>index.json</code></h4>
+              <p>Página de inicio (Home Page). El punto de entrada principal donde se comunican los valores de marca.</p>
+            </div>
+            <div class="concept-card">
+              <h4><code>collection.json</code></h4>
+              <p>Listado de productos pertenecientes a una colección específica con filtros y paginación.</p>
+            </div>
+            <div class="concept-card">
+              <h4><code>product.json</code></h4>
+              <p>Página de detalle de producto (PDP) con selector de variantes, precio, compra y metafields.</p>
+            </div>
+            <div class="concept-card">
+              <h4><code>cart.json</code></h4>
+              <p>Resumen del carrito de compras antes del paso al checkout seguro.</p>
+            </div>
+            <div class="concept-card">
+              <h4><code>customers/account.json</code></h4>
+              <p>Portal privado para consultar historial de compras, estado del envío y direcciones.</p>
+            </div>
+            <div class="concept-card">
+              <h4><code>blog.json</code> & <code>article.json</code></h4>
+              <p>Motor de publicaciones y contenidos editoriales para SEO y marketing de contenidos.</p>
+            </div>
+          </div>
+
+          <!-- Knowledge Check Quiz: CSS Folder -->
+          <div class="quiz-container" style="border-color: var(--accent-amber);">
+            <span class="quiz-badge" style="background: rgba(251, 191, 36, 0.15); color: var(--accent-amber);">Knowledge Check • Estructura de Archivos</span>
+            <h3 class="quiz-question-title">¿En qué carpeta del tema debes agregar las hojas de estilo CSS?</h3>
+
+            <form id="cssFolderQuizForm">
+              <div class="quiz-options-list">
+                <label class="quiz-option-label">
+                  <input type="radio" name="css_folder_opt" value="sections">
+                  <span><code>/sections</code></span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="radio" name="css_folder_opt" value="assets">
+                  <span><code>/assets</code></span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="radio" name="css_folder_opt" value="snippets">
+                  <span><code>/snippets</code></span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="radio" name="css_folder_opt" value="config">
+                  <span><code>/config</code></span>
+                </label>
+              </div>
+
+              <button type="submit" class="quiz-submit-btn" style="background: linear-gradient(135deg, #d97706, #b45309);">Verificar Respuesta</button>
+            </form>
+
+            <div class="quiz-feedback-box" id="cssFolderFeedback"></div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SECCIÓN 4: LAB: BUILD A COLLECTION PAGE                   -->
+        <!-- ========================================================= -->
+        <div class="subtopic" id="sec4-lab-collection">
+          <h3 class="subtopic-title">Sección 4: Lab: Build a Collection Page with a Liquid Section</h3>
+          
+          <div class="callout callout-architect" style="border-left: 4px solid var(--brand-shopify);">
+            <div class="callout-icon">☀️</div>
+            <div class="callout-content">
+              <h4>Escenario de Negocio: Preventa Estacional de "Stylish Stitches"</h4>
+              <p>
+                Lily está fascinada con la velocidad de desarrollo de su tienda. Ahora su equipo ha terminado la <strong>Colección de Verano</strong> y desea comenzar a aceptar <strong>Preventas (Pre-orders)</strong> de inmediato. Lily necesita una <em>plantilla de colección estacional</em> que sea reutilizable tanto para la temporada actual como para futuras colecciones de invierno o primavera.
+              </p>
+              <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
+                <strong>Requerimientos de la Plantilla:</strong>
+                <br>1. Título y descripción de la colección actual.
+                <br>2. Sección de Llamado a la Acción (CTA) para invitar a la preventa con texto configurable.
+                <br>3. Grilla de productos vinculados a la colección.
+              </p>
+            </div>
+          </div>
+
+          <!-- Pasos de Ejecución del Laboratorio -->
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">1</div>
+              <h4 class="step-title">Paso 1: Crear la Colección de Verano en el Shopify Admin</h4>
+            </div>
+            <div class="step-content">
+              <p>
+                En el Admin, ve a <strong>Products &gt; Collections &gt; Create collection</strong>. Asigna el título <code>Colección de Verano 2026</code>, agrega una descripción atractiva y añade 2 o 3 productos de indumentaria. Guarda la colección.
+              </p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">2</div>
+              <h4 class="step-title">Paso 2: Crear la Nueva Plantilla JSON en el Theme Editor</h4>
+            </div>
+            <div class="step-content">
+              <p>
+                Abre el Theme Editor (<em>Online Store &gt; Themes &gt; Customize</em>). En el menú desplegable superior de páginas:
+              </p>
+              <ol>
+                <li>Selecciona <strong>Collections</strong> y haz clic en <strong>⊕ Create template</strong>.</li>
+                <li>Nombre de la plantilla: <code>seasonal-collection</code>.</li>
+                <li>Basada en: <code>Default collection</code>.</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">3</div>
+              <h4 class="step-title">Paso 3: Crear la Sección Liquid <code>sections/call-to-action.liquid</code></h4>
+            </div>
+            <div class="step-content">
+              <p>
+                En el editor de código (o vía Shopify CLI local), crea el archivo <strong><code>sections/call-to-action.liquid</code></strong> con el siguiente código Liquid de producción y su respectivo <code>schema</code>:
+              </p>
+
+              <div class="code-block-container">
+                <div class="code-header">
+                  <div class="code-meta">
+                    <span class="lang-badge">Liquid</span>
+                    <span class="code-filename">sections/call-to-action.liquid</span>
+                  </div>
+                  <button class="copy-btn">Copiar</button>
+                </div>
+                <pre><code class="language-liquid">{% comment %}
+  Section: Call to Action para Colecciones Estacionales (Pre-orders)
+  Permite a Lily personalizar anuncios de preventa y enlaces directos.
+{% endcomment %}
+
+&lt;div class="seasonal-cta-banner page-width" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 2rem; margin: 2rem auto; text-align: center;"&gt;
+  &lt;span style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #059669; letter-spacing: 0.05em;"&gt;
+    {{ section.settings.subheading | default: '¡Preventa Exclusiva!' }}
+  &lt;/span&gt;
+  
+  &lt;h2 style="font-size: 1.8rem; font-weight: 800; color: #0f172a; margin: 0.5rem 0;"&gt;
+    {% if section.settings.custom_title != blank %}
+      {{ section.settings.custom_title }}
+    {% else %}
+      ¡La colección {{ collection.title }} ya está disponible!
+    {% endif %}
+  &lt;/h2&gt;
+
+  {% if section.settings.cta_text != blank %}
+    &lt;div style="font-size: 1rem; color: #475569; max-width: 650px; margin: 0 auto 1.5rem; line-height: 1.6;"&gt;
+      {{ section.settings.cta_text }}
+    &lt;/div&gt;
+  {% endif %}
+
+  {% if section.settings.button_label != blank %}
+    &lt;a href="{{ section.settings.button_link | default: '#product-grid' }}" style="display: inline-block; background: #0f172a; color: #ffffff; padding: 0.85rem 1.75rem; border-radius: 8px; font-weight: 700; text-decoration: none; transition: background 0.2s;"&gt;
+      {{ section.settings.button_label }}
+    &lt;/a&gt;
+  {% endif %}
+&lt;/div&gt;
+
+{% schema %}
+{
+  "name": "Banner Preventa Estacional",
+  "tag": "section",
+  "class": "section-seasonal-cta",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subtítulo / Etiqueta",
+      "default": "Preventa Oficial"
+    },
+    {
+      "type": "text",
+      "id": "custom_title",
+      "label": "Título Personalizado",
+      "info": "Si se deja en blanco, mostrará automáticamente '¡La colección [Nombre] ya está disponible!'"
+    },
+    {
+      "type": "richtext",
+      "id": "cta_text",
+      "label": "Información de Preventa",
+      "default": "<p>Asegura tus prendas de confección limitada antes de que se agote el stock de producción inicial.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto del Botón",
+      "default": "Explorar Prendas en Preventa"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Enlace del Botón"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner Preventa Estacional"
+    }
+  ]
+}
+{% endschema %}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">4</div>
+              <h4 class="step-title">Paso 4: Integrar la Sección en la Plantilla JSON <code>collection.seasonal-collection.json</code></h4>
+            </div>
+            <div class="step-content">
+              <p>
+                Edita el archivo <code>templates/collection.seasonal-collection.json</code> para posicionar el bloque <code>call_to_action</code> entre el banner principal de la colección y la grilla de productos:
+              </p>
+
+              <div class="code-block-container">
+                <div class="code-header">
+                  <div class="code-meta">
+                    <span class="lang-badge">JSON</span>
+                    <span class="code-filename">templates/collection.seasonal-collection.json</span>
+                  </div>
+                  <button class="copy-btn">Copiar</button>
+                </div>
+                <pre><code class="language-json">{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": true
+      }
+    },
+    "call_to_action": {
+      "type": "call-to-action",
+      "settings": {
+        "subheading": "Edición Limitada de Verano",
+        "custom_title": "¡Reserva tus prendas de verano antes del lanzamiento oficial!",
+        "button_label": "Ver Catálogo Completo"
+      }
+    },
+    "product_grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 16,
+        "columns_desktop": 4
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "call_to_action",
+    "product_grid"
+  ]
+}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">5</div>
+              <h4 class="step-title">Paso 5: Asignar la Plantilla y Publicar en el Menú Principal</h4>
+            </div>
+            <div class="step-content">
+              <ol>
+                <li>En el Admin de Shopify, ve a <strong>Products &gt; Collections</strong> y abre tu <code>Colección de Verano 2026</code>.</li>
+                <li>En el panel lateral derecho, en <strong>Theme template</strong>, selecciona <code>seasonal-collection</code> y guarda los cambios.</li>
+                <li>Ve a <strong>Online Store &gt; Navigation &gt; Main menu</strong> y añade el enlace hacia <code>All Collections</code> o la colección de verano directamente para que los clientes puedan acceder desde el menú principal.</li>
+              </ol>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+      <!-- ========================================================= -->
+      <!-- MODULO 5: LABORATORIO PRACTICO SANDBOX                    -->
+      <!-- ========================================================= -->
+      <section class="module-section" id="modulo-5-lab">
+        <div class="section-header">
+          <span class="section-badge" style="background: rgba(168, 85, 247, 0.2); color: var(--accent-purple);">Módulo 05 • Sandbox Interactivo</span>
+          <h2 class="section-title">5. Laboratorio Práctico: Creador y Renderizador de Metafields</h2>
+        </div>
+
+        <p>
+          En este entorno interactivo pondrás a prueba tus conocimientos: crea un producto desde cero, asígnale <strong>Metafields</strong> de distintos tipos primitivos, referencias o Metaobjects, y observa cómo se compila y renderiza en vivo la <strong>Página de Detalle de Producto (PDP)</strong> junto con el código <strong>Liquid</strong> generado automáticamente.
+        </p>
+
+        <div class="practice-lab-container" id="lab-creator">
+          
+          <!-- Banner Superior con Presets -->
+          <div class="lab-header-banner">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <span class="lab-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                </svg>
+                Shopify Developer Sandbox
+              </span>
+              <span style="font-size: 0.85rem; color: var(--text-secondary);">Cargar plantilla rápida:</span>
+            </div>
+
+            <div class="preset-buttons-group">
+              <button type="button" class="preset-btn" id="presetTechProduct">
+                ⚡ Preset: Smartwatch Tech
+              </button>
+              <button type="button" class="preset-btn" id="presetFashionProduct">
+                🧥 Preset: Moda & Eco-Cuero
+              </button>
+            </div>
+          </div>
+
+          <!-- Grid de 2 Columnas: Formulario vs Renderizador -->
+          <div class="lab-grid-layout">
+            
+            <!-- Columna Izquierda: Formulario de Creación -->
+            <div class="lab-form-pane">
+              <form id="practiceProductForm">
+                
+                <!-- Paso 1: Datos Base del Producto -->
+                <div class="form-section-title">
+                  <span>1. Entidad Producto Base (Product)</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="productTitleInput">Título del Producto</label>
+                  <input type="text" id="productTitleInput" class="form-input" placeholder="ej: Campera Bomber Cuero Ecológico" required>
+                </div>
+
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="productVendorInput">Vendor (Fabricante / Marca)</label>
+                    <input type="text" id="productVendorInput" class="form-input" placeholder="ej: Atelier Buenos Aires" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="productTypeInput">Product Type (Categoría)</label>
+                    <input type="text" id="productTypeInput" class="form-input" placeholder="ej: Indumentaria de Autor" required>
+                  </div>
+                </div>
+
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="productPriceInput">Precio ($ USD)</label>
+                    <input type="text" id="productPriceInput" class="form-input" placeholder="220.00" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="productSkuInput">SKU de Variante</label>
+                    <input type="text" id="productSkuInput" class="form-input" placeholder="BOMBER-ECO-01" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="productOptionsInput">Opciones y Valores (Formato: Nombre: Valor1, Valor2 | ...)</label>
+                  <input type="text" id="productOptionsInput" class="form-input" placeholder="Talle: S, M, L | Color: Marrón, Negro">
+                </div>
+
+                <!-- Paso 2: Metafields y Metaobjects Dinámicos -->
+                <div class="form-section-title" style="margin-top: 1rem;">
+                  <span>2. Definición de Metafields & Metaobjects</span>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                  Agrega campos personalizados. El simulador detectará automáticamente el tipo de dato y adaptará la vista.
+                </p>
+
+                <div class="metafields-builder-list" id="metafieldsBuilderList">
+                  <!-- Metafield rows dynamically rendered here -->
+                </div>
+
+                <button type="button" class="add-metafield-btn" id="addMetafieldBtn" style="margin-top: 0.75rem;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  <span>+ Agregar Otro Metafield</span>
+                </button>
+
+                <!-- Botón de Generar PDP -->
+                <div style="margin-top: 1.5rem;">
+                  <button type="submit" class="generate-pdp-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                    <span>⚡ Generar y Renderizar PDP</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Columna Derecha: Vista Previa y Código Liquid -->
+            <div class="lab-preview-pane" id="lab-pdp-render">
+              
+              <!-- Pestañas de la Vista Previa -->
+              <div class="preview-tab-controls">
+                <button type="button" class="lab-tab-btn active" data-lab-tab="preview">
+                  🛍️ Vista Previa PDP
+                </button>
+                <button type="button" class="lab-tab-btn" data-lab-tab="liquid">
+                  💧 Código Liquid
+                </button>
+                <button type="button" class="lab-tab-btn" data-lab-tab="json">
+                  📋 Esquema JSON
+                </button>
+              </div>
+
+              <!-- Pestaña 1: Renderizado HTML de la Tienda -->
+              <div id="tabPanePreview" class="rendered-pdp-screen">
+                <div id="renderedPdpOutput">
+                  <!-- Rendered dynamically by scripts/practice-lab.js -->
+                </div>
+              </div>
+
+              <!-- Pestaña 2: Inspector de Código Liquid -->
+              <div id="tabPaneLiquid" style="display: none;">
+                <div class="code-block-container" style="margin: 0;">
+                  <div class="code-header">
+                    <div class="code-meta">
+                      <span class="lang-badge">Liquid</span>
+                      <span class="code-filename">snippets/custom-metafields-display.liquid</span>
+                    </div>
+                    <button class="copy-btn">Copiar</button>
+                  </div>
+                  <pre><code class="language-liquid" id="generatedLiquidCode"></code></pre>
+                </div>
+              </div>
+
+              <!-- Pestaña 3: Inspector JSON Schema -->
+              <div id="tabPaneJson" style="display: none;">
+                <div class="code-block-container" style="margin: 0;">
+                  <div class="code-header">
+                    <div class="code-meta">
+                      <span class="lang-badge">JSON</span>
+                      <span class="code-filename">product-metafields-payload.json</span>
+                    </div>
+                    <button class="copy-btn">Copiar</button>
+                  </div>
+                  <pre><code class="language-json" id="generatedJsonSchema"></code></pre>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>Shopify Data Architecture & Liquid Engineering Masterclass • Diseñado para Desarrolladores y Agencias</p>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- Prism.js Syntax Highlighting Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-liquid.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-graphql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+
+  <!-- Application Logic Scripts -->
+  <script src="scripts/data-models.js"></script>
+  <script src="scripts/preview-engine.js"></script>
+  <script src="scripts/practice-lab.js"></script>
+  <script src="scripts/app.js"></script>
+</body>
+</html>

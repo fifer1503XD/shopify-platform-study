@@ -1,0 +1,309 @@
+/* Project Portfolio Practical Section & Live Simulator */
+
+.project-simulator-container {
+  margin: 2.5rem 0;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.simulator-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.5rem;
+  background: var(--code-header);
+  border-bottom: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.simulator-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.simulator-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--brand-shopify);
+  box-shadow: 0 0 10px var(--brand-shopify);
+}
+
+.viewport-controls {
+  display: flex;
+  background: var(--bg-primary);
+  border-radius: var(--radius-sm);
+  padding: 0.25rem;
+  border: 1px solid var(--border-subtle);
+  gap: 0.25rem;
+}
+
+.viewport-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 0.4rem 0.85rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.viewport-btn:hover {
+  color: var(--text-primary);
+}
+
+.viewport-btn.active {
+  background: var(--bg-tertiary);
+  color: var(--brand-shopify);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.simulator-stage {
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: radial-gradient(circle at center, #172033 0%, #0c111d 100%);
+  min-height: 520px;
+  overflow-x: auto;
+  transition: all 0.3s ease;
+}
+
+/* Device Shells */
+.device-frame {
+  background: #ffffff;
+  color: #1a1a1a;
+  border-radius: var(--radius-md);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+.device-frame.mode-desktop {
+  width: 100%;
+  max-width: 960px;
+}
+
+.device-frame.mode-mobile {
+  width: 375px;
+  border: 8px solid #2d3748;
+  border-radius: 36px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+}
+
+.device-frame.mode-mobile .mobile-notch {
+  width: 120px;
+  height: 18px;
+  background: #2d3748;
+  margin: 0 auto;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+/* Rendered Shopify Section: sections/product-tech-specs.liquid */
+.shopify-section-preview {
+  padding: 2rem 1.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1f2937;
+  background: #ffffff;
+}
+
+.spec-header-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 1.25rem;
+}
+
+.spec-category-tag {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #059669;
+}
+
+.spec-product-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.25;
+}
+
+.spec-layout-grid {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.mode-desktop .spec-layout-grid {
+  grid-template-columns: 1.2fr 0.8fr;
+}
+
+.mode-mobile .spec-layout-grid {
+  grid-template-columns: 1fr;
+}
+
+/* Specs Accordion / Table */
+.specs-card-box {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.specs-card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.specs-meta-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.spec-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed #e5e7eb;
+  font-size: 0.9rem;
+}
+
+.spec-item-row:last-child {
+  border-bottom: none;
+}
+
+.spec-label {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.spec-value {
+  color: #111827;
+  font-weight: 600;
+}
+
+/* Metaobject: Warranty & Care Card */
+.metaobject-warranty-card {
+  background: linear-gradient(145deg, #f0fdf4 0%, #ffffff 100%);
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.warranty-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  width: fit-content;
+}
+
+.warranty-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #065f46;
+}
+
+.warranty-desc {
+  font-size: 0.875rem;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.care-steps-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.care-step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #1f2937;
+}
+
+.care-step-item span.bullet {
+  color: #16a34a;
+  font-weight: bold;
+}
+
+/* PDF Specs Download Action */
+.pdf-download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #111827;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  transition: background 0.2s ease;
+  width: 100%;
+}
+
+.pdf-download-btn:hover {
+  background: #374151;
+}
+
+/* Dynamic State toggle previewer */
+.data-mock-toggle-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-subtle);
+  font-size: 0.85rem;
+}
+
+.mock-state-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mock-state-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
