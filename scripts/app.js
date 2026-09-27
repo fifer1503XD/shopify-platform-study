@@ -154,6 +154,10 @@ document.addEventListener('DOMContentLoaded', () => {
           <strong>❌ Casi lo tenés. Recordá la regla de transferibilidad:</strong><br>
           Revisa tus selecciones. Las 3 primeras opciones (Developer Previews, Datos de prueba de Shopify, y Tiendas Plus) bloquean la transferencia a un cliente. El tema Horizon NO afecta la transferencia de la tienda.
         `;
+      }
+    });
+  }
+
   // Knowledge Check Quiz 2: Métodos de acceso al Theme Editor
   const themeEditorQuizForm = document.getElementById('themeEditorQuizForm');
   const themeEditorFeedback = document.getElementById('themeEditorFeedback');

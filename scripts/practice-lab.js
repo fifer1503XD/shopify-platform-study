@@ -165,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         jsonSchemaObj.metafields.push({ namespace: ns, key, type: mfType, value: val });
 
         // Build Liquid representation
+        const formattedKeyName = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         liquidSnippetLines.push(`{% assign ${key} = product.metafields.${ns}.${key}.value %}`);
         liquidSnippetLines.push(`{% if ${key} != blank %}`);
         if (mfType === 'color') {
@@ -172,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (mfType === 'file_reference') {
           liquidSnippetLines.push(`  <a href="{{ ${key}.url }}" class="spec-file-download">Descargar Archivo</a>`);
         } else {
-          liquidSnippetLines.push(`  <p><strong>${key | capitalize}:</strong> {{ ${key} }}</p>`);
+          liquidSnippetLines.push(`  <p><strong>${formattedKeyName}:</strong> {{ ${key} }}</p>`);
         }
         liquidSnippetLines.push(`{% endif %}`);
       }
