@@ -1,0 +1,30 @@
+<!-- Quick Module Switcher Toolbar -->
+      <div class="module-switcher-bar">
+        <div class="module-selector-group">
+          <label for="moduleSelectDropdown" style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); white-space: nowrap;">
+            📚 Módulo Activo:
+          </label>
+          <select id="moduleSelectDropdown" class="module-select-dropdown">
+            <option value="modulo-1">Módulo 1: Modelo de Datos de Productos</option>
+            <option value="modulo-2">Módulo 2: Metafields y Metaobjects</option>
+            <option value="modulo-3">Módulo 3: Filtrado y Búsqueda</option>
+            <option value="modulo-4-proyecto">Módulo 4: Proyecto Práctico Portafolio</option>
+            <option value="modulo-lab-dev-store">Módulo 5: Lab: Tienda Dev & Simular Transacción</option>
+            <option value="modulo-customizing-themes">Módulo 6: Customizing Themes</option>
+            <option value="modulo-exploring-extending-data">Módulo 7: Exploring & Extending Data Model</option>
+            <option value="modulo-5-lab">Módulo 8: Laboratorio Sandbox Interactivo</option>
+          </select>
+        </div>
+
+        <div class="module-nav-arrows">
+          <span id="currentModuleBadge" class="badge-tag" style="background: rgba(149, 191, 71, 0.2); color: var(--brand-shopify);">
+            Módulo 1 de 8
+          </span>
+          <button type="button" id="prevModuleBtn" class="mod-arrow-btn" title="Módulo Anterior">
+            ← Anterior
+          </button>
+          <button type="button" id="nextModuleBtn" class="mod-arrow-btn" title="Siguiente Módulo">
+            Siguiente →
+          </button>
+        </div>
+      </div>

@@ -1,0 +1,326 @@
+<section class="module-section" id="modulo-1">
+        <div class="section-header">
+          <span class="section-badge">Módulo 01</span>
+          <h2 class="section-title">1. Modelo de Datos de Productos en Shopify</h2>
+        </div>
+
+        <p>
+          Antes de escribir una sola línea de Liquid o realizar llamadas a la Admin API, es imprescindible comprender cómo Shopify normaliza y almacena sus entidades de catálogo en su base de datos relacional subyacente.
+        </p>
+
+        <!-- Subtopic: Products vs Variants -->
+        <div class="subtopic" id="m1-arquitectura">
+          <h3 class="subtopic-title">Arquitectura del Producto: Products vs. Variants</h3>
+          <p>
+            En Shopify, la entidad <strong>Product</strong> no es un artículo vendible directamente por sí mismo en el checkout; actúa como un <em>contenedor padre</em> o paraguas conceptual que agrupa metadatos globales (título, descripción HTML, proveedor, tipo de producto, etiquetas y lista de imágenes generales).
+          </p>
+          <p>
+            La entidad <strong>ProductVariant</strong> representa la unidad de inventario comercializable real (relación <strong>1 a N</strong>). Cada variante posee su propio precio, precio de comparación (compare_at_price), SKU, código de barras (barcode), peso físico y puntero directo al inventario.
+          </p>
+
+          <!-- Diagrama de Entidad -->
+          <div class="schema-diagram">
+            <div class="diagram-header">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+              Estructura Relacional del Catálogo (1:N)
+            </div>
+            <div class="tree-flow">
+              <div class="tree-node">
+                <div class="tree-node-title">
+                  <span>Product (Contenedor Padre)</span>
+                  <span class="badge-tag" style="background: rgba(56, 189, 248, 0.2); color: var(--accent-cyan);">Entidad Global</span>
+                </div>
+                <ul class="tree-node-props">
+                  <li><span class="key">id:</span> <span class="type">ID (GID)</span></li>
+                  <li><span class="key">title:</span> <span class="type">String</span></li>
+                  <li><span class="key">handle:</span> <span class="type">String (Slug URL)</span></li>
+                  <li><span class="key">vendor:</span> <span class="type">String</span></li>
+                  <li><span class="key">options:</span> <span class="type">Array&lt;ProductOption&gt;</span></li>
+                  <li><span class="key">media:</span> <span class="type">Array&lt;Media&gt;</span></li>
+                </ul>
+              </div>
+
+              <div class="tree-connector"></div>
+
+              <div class="tree-node">
+                <div class="tree-node-title">
+                  <span>ProductVariant (Item Vendible en Checkout)</span>
+                  <span class="badge-tag" style="background: rgba(149, 191, 71, 0.2); color: var(--brand-shopify);">1 a N Variantes</span>
+                </div>
+                <ul class="tree-node-props">
+                  <li><span class="key">id:</span> <span class="type">ID (GID)</span></li>
+                  <li><span class="key">sku:</span> <span class="type">String</span></li>
+                  <li><span class="key">price:</span> <span class="type">Money</span></li>
+                  <li><span class="key">inventory_item_id:</span> <span class="type">ID</span></li>
+                  <li><span class="key">selected_options:</span> <span class="type">[ {name, value} ]</span></li>
+                  <li><span class="key">requires_shipping:</span> <span class="type">Boolean</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic: Opciones y Valores -->
+        <div class="subtopic" id="m1-opciones">
+          <h3 class="subtopic-title">Opciones y Valores (Options & Values)</h3>
+          <p>
+            Las opciones definen las dimensiones de variación del producto (por ejemplo: <em>Talla</em>, <em>Color</em>, <em>Material</em>). En Liquid se accede mediante el objeto iterativo <code>product.options_with_values</code>.
+          </p>
+
+          <div class="callout callout-warning">
+            <div class="callout-icon">⚠️</div>
+            <div class="callout-content">
+              <h4>Restricción Nativa: 3 Opciones / 100 Variantes</h4>
+              <p>
+                Shopify impone un límite estricto de máximo <strong>3 opciones</strong> por producto y un total combinado de <strong>100 variantes</strong> (ej: 4 tallas x 5 colores x 6 materiales = 120 combinaciones, lo cual excedería el límite). 
+                <strong>Solución de Arquitectura:</strong> Para catálogos complejos, se implementa arquitectura de "Productos Vinculados" (Linked Products) conectados vía Metafields de referencia, o personalizaciones vía <em>Line Item Properties</em>.
+              </p>
+            </div>
+          </div>
+
+          <div class="code-block-container">
+            <div class="code-header">
+              <div class="code-meta">
+                <span class="lang-badge">Liquid</span>
+                <span class="code-filename">snippets/product-option-selector.liquid</span>
+              </div>
+              <button class="copy-btn">Copiar</button>
+            </div>
+            <pre><code class="language-liquid">{% comment %} Renderizado de opciones y valores con control de estado {% endcomment %}
+&lt;div class="product-form-options"&gt;
+  {% for option in product.options_with_values %}
+    &lt;fieldset class="option-fieldset"&gt;
+      &lt;legend class="option-name"&gt;{{ option.name }}: &lt;span class="selected-value"&gt;{{ option.selected_value }}&lt;/span&gt;&lt;/legend&gt;
+      &lt;div class="option-values-list"&gt;
+        {% for value in option.values %}
+          &lt;label class="option-pill {% if option.selected_value == value %}is-active{% endif %}"&gt;
+            &lt;input 
+              type="radio" 
+              name="option-{{ option.name | handleize }}" 
+              value="{{ value | escape }}"
+              {% if option.selected_value == value %}checked{% endif %}
+              data-option-position="{{ option.position }}"
+            &gt;
+            &lt;span&gt;{{ value }}&lt;/span&gt;
+          &lt;/label&gt;
+        {% endfor %}
+      &lt;/div&gt;
+    &lt;/fieldset&gt;
+  {% endfor %}
+&lt;/div&gt;</code></pre>
+          </div>
+        </div>
+
+        <!-- Subtopic: Colecciones -->
+        <div class="subtopic" id="m1-colecciones">
+          <h3 class="subtopic-title">Colecciones: Manuales vs. Automatizadas (Smart Collections)</h3>
+          
+          <div class="table-wrapper">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Característica</th>
+                  <th>Colecciones Manuales (CustomCollections)</th>
+                  <th>Colecciones Automatizadas (SmartCollections)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Mecanismo de Inclusión</strong></td>
+                  <td>Asignación estática 1 por 1 por el administrador.</td>
+                  <td>Reglas dinámicas booleanas (AND / OR).</td>
+                </tr>
+                <tr>
+                  <td><strong>Condiciones Soportadas</strong></td>
+                  <td>No aplica (lista explícita).</td>
+                  <td>Tags, Product Type, Vendor, Price, Compare Price, Inventory Stock.</td>
+                </tr>
+                <tr>
+                  <td><strong>Mantenimiento Operativo</strong></td>
+                  <td>Alto. Requiere intervención manual con nuevos SKUs.</td>
+                  <td>Bajo / Automático en tiempo real al indexar productos.</td>
+                </tr>
+                <tr>
+                  <td><strong>Uso Recomendado</strong></td>
+                  <td>Curaduría editorial, promociones especiales, lookbooks.</td>
+                  <td>Catálogos masivos por categorías, marcas o estado de inventario.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Subtopic: Admin API (GraphQL / REST) -->
+        <div class="subtopic" id="m1-apis">
+          <h3 class="subtopic-title">Creación de Productos vía Código: GraphQL vs. REST Admin API</h3>
+          <p>
+            Shopify recomienda <strong>GraphQL Admin API</strong> como estándar exclusivo para desarrollos modernos debido al costo de consulta medido por complejidad (query cost) en lugar de rate limits ciegos, y a la capacidad de crear productos y variantes anidadas en un solo llamado atómico.
+          </p>
+
+          <div class="tabbed-code-container">
+            <div class="tab-nav">
+              <button class="tab-btn active" data-tab="graphql-create">GraphQL: productCreate</button>
+              <button class="tab-btn" data-tab="graphql-inventory">GraphQL: Inventory Adjustment</button>
+              <button class="tab-btn" data-tab="rest-create">REST API (Legacy Reference)</button>
+            </div>
+
+            <!-- Tab 1: GraphQL Create -->
+            <div class="tab-pane active" data-pane="graphql-create">
+              <div class="code-header">
+                <div class="code-meta">
+                  <span class="lang-badge">GraphQL</span>
+                  <span class="code-filename">mutations/productCreate.graphql</span>
+                </div>
+                <button class="copy-btn">Copiar</button>
+              </div>
+              <pre><code class="language-graphql"># Creación atómica de Producto con Variantes, SKU e Inventario
+mutation CreateCompleteProduct($input: ProductInput!) {
+  productCreate(input: $input) {
+    product {
+      id
+      title
+      handle
+      status
+      variants(first: 5) {
+        nodes {
+          id
+          sku
+          price
+          inventoryItem {
+            id
+            tracked
+          }
+        }
+      }
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+
+# Variables de la petición:
+# {
+#   "input": {
+#     "title": "Auriculares Noise-Cancelling Pro X900",
+#     "vendor": "AcousticLab",
+#     "productType": "Audio Profesional",
+#     "status": "ACTIVE",
+#     "tags": ["audio", "bluetooth-5.3", "pro-audio"]
+#   }
+# }</code></pre>
+            </div>
+
+            <!-- Tab 2: GraphQL Inventory -->
+            <div class="tab-pane" data-pane="graphql-inventory">
+              <div class="code-header">
+                <div class="code-meta">
+                  <span class="lang-badge">GraphQL</span>
+                  <span class="code-filename">mutations/inventoryAdjustQuantities.graphql</span>
+                </div>
+                <button class="copy-btn">Copiar</button>
+              </div>
+              <pre><code class="language-graphql"># Ajuste de niveles de stock en ubicación específica (InventoryLevel)
+mutation AdjustStock($input: InventoryAdjustQuantitiesInput!) {
+  inventoryAdjustQuantities(input: $input) {
+    inventoryAdjustmentGroup {
+      createdAt
+      reason
+      changes {
+        name
+        delta
+        quantityAfterChange
+      }
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+
+# Variables:
+# {
+#   "input": {
+#     "reason": "correction",
+#     "name": "available",
+#     "changes": [
+#       {
+#         "inventoryItemId": "gid://shopify/InventoryItem/4920192849",
+#         "locationId": "gid://shopify/Location/7821903",
+#         "delta": 25
+#       }
+#     ]
+#   }
+# }</code></pre>
+            </div>
+
+            <!-- Tab 3: REST -->
+            <div class="tab-pane" data-pane="rest-create">
+              <div class="code-header">
+                <div class="code-meta">
+                  <span class="lang-badge">HTTP / JSON</span>
+                  <span class="code-filename">POST /admin/api/2024-01/products.json</span>
+                </div>
+                <button class="copy-btn">Copiar</button>
+              </div>
+              <pre><code class="language-json">{
+  "product": {
+    "title": "Auriculares Noise-Cancelling Pro X900",
+    "body_html": "&lt;strong&gt;Audio de alta fidelidad profesional&lt;/strong&gt;",
+    "vendor": "AcousticLab",
+    "product_type": "Audio Profesional",
+    "variants": [
+      {
+        "option1": "Midnight Black",
+        "price": "349.00",
+        "sku": "AC-X900-BLK",
+        "inventory_management": "shopify"
+      }
+    ]
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic: CSV Import/Export -->
+        <div class="subtopic" id="m1-csv">
+          <h3 class="subtopic-title">Importación y Exportación Masiva vía CSV</h3>
+          <p>
+            Para cargas masivas y migraciones de catálogo, el archivo CSV nativo de Shopify requiere una estructura de columnas estrictamente normalizada. La columna <strong>Handle</strong> actúa como clave de agrupación: múltiples filas con el mismo handle representan las variantes de un único producto.
+          </p>
+
+          <div class="code-block-container">
+            <div class="code-header">
+              <div class="code-meta">
+                <span class="lang-badge">CSV</span>
+                <span class="code-filename">products_export_sample.csv</span>
+              </div>
+              <button class="copy-btn">Copiar</button>
+            </div>
+            <pre><code class="language-none">Handle,Title,Body (HTML),Vendor,Type,Tags,Option1 Name,Option1 Value,Option2 Name,Option2 Value,Variant SKU,Variant Price,Variant Inventory Tracker,Variant Inventory Qty
+pro-x900,Auriculares Pro X900,"<p>Driver 45mm</p>",AcousticLab,Audio,"bluetooth,anc",Color,Midnight Black,Edición,Standard,AC-X900-BLK,349.00,shopify,45
+pro-x900,,,,,,Color,Midnight Black,Edición,Studio DAC,AC-X900-BLK-DAC,429.00,shopify,20
+pro-x900,,,,,,Color,Arctic Silver,Edición,Standard,AC-X900-SLV,349.00,shopify,30</code></pre>
+          </div>
+        </div>
+
+        <!-- Paginación de Módulo -->
+        <div class="module-pagination-nav">
+          <div></div>
+          <a href="#modulo-2" class="pag-btn next-btn">
+            <span class="pag-label">Siguiente Módulo →</span>
+            <span class="pag-title">2. Metafields y Metaobjects</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- MODULO 2: METAFIELDS Y METAOBJECTS                        -->
+      <!-- ========================================================= -->

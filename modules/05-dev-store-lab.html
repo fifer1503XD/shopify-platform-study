@@ -1,0 +1,266 @@
+<section class="module-section" id="modulo-lab-dev-store">
+        <div class="section-header">
+          <span class="section-badge" style="background: rgba(149, 191, 71, 0.2); color: var(--brand-shopify);">Laboratorio Guiado • Fundamentos</span>
+          <h2 class="section-title">Lab: Build a dev store with product data and simulate a transaction</h2>
+          <p style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 1.05rem;">
+            Construcción de una tienda de desarrollo para indumentaria ("Stylish Stitches"), exploración del Shopify Admin, importación masiva de catálogo y simulación de transacciones con pasarela de prueba.
+          </p>
+        </div>
+
+        <!-- Escenario del Proyecto -->
+        <div class="subtopic" id="lab-scenario">
+          <div class="callout callout-architect" style="border-left: 4px solid var(--accent-cyan);">
+            <div class="callout-icon">👗</div>
+            <div class="callout-content">
+              <h4>Escenario de Cliente: "Stylish Stitches"</h4>
+              <p>
+                Un negocio de indumentaria y moda de autor llamado <strong>"Stylish Stitches"</strong>, propiedad de la diseñadora Lily, está iniciando su transformación digital para expandir su alcance mediante una tienda online en Shopify. Ante el desafío de llevar sus prendas de alta confección al mundo virtual, Lily recurre a vos para construir y configurar su tienda desde las bases.
+              </p>
+              <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
+                <em>Nota de arquitectura:</em> Nunca utilices una tienda real de producción para estas actividades prácticas. Crearemos una <strong>Development Store (Tienda de Desarrollo)</strong> en Shopify Partners para ejecutar personalizaciones de tema, scripts Liquid y pruebas backend sin costos ni riesgos.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 1: Crear Dev Store -->
+        <div class="subtopic" id="lab-step1">
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">1</div>
+              <h3 class="step-title">Paso 1: Registro en Shopify Partners y Creación de la Tienda de Desarrollo</h3>
+            </div>
+            <div class="step-content">
+              <p>Sigue estos pasos en el portal de partners de Shopify:</p>
+              <ol>
+                <li>Crea una cuenta en <strong><a href="https://www.shopify.com/partners" target="_blank" style="color: var(--accent-cyan);">Shopify Partners</a></strong> (si aún no posees una).</li>
+                <li>Haz clic en tu nombre en la esquina superior derecha y selecciona <strong>Dev Dashboard</strong>.</li>
+                <li>En el menú lateral izquierdo, haz clic en <strong>Dev stores (Tiendas de desarrollo)</strong>.</li>
+                <li>Haz clic en el botón <strong>Create dev store (Crear tienda de desarrollo)</strong>.</li>
+                <li>Asigna un nombre a tu tienda (por ejemplo: <code>stylish-stitches-lab</code>) y selecciona el propósito de la tienda (Build a new store for a client).</li>
+                <li><strong style="color: var(--accent-amber);">IMPORTANTE:</strong> <em>No selecciones "Generate test data for store"</em>. Dejaremos la tienda limpia para importar nuestro propio catálogo de indumentaria en el Paso 4.</li>
+                <li>Haz clic en <strong>Create store</strong>. ¡Listo! Serás redirigido directamente al panel principal de administración (Shopify Admin).</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 2: Shopify Admin y Sidekick -->
+        <div class="subtopic" id="lab-step2">
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">2</div>
+              <h3 class="step-title">Paso 2: Familiarización con los Elementos Clave del Shopify Admin</h3>
+            </div>
+            <div class="step-content">
+              <p>
+                El <strong>Shopify Admin</strong> es el centro neurálgico donde gestionarás todo el negocio. En la barra superior encontrarás a <strong>Shopify Sidekick</strong>, el asistente de inteligencia artificial nativo capaz de asistirte en la configuración de la tienda, generación de copys de producto y resolución de dudas técnicas.
+              </p>
+
+              <!-- Grid de Entidades Fundamentales -->
+              <div class="cards-grid" style="margin-top: 1rem;">
+                <div class="concept-card">
+                  <div class="card-icon icon-green">📦</div>
+                  <h4>Products & Variants</h4>
+                  <p>
+                    Las mercancías físicas o digitales que vendes. Una prenda como una remera de Lily se compone de opciones (Talla: S, M, L; Color: Azul, Verde). Cada combinación específica (ej. "Talla M en Color Azul") conforma una <strong>Variant</strong> con su propio inventario y SKU. Los productos también se vinculan a <em>Locations</em> (ubicaciones físicas de inventario), modelos de suscripción y <em>Shopify Markets</em> para localización internacional.
+                  </p>
+                </div>
+
+                <div class="concept-card">
+                  <div class="card-icon icon-cyan">🗂️</div>
+                  <h4>Collections (Colecciones)</h4>
+                  <p>
+                    Agrupaciones de productos para facilitar el descubrimiento y aplicar descuentos:
+                    <br><strong>• Automated (Smart) Collections:</strong> Se pueblan solas en tiempo real según condiciones (tags, precio, tipo o stock).
+                    <br><strong>• Manual Collections:</strong> Curaduría estática donde seleccionas manualmente los ítems.
+                  </p>
+                </div>
+
+                <div class="concept-card">
+                  <div class="card-icon icon-purple">👥</div>
+                  <h4>Customers (Clientes)</h4>
+                  <p>
+                    El objeto <code>Customer</code> almacena nombres, contactos, historial de órdenes y direcciones. Permite crear cuentas de cliente para autocompletado en checkout y segmentación para campañas de retención.
+                  </p>
+                </div>
+
+                <div class="concept-card">
+                  <div class="card-icon icon-amber">🧾</div>
+                  <h4>Orders (Pedidos)</h4>
+                  <p>
+                    El eslabón relacional que conecta clientes con productos vendidos, gestionando el ciclo de vida del pago, autorización bancaria y estados de fulfillment (despacho).
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 3: Unified Commerce -->
+        <div class="subtopic" id="lab-step3">
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">3</div>
+              <h3 class="step-title">Paso 3: Explorando el Resto del Admin & Unified Commerce</h3>
+            </div>
+            <div class="step-content">
+              <p>Debajo de las entidades de e-commerce principales, dispones de módulos clave:</p>
+              <ul>
+                <li><strong>Content (Contenido):</strong> Repositorio centralizado de archivos multimedia en CDN y el gestor de <em>Metaobjects</em>.</li>
+                <li><strong>Discounts (Descuentos):</strong> Reglas de monto fijo, porcentaje, "Compra X y lleva Y" (BXGY), envíos gratis y reglas avanzadas programadas con <em>Shopify Functions</em>.</li>
+                <li><strong>Finance, Analytics & Marketing:</strong> Reportes de margen bruto, valor promedio del pedido (AOV), embudos de conversión y sesiones web.</li>
+                <li><strong>Sales Channels (Comercio Unificado):</strong>
+                  <ul>
+                    <li><em>Online Store:</em> Gestión de temas Liquid, páginas estáticas y blogs.</li>
+                    <li><em>Point of Sale (POS):</em> Para ventas presenciales en tiendas físicas, ferias o pop-ups de moda.</li>
+                    <li><em>Shop App:</em> Canal móvil con más de 100 millones de compradores activos con checkout acelerado (Shop Pay).</li>
+                  </ul>
+                </li>
+                <li><strong>Settings (Configuración):</strong> Configuración de monedas, impuestos, pasarelas de pago, shipping zones y permisos.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 4: Importar Datos Apparel CSV -->
+        <div class="subtopic" id="lab-step4">
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">4</div>
+              <h3 class="step-title">Paso 4: Importar Datos de Indumentaria de Muestra (Apparel CSV)</h3>
+            </div>
+            <div class="step-content">
+              <p>Démosle vida a la tienda de Lily cargando el catálogo de prueba:</p>
+              <ol>
+                <li>Descarga el archivo oficial de prueba: <strong><a href="https://github.com/shopifypartners/product-csvs/blob/master/apparel.csv" target="_blank" style="color: var(--brand-shopify); font-weight: 600;">apparel.csv en GitHub de Shopify Partners</a></strong>.</li>
+                <li>En el Shopify Admin, ve a <strong>Products</strong> y haz clic en el botón superior <strong>Import</strong>.</li>
+                <li>Sube el archivo <code>apparel.csv</code> y confirma la importación.</li>
+                <li>Verifica que los productos aparezcan en la grilla con sus respectivos precios, fotos y etiquetas (tags).</li>
+                <li>Abre el producto <strong>"Classic varsity top"</strong> e inspecciona cómo se estructuran las opciones y variantes de tallas y colores.</li>
+                <li><em>Opcional:</em> Ve a <strong>Products &gt; Collections &gt; Add collection</strong> y crea una colección manual "Colección Destacada" y una colección inteligente "Ropa en Stock" con la condición <code>Inventory stock &gt; 0</code>.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 5: Tema Horizon -->
+        <div class="subtopic" id="lab-step5">
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">5</div>
+              <h3 class="step-title">Paso 5: Previsualizar la Tienda y Explorar el Tema Horizon</h3>
+            </div>
+            <div class="step-content">
+              <p>
+                Al crear una nueva tienda de desarrollo, Shopify instala automáticamente el tema <strong>Horizon</strong> (o el tema estándar Dawn/OS 2.0). 
+              </p>
+              <p>
+                Dirígete a <strong>Online Store &gt; Themes</strong> y haz clic en <strong>View your store</strong> para ver cómo luce la tienda en el frontend con las prendas y colecciones recién importadas.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 6: Simular Transacción Bogus Gateway -->
+        <div class="subtopic" id="lab-step6">
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">6</div>
+              <h3 class="step-title">Paso 6: Simular una Transacción de Compra Completa (Bogus Gateway)</h3>
+            </div>
+            <div class="step-content">
+              <p>
+                Para probar el flujo integral de checkout y generación de órdenes sin realizar cobros reales con tarjeta de crédito:
+              </p>
+              <ol>
+                <li><strong>Obtén la contraseña de la tienda:</strong> En el Admin, ve a <em>Online Store &gt; Preferences &gt; Password protection</em> para ver la contraseña de acceso público.</li>
+                <li><strong>Activa la pasarela de prueba (Bogus Gateway):</strong> Ve a <em>Settings &gt; Payments</em>. En la sección de proveedores, selecciona <em>(for testing) Bogus Gateway</em> y activa la pasarela.</li>
+                <li><strong>Realiza una compra de prueba en el Storefront:</strong> Navega a la tienda, añade una prenda al carrito y procede al Checkout.</li>
+              </ol>
+
+              <div class="bogus-gateway-card">
+                <h4 style="color: var(--accent-cyan); font-size: 0.95rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                  💳 Datos Oficiales para Bogus Gateway Test
+                </h4>
+                <div class="bogus-param-row">
+                  <span style="color: #94a3b8;">Nombre en la tarjeta:</span>
+                  <span style="color: #f8fafc; font-family: var(--font-mono); font-weight: 600;">Bogus Gateway</span>
+                </div>
+                <div class="bogus-param-row">
+                  <span style="color: #94a3b8;">Número de tarjeta (Transacción exitosa):</span>
+                  <span style="color: #4ade80; font-family: var(--font-mono); font-weight: 700;">1</span>
+                </div>
+                <div class="bogus-param-row">
+                  <span style="color: #94a3b8;">Número de tarjeta (Simular fallo):</span>
+                  <span style="color: #f87171; font-family: var(--font-mono); font-weight: 700;">2</span>
+                </div>
+                <div class="bogus-param-row">
+                  <span style="color: #94a3b8;">Fecha de Vencimiento:</span>
+                  <span style="color: #f8fafc; font-family: var(--font-mono);">Cualquier fecha futura (ej: 12/28)</span>
+                </div>
+                <div class="bogus-param-row">
+                  <span style="color: #94a3b8;">Código de Seguridad (CVV):</span>
+                  <span style="color: #f8fafc; font-family: var(--font-mono); font-weight: 600;">111</span>
+                </div>
+              </div>
+
+              <p style="margin-top: 0.75rem;">
+                4. Al completar el pedido, regresa a <strong>Orders</strong> en el Shopify Admin. Verás la orden creada con su respectivo cliente, total facturado y estado listo para preparar.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Knowledge Check Interactivo -->
+        <div class="subtopic" id="lab-quiz">
+          <div class="quiz-container">
+            <span class="quiz-badge">Control de Conocimientos • Knowledge Check</span>
+            <h3 class="quiz-question-title">¿Qué acciones hacen que una tienda de desarrollo (Dev Store) sea NO transferible a un cliente?</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">
+              Selecciona todas las opciones correctas y presiona "Verificar Respuesta".
+            </p>
+
+            <form id="devStoreQuizForm">
+              <div class="quiz-options-list">
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="quizOpt1">
+                  <span>Habilitar funciones de vista previa para desarrolladores (Developer Preview features).</span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="quizOpt2">
+                  <span>Elegir usar los datos de prueba autogenerados por Shopify al crear la tienda.</span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="quizOpt3">
+                  <span>Elegir construir una tienda de desarrollo específica para Shopify Plus (Plus dev store).</span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="quizOpt4">
+                  <span>Usar e instalar el tema Horizon de Shopify.</span>
+                </label>
+              </div>
+
+              <button type="submit" class="quiz-submit-btn">Verificar Respuesta</button>
+            </form>
+
+            <div class="quiz-feedback-box" id="quizFeedback"></div>
+          </div>
+        </div>
+
+        <!-- Paginación de Módulo -->
+        <div class="module-pagination-nav">
+          <a href="#modulo-4-proyecto" class="pag-btn">
+            <span class="pag-label">← Módulo Anterior</span>
+            <span class="pag-title">4. Proyecto Práctico Portafolio</span>
+          </a>
+          <a href="#modulo-customizing-themes" class="pag-btn next-btn">
+            <span class="pag-label">Siguiente Módulo →</span>
+            <span class="pag-title">6. Customizing Themes</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- MODULO: CUSTOMIZING THEMES (PERSONALIZACIÓN DE TEMAS)     -->
+      <!-- ========================================================= -->

@@ -1,0 +1,100 @@
+<section class="module-section" id="modulo-3">
+        <div class="section-header">
+          <span class="section-badge">Módulo 03</span>
+          <h2 class="section-title">3. Filtrado y Búsqueda con Datos Personalizados</h2>
+        </div>
+
+        <p>
+          Las tiendas enterprise demandan sistemas de filtrado por facetas (Facet Filtering) avanzados, como filtrar colecciones por rango de frecuencia, tipo de material o compatibilidad, alimentados directamente por Metafields.
+        </p>
+
+        <!-- Subtopic: Search & Discovery -->
+        <div class="subtopic" id="m3-search-discovery">
+          <h3 class="subtopic-title">Shopify Search & Discovery App</h3>
+          <p>
+            La aplicación oficial <em>Shopify Search & Discovery</em> permite activar filtros nativos basados en:
+          </p>
+          <ul style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-secondary);">
+            <li>Disponibilidad de stock (`filter.v.availability`).</li>
+            <li>Rango de precios (`filter.v.price.gte` / `filter.v.price.lte`).</li>
+            <li>Opciones de producto (`filter.v.option.color`).</li>
+            <li><strong>Metafields personalizados</strong> (`filter.p.m.custom.material` o `filter.p.m.custom.connectivity`).</li>
+          </ul>
+        </div>
+
+        <!-- Subtopic: Storefront Filtering API -->
+        <div class="subtopic" id="m3-storefront-api">
+          <h3 class="subtopic-title">Storefront Filtering API & AJAX Rendering</h3>
+          <p>
+            Para crear una experiencia de filtrado instantánea sin recargar la página completa, consumimos la <strong>Shopify Section Rendering API</strong> pasando los parámetros de filtro mediante JavaScript (Fetch).
+          </p>
+
+          <div class="code-block-container">
+            <div class="code-header">
+              <div class="code-meta">
+                <span class="lang-badge">JavaScript (ES6+)</span>
+                <span class="code-filename">assets/collection-filters.js</span>
+              </div>
+              <button class="copy-btn">Copiar</button>
+            </div>
+            <pre><code class="language-javascript">// Implementación de Facet Filter reactivo con Section Rendering API
+class CollectionFilters {
+  constructor(formElement, gridContainerId) {
+    this.form = formElement;
+    this.gridContainer = document.getElementById(gridContainerId);
+    this.bindEvents();
+  }
+
+  bindEvents() {
+    this.form.addEventListener('change', () => this.applyFilters());
+  }
+
+  async applyFilters() {
+    const formData = new FormData(this.form);
+    const params = new URLSearchParams(formData);
+    
+    // Indicamos a Shopify que solo re-renderice la sección de grilla de productos
+    params.set('section_id', 'main-collection-product-grid');
+    
+    // Actualizamos URL en el navegador sin recargar
+    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
+
+    try {
+      this.gridContainer.classList.add('is-loading');
+      
+      const response = await fetch(`${window.location.pathname}?${params.toString()}`);
+      const htmlText = await response.text();
+      
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlText, 'text/html');
+      const newGridContent = doc.getElementById('main-collection-product-grid');
+
+      if (newGridContent) {
+        this.gridContainer.innerHTML = newGridContent.innerHTML;
+      }
+    } catch (error) {
+      console.error('Error al aplicar filtros de colección:', error);
+    } finally {
+      this.gridContainer.classList.remove('is-loading');
+    }
+  }
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Paginación de Módulo -->
+        <div class="module-pagination-nav">
+          <a href="#modulo-2" class="pag-btn">
+            <span class="pag-label">← Módulo Anterior</span>
+            <span class="pag-title">2. Metafields y Metaobjects</span>
+          </a>
+          <a href="#modulo-4-proyecto" class="pag-btn next-btn">
+            <span class="pag-label">Siguiente Módulo →</span>
+            <span class="pag-title">4. Proyecto Práctico Portafolio</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- MODULO 4: PROYECTO PRACTICO DE PORTAFOLIO                 -->
+      <!-- ========================================================= -->

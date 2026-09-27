@@ -1,0 +1,602 @@
+<section class="module-section" id="modulo-customizing-themes">
+        <div class="section-header">
+          <span class="section-badge" style="background: rgba(56, 189, 248, 0.2); color: var(--accent-cyan);">Módulo Avanzado • Storefronts & Themes</span>
+          <h2 class="section-title">Customizing Themes (Personalización de Temas en Shopify)</h2>
+          <p style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 1.05rem;">
+            Aprende sobre las distintas opciones de storefronts en el ecosistema de Shopify, la arquitectura Online Store 2.0, personalización sin código con el Theme Editor y desarrollo de secciones Liquid personalizadas para colecciones estacionales.
+          </p>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SECCIÓN 1: STOREFRONTS & TIPOS DE TEMAS                   -->
+        <!-- ========================================================= -->
+        <div class="subtopic" id="sec1-storefronts">
+          <h3 class="subtopic-title">Sección 1: Shopify Storefront Customization and Themes</h3>
+          <p>
+            Los <strong>Storefronts (escaparates de venta)</strong> permiten brindar experiencias de compra únicas en cualquier punto de contacto donde se encuentren los clientes: sitios web, aplicaciones móviles, terminales de punto de venta e incluso videojuegos. La tienda online basada en web es la variante más popular, pero no es la única.
+          </p>
+          <p>
+            Todas las variantes se conectan con la lógica de negocio y los datos centralizados de Shopify mediante el Shopify Admin o las APIs públicas:
+          </p>
+
+          <!-- Tabla Comparativa de Variantes de Storefront -->
+          <div class="table-wrapper">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Tipo de Storefront</th>
+                  <th>Online Store (Clásica)</th>
+                  <th>Custom Storefront (Hydrogen)</th>
+                  <th>Custom Storefront (Self-Hosted)</th>
+                  <th>Mobile Apps (Nativas)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Resumen del Stack</strong></td>
+                  <td>Web construida con Liquid, hosteada 100% por Shopify.</td>
+                  <td>Web construida con Hydrogen (React/Remix), hosteada en Shopify Oxygen.</td>
+                  <td>Web construida con frameworks JS (Next.js, Angular), auto-alojada.</td>
+                  <td>Apps nativas iOS y Android con SDKs móviles de Shopify.</td>
+                </tr>
+                <tr>
+                  <td><strong>Ejemplo Real</strong></td>
+                  <td><span class="badge-tag" style="background: rgba(239, 68, 68, 0.2); color: #f87171;">Netflix Shop</span></td>
+                  <td><span class="badge-tag" style="background: rgba(56, 189, 248, 0.2); color: var(--accent-cyan);">Nour Hammour</span></td>
+                  <td><span class="badge-tag" style="background: rgba(168, 85, 247, 0.2); color: var(--accent-purple);">YouFoodz</span></td>
+                  <td><span class="badge-tag" style="background: rgba(251, 191, 36, 0.2); color: var(--accent-amber);">Fashion Nova App</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Infraestructura de Hosting</strong></td>
+                  <td>Shopify Global Cloud</td>
+                  <td>Shopify Oxygen (Edge global)</td>
+                  <td>Plataforma a elección (AWS, Vercel, Azure)</td>
+                  <td>App Store / Google Play</td>
+                </tr>
+                <tr>
+                  <td><strong>Tecnologías de Desarrollo</strong></td>
+                  <td>Liquid, HTML5, CSS3, Vanilla JS</td>
+                  <td>Hydrogen, React, Remix, Tailwind</td>
+                  <td>Next.js, Nuxt, Angular, Ruby, etc.</td>
+                  <td>Swift, Kotlin, React Native, Flutter</td>
+                </tr>
+                <tr>
+                  <td><strong>Acceso a Datos de Shopify</strong></td>
+                  <td>Motor de renderizado Liquid nativo</td>
+                  <td>Storefront API (GraphQL)</td>
+                  <td>Storefront API (GraphQL)</td>
+                  <td>Storefront API & Mobile Checkout SDKs</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Tipos de Temas y Casos Comunes -->
+          <h4 style="color: var(--text-primary); font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Tipos de Temas de Shopify</h4>
+          <div class="cards-grid">
+            <div class="concept-card">
+              <div class="card-icon icon-green">🛍️</div>
+              <h4>1. Temas Preconstruidos (Shopify Theme Store)</h4>
+              <p>
+                Opciones gratuitas y de pago creadas por Shopify y partners certificados. Todos los temas de la Theme Store son rigurosamente auditados en rendimiento (Core Web Vitals), accesibilidad y seguridad. Se pueden personalizar sin código mediante el Theme Editor o editando su código Liquid.
+              </p>
+            </div>
+            <div class="concept-card">
+              <div class="card-icon icon-purple">⚡</div>
+              <h4>2. Temas Custom a Medida</h4>
+              <p>
+                Desarrollados desde cero para marcas con requerimientos de UX/UI complejos, integraciones ERP avanzadas o flujos B2B únicos que exceden las capacidades de un tema genérico.
+              </p>
+            </div>
+          </div>
+
+          <!-- Casos Comunes de Clientes en Agencias -->
+          <div class="callout callout-architect">
+            <div class="callout-icon">💼</div>
+            <div class="callout-content">
+              <h4>Peticiones Habituales de Clientes en el Mundo Real</h4>
+              <ul style="margin-left: 1.25rem; font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">
+                <li><strong>Expansión Global y Multidivisa:</strong> Configurar selectores de idiomas y divisas nativos con <em>Shopify Markets</em>.</li>
+                <li><strong>Nuevas Líneas de Productos:</strong> Adaptar la ficha de producto para desplegar tablas de medidas en indumentaria versus especificaciones en accesorios.</li>
+                <li><strong>Migración a Online Store 2.0:</strong> Modernizar temas heredados a plantillas JSON modulares para admitir fuentes dinámicas de Metafields.</li>
+                <li><strong>Expansión B2B:</strong> Implementar el tema oficial <em>Trade</em> de Shopify diseñado para listas de precios al por mayor y pedidos masivos.</li>
+                <li><strong>Headless Enterprise:</strong> Desacoplar el frontend con <em>Hydrogen & Oxygen</em> para empresas con stacks tecnológicos heterogéneos.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Principios Rectores -->
+          <div class="callout callout-pro-tip">
+            <div class="callout-icon">⭐</div>
+            <div class="callout-content">
+              <h4>Mejores Prácticas de Desarrollo de Temas (Shopify Best Practices)</h4>
+              <p>
+                <strong>1. Performance ante todo:</strong> Mínimo JavaScript bloqueante y carga diferida de imágenes.
+                <br><strong>2. Propósito definido (Purpose-built):</strong> Evitar sobrecargar temas con opciones innecesarias.
+                <br><strong>3. UX de primer nivel y Mobile First:</strong> El 75%+ de las transacciones ocurren en smartphones.
+                <br><strong>4. Accesibilidad (WCAG):</strong> Estructuras semánticas y contrastes legibles.
+                <br><strong>5. Simplicidad de personalización:</strong> Diseñar esquemas intuitivos para administradores no técnicos.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SECCIÓN 2: HORIZON & THEME EDITOR                         -->
+        <!-- ========================================================= -->
+        <div class="subtopic" id="sec2-horizon">
+          <h3 class="subtopic-title">Sección 2: Customizing Horizon with the Theme Editor</h3>
+          <p>
+            Comprender la jerarquía visual de un tema es indispensable antes de realizar personalizaciones. Una página típica de e-commerce en Online Store 2.0 se organiza en 5 capas:
+          </p>
+
+          <div class="table-wrapper">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Nivel</th>
+                  <th>Componente</th>
+                  <th>Descripción Técnica</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>1</strong></td>
+                  <td><strong>The Layout</strong></td>
+                  <td>La base estructural del tema (ej. <code>layout/theme.liquid</code>). Aloja elementos persistentes globales como encabezados (Header) y pies de página (Footer).</td>
+                </tr>
+                <tr>
+                  <td><strong>2</strong></td>
+                  <td><strong>The Template</strong></td>
+                  <td>Controla lo que se renderiza en una página específica (ej. <code>templates/product.json</code>, <code>templates/index.json</code>).</td>
+                </tr>
+                <tr>
+                  <td><strong>3</strong></td>
+                  <td><strong>Section Groups</strong></td>
+                  <td>Contenedores modulares de grupos de secciones y app blocks (ej. <code>sections/header-group.json</code>).</td>
+                </tr>
+                <tr>
+                  <td><strong>4</strong></td>
+                  <td><strong>The Sections</strong></td>
+                  <td>Módulos de contenido reutilizables y reordenables que se inyectan en plantillas JSON (archivos <code>.liquid</code> en <code>/sections</code>).</td>
+                </tr>
+                <tr>
+                  <td><strong>5</strong></td>
+                  <td><strong>The Blocks</strong></td>
+                  <td>Micro-componentes anidados dentro de una sección (títulos, botones, textos, ratings) que pueden agregarse, borrarse o reordenarse libremente.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Introducción a Horizon -->
+          <div class="step-card" style="margin-top: 1.5rem;">
+            <div class="step-header">
+              <div class="step-number" style="background: var(--accent-cyan);">H</div>
+              <h4 class="step-title">El Tema Horizon: El Estándar de Referencia OS 2.0</h4>
+            </div>
+            <div class="step-content">
+              <p>
+                <strong>Horizon</strong> es una plantilla ultra-optimizada diseñada por Shopify para demostrar las mejores prácticas de la arquitectura Online Store 2.0:
+              </p>
+              <ul>
+                <li>Plantillas 100% JSON en todas las páginas para admitir <em>App Blocks</em> y <em>Theme Blocks</em>.</li>
+                <li>Enfoque <em>Mobile-First</em> con uso mínimo de JavaScript para garantizar tiempos de carga instantáneos.</li>
+                <li>Máxima accesibilidad y facilidad de personalización drag-and-drop.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Práctica Theme Editor -->
+          <div class="callout callout-architect">
+            <div class="callout-icon">🛠️</div>
+            <div class="callout-content">
+              <h4>Práctica: Personalización con el Theme Editor</h4>
+              <ol style="margin-left: 1.25rem; font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">
+                <li><strong>Confirmar instalación de Horizon:</strong> En <em>Online Store &gt; Themes</em>, verifica que Horizon esté añadido a tu biblioteca.</li>
+                <li><strong>Explorar Secciones:</strong> Haz clic en <strong>Customize (Personalizar)</strong>. Navega por las páginas (Home, Catalog, Contact, Featured Collections) y experimenta añadiendo secciones de formulario de contacto o artículos de blog.</li>
+                <li><strong>Explorar Theme Settings:</strong> En la barra lateral izquierda, abre <em>Theme Settings</em> para configurar la tipografía corporativa, paleta de colores y enlaces a redes sociales.</li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Knowledge Check Quiz: Métodos de Acceso al Theme Editor -->
+          <div class="quiz-container" style="border-color: var(--accent-cyan);">
+            <span class="quiz-badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan);">Knowledge Check • Theme Editor</span>
+            <h3 class="quiz-question-title">Según la documentación de Shopify, ¿cuáles de los siguientes son métodos válidos para acceder al Theme Editor durante el desarrollo? (Selecciona todas las correctas)</h3>
+
+            <form id="themeEditorQuizForm">
+              <div class="quiz-options-list">
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="teQuizOpt1">
+                  <span>Ejecutar tu tema como un tema de desarrollo utilizando Shopify CLI (<code>shopify theme dev</code>).</span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="teQuizOpt2">
+                  <span>Utilizar la integración integrada de Theme Editor dentro de Visual Studio Code.</span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="teQuizOpt3">
+                  <span>Conectar una rama de GitHub a tu tienda utilizando la app oficial de integración de Shopify con GitHub.</span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="checkbox" id="teQuizOpt4">
+                  <span>Subir tu tema empaquetado como archivo <code>.zip</code> a la tienda de Shopify.</span>
+                </label>
+              </div>
+
+              <button type="submit" class="quiz-submit-btn" style="background: linear-gradient(135deg, #0284c7, #0369a1);">Verificar Respuesta</button>
+            </form>
+
+            <div class="quiz-feedback-box" id="themeEditorFeedback"></div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SECCIÓN 3: THEME BUILDING BLOCKS & CARPETAS               -->
+        <!-- ========================================================= -->
+        <div class="subtopic" id="sec3-building-blocks">
+          <h3 class="subtopic-title">Sección 3: Theme Building Blocks & Directory Structure</h3>
+          <p>
+            Todos los temas de Shopify siguen una estructura estandarizada de directorios obligatoria. Esta organización divide el código en archivos de marcado Liquid, recursos de soporte (assets), configuración JSON y snippets reutilizables:
+          </p>
+
+          <!-- Estructura de Directorios Árbol -->
+          <div class="code-block-container">
+            <div class="code-header">
+              <div class="code-meta">
+                <span class="lang-badge">File Tree</span>
+                <span class="code-filename">Estructura Estándar de un Tema Shopify OS 2.0</span>
+              </div>
+            </div>
+            <pre><code class="language-none">📦 shopify-theme/
+├── 📁 assets/       # CSS, JavaScript compilado, fuentes e imágenes estáticas del tema
+├── 📁 blocks/       # Theme Blocks reutilizables independientes
+├── 📁 config/       # settings_schema.json y settings_data.json (configuración del theme editor)
+├── 📁 layout/       # theme.liquid (plantilla base de layout global)
+├── 📁 locales/      # Archivos de traducción y localización multi-idioma (es.json, en.default.json)
+├── 📁 sections/     # Módulos Liquid y grupos JSON de secciones (header, footer, banners)
+├── 📁 snippets/     # Micro-trozos de Liquid reutilizables incluidos vía {% render 'snippet' %}
+└── 📁 templates/    # Plantillas de páginas (.json o .liquid)
+    └── 📁 customers/ # Plantillas específicas de clientes (account, login, register, addresses)</code></pre>
+          </div>
+
+          <!-- Tabla de Componentes y Ubicaciones -->
+          <div class="table-wrapper">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Componente</th>
+                  <th>Tipo de Archivo</th>
+                  <th>Ubicación en el Tema</th>
+                  <th>Propósito Principal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Layout</strong></td>
+                  <td><code>.liquid</code></td>
+                  <td><code>/layout</code></td>
+                  <td>Esqueleto HTML envolvente (encabezados, scripts globales, footer).</td>
+                </tr>
+                <tr>
+                  <td><strong>Template</strong></td>
+                  <td><code>.json</code> / <code>.liquid</code></td>
+                  <td><code>/templates</code></td>
+                  <td>Estructura y secciones de páginas (Home, Producto, Colección, Carrito).</td>
+                </tr>
+                <tr>
+                  <td><strong>Section Groups</strong></td>
+                  <td><code>.json</code></td>
+                  <td><code>/sections</code></td>
+                  <td>Contenedores para encabezados (header-group) y pies de página (footer-group).</td>
+                </tr>
+                <tr>
+                  <td><strong>Sections</strong></td>
+                  <td><code>.liquid</code></td>
+                  <td><code>/sections</code></td>
+                  <td>Módulos de UI con lógica Liquid y esquema de configuración <code>{% schema %}</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong>Blocks</strong></td>
+                  <td>Declarados en <code>schema</code></td>
+                  <td>Dentro de Sections / Blocks</td>
+                  <td>Sub-elementos dinámicos configurables por el comerciante.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Páginas Esenciales -->
+          <h4 style="color: var(--text-primary); font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Páginas Clave en un E-Commerce de Shopify</h4>
+          <div class="cards-grid">
+            <div class="concept-card">
+              <h4><code>index.json</code></h4>
+              <p>Página de inicio (Home Page). El punto de entrada principal donde se comunican los valores de marca.</p>
+            </div>
+            <div class="concept-card">
+              <h4><code>collection.json</code></h4>
+              <p>Listado de productos pertenecientes a una colección específica con filtros y paginación.</p>
+            </div>
+            <div class="concept-card">
+              <h4><code>product.json</code></h4>
+              <p>Página de detalle de producto (PDP) con selector de variantes, precio, compra y metafields.</p>
+            </div>
+            <div class="concept-card">
+              <h4><code>cart.json</code></h4>
+              <p>Resumen del carrito de compras antes del paso al checkout seguro.</p>
+            </div>
+            <div class="concept-card">
+              <h4><code>customers/account.json</code></h4>
+              <p>Portal privado para consultar historial de compras, estado del envío y direcciones.</p>
+            </div>
+            <div class="concept-card">
+              <h4><code>blog.json</code> & <code>article.json</code></h4>
+              <p>Motor de publicaciones y contenidos editoriales para SEO y marketing de contenidos.</p>
+            </div>
+          </div>
+
+          <!-- Knowledge Check Quiz: CSS Folder -->
+          <div class="quiz-container" style="border-color: var(--accent-amber);">
+            <span class="quiz-badge" style="background: rgba(251, 191, 36, 0.15); color: var(--accent-amber);">Knowledge Check • Estructura de Archivos</span>
+            <h3 class="quiz-question-title">¿En qué carpeta del tema debes agregar las hojas de estilo CSS?</h3>
+
+            <form id="cssFolderQuizForm">
+              <div class="quiz-options-list">
+                <label class="quiz-option-label">
+                  <input type="radio" name="css_folder_opt" value="sections">
+                  <span><code>/sections</code></span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="radio" name="css_folder_opt" value="assets">
+                  <span><code>/assets</code></span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="radio" name="css_folder_opt" value="snippets">
+                  <span><code>/snippets</code></span>
+                </label>
+                <label class="quiz-option-label">
+                  <input type="radio" name="css_folder_opt" value="config">
+                  <span><code>/config</code></span>
+                </label>
+              </div>
+
+              <button type="submit" class="quiz-submit-btn" style="background: linear-gradient(135deg, #d97706, #b45309);">Verificar Respuesta</button>
+            </form>
+
+            <div class="quiz-feedback-box" id="cssFolderFeedback"></div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SECCIÓN 4: LAB: BUILD A COLLECTION PAGE                   -->
+        <!-- ========================================================= -->
+        <div class="subtopic" id="sec4-lab-collection">
+          <h3 class="subtopic-title">Sección 4: Lab: Build a Collection Page with a Liquid Section</h3>
+          
+          <div class="callout callout-architect" style="border-left: 4px solid var(--brand-shopify);">
+            <div class="callout-icon">☀️</div>
+            <div class="callout-content">
+              <h4>Escenario de Negocio: Preventa Estacional de "Stylish Stitches"</h4>
+              <p>
+                Lily está fascinada con la velocidad de desarrollo de su tienda. Ahora su equipo ha terminado la <strong>Colección de Verano</strong> y desea comenzar a aceptar <strong>Preventas (Pre-orders)</strong> de inmediato. Lily necesita una <em>plantilla de colección estacional</em> que sea reutilizable tanto para la temporada actual como para futuras colecciones de invierno o primavera.
+              </p>
+              <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
+                <strong>Requerimientos de la Plantilla:</strong>
+                <br>1. Título y descripción de la colección actual.
+                <br>2. Sección de Llamado a la Acción (CTA) para invitar a la preventa con texto configurable.
+                <br>3. Grilla de productos vinculados a la colección.
+              </p>
+            </div>
+          </div>
+
+          <!-- Pasos de Ejecución del Laboratorio -->
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">1</div>
+              <h4 class="step-title">Paso 1: Crear la Colección de Verano en el Shopify Admin</h4>
+            </div>
+            <div class="step-content">
+              <p>
+                En el Admin, ve a <strong>Products &gt; Collections &gt; Create collection</strong>. Asigna el título <code>Colección de Verano 2026</code>, agrega una descripción atractiva y añade 2 o 3 productos de indumentaria. Guarda la colección.
+              </p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">2</div>
+              <h4 class="step-title">Paso 2: Crear la Nueva Plantilla JSON en el Theme Editor</h4>
+            </div>
+            <div class="step-content">
+              <p>
+                Abre el Theme Editor (<em>Online Store &gt; Themes &gt; Customize</em>). En el menú desplegable superior de páginas:
+              </p>
+              <ol>
+                <li>Selecciona <strong>Collections</strong> y haz clic en <strong>⊕ Create template</strong>.</li>
+                <li>Nombre de la plantilla: <code>seasonal-collection</code>.</li>
+                <li>Basada en: <code>Default collection</code>.</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">3</div>
+              <h4 class="step-title">Paso 3: Crear la Sección Liquid <code>sections/call-to-action.liquid</code></h4>
+            </div>
+            <div class="step-content">
+              <p>
+                En el editor de código (o vía Shopify CLI local), crea el archivo <strong><code>sections/call-to-action.liquid</code></strong> con el siguiente código Liquid de producción y su respectivo <code>schema</code>:
+              </p>
+
+              <div class="code-block-container">
+                <div class="code-header">
+                  <div class="code-meta">
+                    <span class="lang-badge">Liquid</span>
+                    <span class="code-filename">sections/call-to-action.liquid</span>
+                  </div>
+                  <button class="copy-btn">Copiar</button>
+                </div>
+                <pre><code class="language-liquid">{% comment %}
+  Section: Call to Action para Colecciones Estacionales (Pre-orders)
+  Permite a Lily personalizar anuncios de preventa y enlaces directos.
+{% endcomment %}
+
+&lt;div class="seasonal-cta-banner page-width" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 2rem; margin: 2rem auto; text-align: center;"&gt;
+  &lt;span style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #059669; letter-spacing: 0.05em;"&gt;
+    {{ section.settings.subheading | default: '¡Preventa Exclusiva!' }}
+  &lt;/span&gt;
+  
+  &lt;h2 style="font-size: 1.8rem; font-weight: 800; color: #0f172a; margin: 0.5rem 0;"&gt;
+    {% if section.settings.custom_title != blank %}
+      {{ section.settings.custom_title }}
+    {% else %}
+      ¡La colección {{ collection.title }} ya está disponible!
+    {% endif %}
+  &lt;/h2&gt;
+
+  {% if section.settings.cta_text != blank %}
+    &lt;div style="font-size: 1rem; color: #475569; max-width: 650px; margin: 0 auto 1.5rem; line-height: 1.6;"&gt;
+      {{ section.settings.cta_text }}
+    &lt;/div&gt;
+  {% endif %}
+
+  {% if section.settings.button_label != blank %}
+    &lt;a href="{{ section.settings.button_link | default: '#product-grid' }}" style="display: inline-block; background: #0f172a; color: #ffffff; padding: 0.85rem 1.75rem; border-radius: 8px; font-weight: 700; text-decoration: none; transition: background 0.2s;"&gt;
+      {{ section.settings.button_label }}
+    &lt;/a&gt;
+  {% endif %}
+&lt;/div&gt;
+
+{% schema %}
+{
+  "name": "Banner Preventa Estacional",
+  "tag": "section",
+  "class": "section-seasonal-cta",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subtítulo / Etiqueta",
+      "default": "Preventa Oficial"
+    },
+    {
+      "type": "text",
+      "id": "custom_title",
+      "label": "Título Personalizado",
+      "info": "Si se deja en blanco, mostrará automáticamente '¡La colección [Nombre] ya está disponible!'"
+    },
+    {
+      "type": "richtext",
+      "id": "cta_text",
+      "label": "Información de Preventa",
+      "default": "<p>Asegura tus prendas de confección limitada antes de que se agote el stock de producción inicial.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto del Botón",
+      "default": "Explorar Prendas en Preventa"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Enlace del Botón"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner Preventa Estacional"
+    }
+  ]
+}
+{% endschema %}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">4</div>
+              <h4 class="step-title">Paso 4: Integrar la Sección en la Plantilla JSON <code>collection.seasonal-collection.json</code></h4>
+            </div>
+            <div class="step-content">
+              <p>
+                Edita el archivo <code>templates/collection.seasonal-collection.json</code> para posicionar el bloque <code>call_to_action</code> entre el banner principal de la colección y la grilla de productos:
+              </p>
+
+              <div class="code-block-container">
+                <div class="code-header">
+                  <div class="code-meta">
+                    <span class="lang-badge">JSON</span>
+                    <span class="code-filename">templates/collection.seasonal-collection.json</span>
+                  </div>
+                  <button class="copy-btn">Copiar</button>
+                </div>
+                <pre><code class="language-json">{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": true
+      }
+    },
+    "call_to_action": {
+      "type": "call-to-action",
+      "settings": {
+        "subheading": "Edición Limitada de Verano",
+        "custom_title": "¡Reserva tus prendas de verano antes del lanzamiento oficial!",
+        "button_label": "Ver Catálogo Completo"
+      }
+    },
+    "product_grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 16,
+        "columns_desktop": 4
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "call_to_action",
+    "product_grid"
+  ]
+}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-number">5</div>
+              <h4 class="step-title">Paso 5: Asignar la Plantilla y Publicar en el Menú Principal</h4>
+            </div>
+            <div class="step-content">
+              <ol>
+                <li>En el Admin de Shopify, ve a <strong>Products &gt; Collections</strong> y abre tu <code>Colección de Verano 2026</code>.</li>
+                <li>En el panel lateral derecho, en <strong>Theme template</strong>, selecciona <code>seasonal-collection</code> y guarda los cambios.</li>
+                <li>Ve a <strong>Online Store &gt; Navigation &gt; Main menu</strong> y añade el enlace hacia <code>All Collections</code> o la colección de verano directamente para que los clientes puedan acceder desde el menú principal.</li>
+              </ol>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Paginación de Módulo -->
+        <div class="module-pagination-nav">
+          <a href="#modulo-lab-dev-store" class="pag-btn">
+            <span class="pag-label">← Módulo Anterior</span>
+            <span class="pag-title">5. Lab: Tienda Dev & Simular Transacción</span>
+          </a>
+          <a href="#modulo-exploring-extending-data" class="pag-btn next-btn">
+            <span class="pag-label">Siguiente Módulo →</span>
+            <span class="pag-title">7. Exploring & Extending Data Model</span>
+          </a>
+        </div>
+      </section>
+      <!-- ========================================================= -->
+      <!-- MODULO: EXPLORING AND EXTENDING SHOPIFY'S DATA MODEL      -->
+      <!-- ========================================================= -->

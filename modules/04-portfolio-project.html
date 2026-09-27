@@ -1,0 +1,215 @@
+<section class="module-section" id="modulo-4-proyecto">
+        <div class="section-header">
+          <span class="section-badge" style="background: rgba(168, 85, 247, 0.15); color: var(--accent-purple);">Módulo 04 • Proyecto Práctico</span>
+          <h2 class="section-title">4. Proyecto de Portafolio: Ficha de Producto Ultra-Técnica</h2>
+        </div>
+
+        <p>
+          En este proyecto construimos una solución integral para productos de alta gama (tecnología/audio). Integramos especificaciones de ingeniería con Metafields, soporte de manuales en PDF y un Metaobject de Garantía y Cuidados con validaciones Liquid condicionales y diseño 100% adaptable para Desktop y Mobile.
+        </p>
+
+        <!-- Subtopic: Modelo de Datos -->
+        <div class="subtopic" id="p4-modelo">
+          <h3 class="subtopic-title">Esquema del Proyecto Práctico</h3>
+          
+          <div class="cards-grid">
+            <div class="concept-card">
+              <div class="card-icon icon-cyan">🧩</div>
+              <h4>Metafields del Producto</h4>
+              <ul style="font-size: 0.85rem; color: var(--text-secondary); margin-left: 1rem; line-height: 1.6;">
+                <li><code>custom.tech_specs</code> (JSON estructurado)</li>
+                <li><code>custom.specs_pdf</code> (file_reference para manual PDF)</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <div class="card-icon icon-green">🛡️</div>
+              <h4>Metaobject: warranty_and_care</h4>
+              <ul style="font-size: 0.85rem; color: var(--text-secondary); margin-left: 1rem; line-height: 1.6;">
+                <li><code>title</code> (Single line text)</li>
+                <li><code>coverage_period</code> (Single line text)</li>
+                <li><code>cleaning_instructions</code> (List of text)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic: Código Liquid -->
+        <div class="subtopic" id="p4-liquid-code">
+          <h3 class="subtopic-title">Código Liquid de Producción: sections/product-tech-specs.liquid</h3>
+          
+          <div class="code-block-container">
+            <div class="code-header">
+              <div class="code-meta">
+                <span class="lang-badge">Liquid</span>
+                <span class="code-filename">sections/product-tech-specs.liquid</span>
+              </div>
+              <button class="copy-btn">Copiar</button>
+            </div>
+            <pre><code class="language-liquid">{% comment %}
+  Section: Product Technical Specs & Warranty Metaobject
+  Solo se renderiza si el producto posee datos de especificaciones cargados.
+{% endcomment %}
+
+{% assign specs = product.metafields.custom.tech_specs.value %}
+{% assign pdf_doc = product.metafields.custom.specs_pdf.value %}
+{% assign warranty = product.metafields.custom.warranty_and_care.value %}
+
+{% if specs != blank or warranty != blank %}
+  &lt;section class="shopify-section-tech-specs page-width" id="TechSpecs-{{ section.id }}"&gt;
+    &lt;div class="tech-specs-container"&gt;
+      
+      &lt;div class="tech-specs-header"&gt;
+        &lt;span class="tech-subheading"&gt;{{ section.settings.subheading | default: 'Ingeniería y Rendimiento' }}&lt;/span&gt;
+        &lt;h2 class="tech-title"&gt;{{ section.settings.heading | default: 'Especificaciones Técnicas' }}&lt;/h2&gt;
+      &lt;/div&gt;
+
+      &lt;div class="tech-specs-grid"&gt;
+        
+        {% comment %} Columna 1: Especificaciones Técnicas (JSON Metafield) {% endcomment %}
+        {% if specs != blank %}
+          &lt;div class="tech-card specs-box"&gt;
+            &lt;h3 class="card-headline"&gt;Detalles del Hardware&lt;/h3&gt;
+            &lt;dl class="specs-definition-list"&gt;
+              {% for item in specs %}
+                &lt;div class="spec-row"&gt;
+                  &lt;dt class="spec-term"&gt;{{ item[0] | replace: '_', ' ' | capitalize }}&lt;/dt&gt;
+                  &lt;dd class="spec-desc"&gt;{{ item[1] }}&lt;/dd&gt;
+                &lt;/div&gt;
+              {% endfor %}
+            &lt;/dl&gt;
+
+            {% if pdf_doc != blank %}
+              &lt;a href="{{ pdf_doc.url }}" class="btn-download-pdf" target="_blank" rel="noopener noreferrer"&gt;
+                &lt;svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;
+                  &lt;path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"&gt;&lt;/path&gt;
+                  &lt;polyline points="14 2 14 8 20 8"&gt;&lt;/polyline&gt;
+                &lt;/svg&gt;
+                &lt;span&gt;Descargar Manual Oficial en PDF ({{ pdf_doc.file_size | file_size }})&lt;/span&gt;
+              &lt;/a&gt;
+            {% endif %}
+          &lt;/div&gt;
+        {% endif %}
+
+        {% comment %} Columna 2: Metaobject de Garantía y Cuidado {% endcomment %}
+        {% if warranty != blank %}
+          &lt;div class="tech-card warranty-box"&gt;
+            &lt;span class="badge-warranty"&gt;Garantía Oficial&lt;/span&gt;
+            &lt;h3 class="card-headline"&gt;{{ warranty.title }}&lt;/h3&gt;
+            &lt;p class="warranty-coverage"&gt;{{ warranty.coverage_period }}&lt;/p&gt;
+
+            &lt;div class="care-instructions-block"&gt;
+              &lt;h4 class="care-subtitle"&gt;Guía de Mantenimiento:&lt;/h4&gt;
+              &lt;ul class="care-list"&gt;
+                {% for tip in warranty.cleaning_instructions.value %}
+                  &lt;li&gt;{{ tip }}&lt;/li&gt;
+                {% endfor %}
+              &lt;/ul&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        {% endif %}
+
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+{% endif %}
+
+{% schema %}
+{
+  "name": "Especificaciones Técnicas",
+  "tag": "section",
+  "class": "section-tech-specs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título de la Sección",
+      "default": "Especificaciones y Cuidados"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subtítulo",
+      "default": "Ingeniería de Audio"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Especificaciones Técnicas (Metafields)"
+    }
+  ]
+}
+{% endschema %}</code></pre>
+          </div>
+        </div>
+
+        <!-- Subtopic: Simulador Interactivo Mobile / Desktop -->
+        <div class="subtopic" id="p4-simulador">
+          <h3 class="subtopic-title">Simulador Interactivo de Renderizado en Vivo</h3>
+          <p>
+            Prueba cómo reacciona la sección en pantallas de escritorio vs. smartphones, y valida cómo la directiva condicional Liquid <code>{% if specs != blank %}</code> previene la inyección de HTML vacío cuando un producto no tiene metafields asignados.
+          </p>
+
+          <!-- Componente Simulador -->
+          <div class="project-simulator-container">
+            <div class="simulator-toolbar">
+              <div class="simulator-title-group">
+                <div class="simulator-status-dot"></div>
+                <strong style="font-size: 0.9rem; color: #ffffff;">Live Section Preview: product-tech-specs.liquid</strong>
+              </div>
+
+              <div class="viewport-controls">
+                <button class="viewport-btn active" id="viewDesktopBtn">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                  </svg>
+                  <span>Desktop (100%)</span>
+                </button>
+                <button class="viewport-btn" id="viewMobileBtn">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                  </svg>
+                  <span>Mobile (375px)</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Escenario interactivo -->
+            <div class="simulator-stage">
+              <div class="device-frame mode-desktop" id="deviceFrame">
+                <div id="shopifyLivePreview">
+                  <!-- Rendered dynamically by scripts/preview-engine.js -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Barra de Control de Estado de Datos -->
+            <div class="data-mock-toggle-bar">
+              <div id="dataStateStatus">
+                <span style="color: #95bf47; font-weight: 700;">● Metafields Poblados</span> (Renderizado Activo)
+              </div>
+              <button class="mock-state-btn" id="toggleDataStateBtn">
+                Vaciar Metafields (Simular null)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paginación de Módulo -->
+        <div class="module-pagination-nav">
+          <a href="#modulo-3" class="pag-btn">
+            <span class="pag-label">← Módulo Anterior</span>
+            <span class="pag-title">3. Filtrado y Búsqueda</span>
+          </a>
+          <a href="#modulo-lab-dev-store" class="pag-btn next-btn">
+            <span class="pag-label">Siguiente Módulo →</span>
+            <span class="pag-title">5. Lab: Tienda Dev & Simular Transacción</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- LAB: CREAR DEV STORE CON DATOS Y SIMULAR TRANSACCIÓN              -->
+      <!-- ================================================================= -->

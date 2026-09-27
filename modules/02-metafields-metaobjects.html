@@ -1,0 +1,146 @@
+<section class="module-section" id="modulo-2">
+        <div class="section-header">
+          <span class="section-badge">Módulo 02</span>
+          <h2 class="section-title">2. Dominio Total de Metafields y Metaobjects</h2>
+        </div>
+
+        <p>
+          Los <strong>Metafields</strong> permiten extender el esquema de datos nativo asociando pares clave-valor fuertemente tipados a productos, variantes, clientes o pedidos. Los <strong>Metaobjects</strong> son entidades completas y reutilizables compuestas por múltiples campos, equivalentes a tablas relacionales personalizadas en Shopify.
+        </p>
+
+        <!-- Subtopic: Tipos de Datos -->
+        <div class="subtopic" id="m2-tipos-datos">
+          <h3 class="subtopic-title">Tipos de Datos en Metafields</h3>
+          
+          <div class="cards-grid">
+            <div class="concept-card">
+              <div class="card-icon icon-green">📄</div>
+              <h4>Texto y Primitivos</h4>
+              <p><code>single_line_text_field</code>, <code>multi_line_text_field</code>, <code>number_integer</code>, <code>number_decimal</code>, <code>boolean</code>, <code>date</code> y <code>color</code>.</p>
+            </div>
+            <div class="concept-card">
+              <div class="card-icon icon-cyan">🔗</div>
+              <h4>Referencias (References)</h4>
+              <p><code>file_reference</code> (PDFs, videos, imágenes en CDN), <code>product_reference</code>, <code>page_reference</code> y <code>metaobject_reference</code>.</p>
+            </div>
+            <div class="concept-card">
+              <div class="card-icon icon-purple">📚</div>
+              <h4>Listas (Lists)</h4>
+              <p>Array tipado: <code>list.single_line_text_field</code> o <code>list.file_reference</code> para galerías de demostración y listas de características.</p>
+            </div>
+            <div class="concept-card">
+              <div class="card-icon icon-amber">⚙️</div>
+              <h4>Estructuras JSON</h4>
+              <p><code>json</code>: Permite persistir estructuras anidadas arbitrarias cuando se requiere flexibilidad no soportada por tipos estándar.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic: Liquid Syntax -->
+        <div class="subtopic" id="m2-liquid">
+          <h3 class="subtopic-title">Metafields en Liquid: Sintaxis y Filtros</h3>
+          <p>
+            En Liquid, el acceso canónico se realiza a través de la notación de objeto <code>{{ resource.metafields.namespace.key.value }}</code>. <strong>Regla de oro:</strong> Siempre incluir la propiedad <code>.value</code> para desempaquetar el objeto tipado subyacente.
+          </p>
+
+          <div class="code-block-container">
+            <div class="code-header">
+              <div class="code-meta">
+                <span class="lang-badge">Liquid</span>
+                <span class="code-filename">snippets/render-metafields.liquid</span>
+              </div>
+              <button class="copy-btn">Copiar</button>
+            </div>
+            <pre><code class="language-liquid">{% comment %} 1. Acceso a Campo Simple de Texto {% endcomment %}
+{% if product.metafields.custom.fabric_origin.value != blank %}
+  &lt;p class="origin-info"&gt;Fabricación: {{ product.metafields.custom.fabric_origin.value }}&lt;/p&gt;
+{% endif %}
+
+{% comment %} 2. Renderizado de Referencia a Archivo (File Reference - PDF / Imagen) {% endcomment %}
+{% assign spec_sheet = product.metafields.custom.spec_sheet_pdf.value %}
+{% if spec_sheet != blank %}
+  &lt;a href="{{ spec_sheet.url }}" target="_blank" class="btn-download"&gt;
+    Descargar Documento Técnico ({{ spec_sheet.file_size | file_size }})
+  &lt;/a&gt;
+{% endif %}
+
+{% comment %} 3. Iteración sobre Lista de Referencias de Imágenes {% endcomment %}
+{% assign tech_diagrams = product.metafields.custom.exploded_view_images.value %}
+{% if tech_diagrams != blank %}
+  &lt;div class="technical-gallery"&gt;
+    {% for image in tech_diagrams %}
+      {{ image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'tech-img' }}
+    {% endfor %}
+  &lt;/div&gt;
+{% endif %}</code></pre>
+          </div>
+        </div>
+
+        <!-- Subtopic: Metaobjects -->
+        <div class="subtopic" id="m2-metaobjects">
+          <h3 class="subtopic-title">Metaobjects: Modelado Reutilizable y Páginas Dinámicas</h3>
+          <p>
+            Un <strong>Metaobject</strong> es un registro estructurado con una definición formal (Schema). Son ideales para entidades que se repiten a lo largo de múltiples productos, como tablas de medidas (Size Charts), perfiles de autores/diseñadores o <em>guías de cuidado y garantía</em>.
+          </p>
+
+          <div class="code-block-container">
+            <div class="code-header">
+              <div class="code-meta">
+                <span class="lang-badge">Liquid</span>
+                <span class="code-filename">sections/metaobject-warranty-block.liquid</span>
+              </div>
+              <button class="copy-btn">Copiar</button>
+            </div>
+            <pre><code class="language-liquid">{% comment %} Consumo de Metaobject referenciado desde el Producto {% endcomment %}
+{% assign warranty_entry = product.metafields.custom.warranty_and_care.value %}
+
+{% if warranty_entry != blank %}
+  &lt;div class="warranty-card" style="border-left: 4px solid #95bf47; padding: 1.5rem; background: #f8fafc;"&gt;
+    &lt;h3&gt;{{ warranty_entry.policy_name }}&lt;/h3&gt;
+    &lt;p class="coverage"&gt;<strong>Plazo de Cobertura:</strong> {{ warranty_entry.duration_months }} meses&lt;/p&gt;
+    
+    {% comment %} Iterar lista interna dentro del metaobject {% endcomment %}
+    &lt;h4&gt;Protocolo de Mantenimiento:&lt;/h4&gt;
+    &lt;ul&gt;
+      {% for tip in warranty_entry.maintenance_tips.value %}
+        &lt;li&gt;{{ tip }}&lt;/li&gt;
+      {% endfor %}
+    &lt;/ul&gt;
+  &lt;/div&gt;
+{% endif %}</code></pre>
+          </div>
+        </div>
+
+        <!-- Subtopic: Theme Editor & Dynamic Sources -->
+        <div class="subtopic" id="m2-theme-editor">
+          <h3 class="subtopic-title">Conexión con el Theme Editor (Dynamic Sources)</h3>
+          <p>
+            En la arquitectura <strong>Online Store 2.0 (OS 2.0)</strong>, los esquemas de secciones y bloques (`schema JSON`) permiten definir configuraciones que se pueden conectar dinámicamente con Metafields y Metaobjects sin alterar código.
+          </p>
+          <div class="callout callout-architect">
+            <div class="callout-icon">💡</div>
+            <div class="callout-content">
+              <h4>Arquitectura sin Código para Clientes</h4>
+              <p>
+                Al vincular Metafields como <em>Dynamic Sources</em> en el Theme Editor, los editores y gestores de catálogo de la tienda pueden cambiar especificaciones o asociar tablas de cuidado desde la interfaz visual nativa de Shopify, garantizando un acoplamiento limpio entre contenido y diseño.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paginación de Módulo -->
+        <div class="module-pagination-nav">
+          <a href="#modulo-1" class="pag-btn">
+            <span class="pag-label">← Módulo Anterior</span>
+            <span class="pag-title">1. Modelo de Datos de Productos</span>
+          </a>
+          <a href="#modulo-3" class="pag-btn next-btn">
+            <span class="pag-label">Siguiente Módulo →</span>
+            <span class="pag-title">3. Filtrado y Búsqueda</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- MODULO 3: FILTRADO Y BUSQUEDA                             -->
+      <!-- ========================================================= -->

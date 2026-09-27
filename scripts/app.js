@@ -36,42 +36,189 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ScrollSpy for Active Sidebar Links
-  const sections = document.querySelectorAll('.module-section, .subtopic');
-  const navLinks = document.querySelectorAll('.sidebar .nav-link, .sidebar .nav-sub-link');
+  // Ordered List of Course Modules
+  const moduleList = [
+    { id: 'modulo-1', title: '1. Modelo de Datos de Productos' },
+    { id: 'modulo-2', title: '2. Metafields y Metaobjects' },
+    { id: 'modulo-3', title: '3. Filtrado y Búsqueda' },
+    { id: 'modulo-4-proyecto', title: '4. Proyecto Práctico Portafolio' },
+    { id: 'modulo-lab-dev-store', title: '🛍️ Lab: Tienda Dev & Simular Transacción' },
+    { id: 'modulo-customizing-themes', title: '🎨 Módulo: Customizing Themes' },
+    { id: 'modulo-exploring-extending-data', title: '🧩 Módulo: Exploring & Extending Data Model' },
+    { id: 'modulo-5-lab', title: '★ 5. Laboratorio Práctico Sandbox' }
+  ];
 
-  const observerOptions = {
-    root: null,
-    rootMargin: '-80px 0px -70% 0px',
-    threshold: 0
-  };
+  const moduleSections = document.querySelectorAll('.module-section');
+  const moduleDropdown = document.getElementById('moduleSelectDropdown');
+  const prevModBtn = document.getElementById('prevModuleBtn');
+  const nextModBtn = document.getElementById('nextModuleBtn');
+  const currentModBadge = document.getElementById('currentModuleBadge');
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.getAttribute('id');
-        if (!id) return;
-        navLinks.forEach(link => {
-          const href = link.getAttribute('href');
-          if (href === `#${id}`) {
-            link.classList.add('active');
-          } else if (href && href.startsWith('#') && !link.closest('.nav-sub-menu')) {
-            // Check if current section is child of this module
-            const parentModule = entry.target.closest('.module-section');
-            if (parentModule && parentModule.getAttribute('id') === href.replace('#', '')) {
-              link.classList.add('active');
-            } else {
-              link.classList.remove('active');
-            }
-          } else {
-            link.classList.remove('active');
-          }
-        });
+  let currentModuleIndex = 0;
+
+  // Set and render active module
+  function setActiveModule(targetModuleId, targetSubtopicId = null, updateHash = true) {
+    let index = moduleList.findIndex(m => m.id === targetModuleId);
+    if (index === -1) index = 0;
+    currentModuleIndex = index;
+
+    const activeId = moduleList[index].id;
+
+    // Show only the selected module section
+    moduleSections.forEach(section => {
+      if (section.getAttribute('id') === activeId) {
+        section.classList.add('active-module-view');
+      } else {
+        section.classList.remove('active-module-view');
       }
     });
-  }, observerOptions);
 
-  sections.forEach(section => observer.observe(section));
+    // Update Dropdown Selector
+    if (moduleDropdown) {
+      moduleDropdown.value = activeId;
+    }
+
+    // Update Header Indicator Badge
+    if (currentModBadge) {
+      currentModBadge.innerText = `Módulo ${index + 1} de ${moduleList.length}`;
+    }
+
+    // Update Navigation Arrow Buttons
+    if (prevModBtn) {
+      prevModBtn.disabled = (index === 0);
+    }
+    if (nextModBtn) {
+      nextModBtn.disabled = (index === moduleList.length - 1);
+    }
+
+    // Update Sidebar Navigation Active States
+    const allNavLinks = document.querySelectorAll('.sidebar .nav-link');
+    const allSubLinks = document.querySelectorAll('.sidebar .nav-sub-link');
+
+    allNavLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href === `#${activeId}`) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+
+    allSubLinks.forEach(subLink => {
+      const href = subLink.getAttribute('href');
+      if (targetSubtopicId && href === `#${targetSubtopicId}`) {
+        subLink.classList.add('active');
+      } else {
+        subLink.classList.remove('active');
+      }
+    });
+
+    // Update URL hash if requested
+    if (updateHash) {
+      const newHash = targetSubtopicId ? `#${targetSubtopicId}` : `#${activeId}`;
+      if (window.location.hash !== newHash) {
+        window.history.pushState(null, '', newHash);
+      }
+    }
+
+    // Scroll handling
+    if (targetSubtopicId) {
+      const subElem = document.getElementById(targetSubtopicId);
+      if (subElem) {
+        setTimeout(() => {
+          subElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 50);
+        return;
+      }
+    }
+    
+    // Default scroll to top of content area
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Handle Dropdown Change
+  if (moduleDropdown) {
+    moduleDropdown.addEventListener('change', (e) => {
+      setActiveModule(e.target.value);
+    });
+  }
+
+  // Handle Prev / Next Module Buttons
+  if (prevModBtn) {
+    prevModBtn.addEventListener('click', () => {
+      if (currentModuleIndex > 0) {
+        setActiveModule(moduleList[currentModuleIndex - 1].id);
+      }
+    });
+  }
+
+  if (nextModBtn) {
+    nextModBtn.addEventListener('click', () => {
+      if (currentModuleIndex < moduleList.length - 1) {
+        setActiveModule(moduleList[currentModuleIndex + 1].id);
+      }
+    });
+  }
+
+  // Intercept Sidebar & Pagination Link Clicks
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href^="#"]');
+    if (!link) return;
+
+    const href = link.getAttribute('href');
+    if (!href || href === '#') return;
+
+    const targetId = href.replace('#', '');
+    
+    // Check if target is a module section
+    const isModule = moduleList.some(m => m.id === targetId);
+    if (isModule) {
+      e.preventDefault();
+      setActiveModule(targetId);
+      return;
+    }
+
+    // Check if target is a subtopic inside a module
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      const parentModule = targetElement.closest('.module-section');
+      if (parentModule) {
+        e.preventDefault();
+        const parentModuleId = parentModule.getAttribute('id');
+        setActiveModule(parentModuleId, targetId);
+      }
+    }
+  });
+
+  // Handle Initial Load and Browser Back/Forward (hashchange)
+  function handleUrlHash() {
+    const hash = window.location.hash.replace('#', '');
+    if (!hash) {
+      setActiveModule(moduleList[0].id, null, false);
+      return;
+    }
+
+    const isModule = moduleList.some(m => m.id === hash);
+    if (isModule) {
+      setActiveModule(hash, null, false);
+      return;
+    }
+
+    const subElem = document.getElementById(hash);
+    if (subElem) {
+      const parentModule = subElem.closest('.module-section');
+      if (parentModule) {
+        setActiveModule(parentModule.getAttribute('id'), hash, false);
+        return;
+      }
+    }
+
+    // Default fallback
+    setActiveModule(moduleList[0].id, null, false);
+  }
+
+  window.addEventListener('hashchange', handleUrlHash);
+  handleUrlHash();
 
   // Copy Code Button Logic
   document.querySelectorAll('.copy-btn').forEach(button => {

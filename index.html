@@ -24,7 +24,7 @@
   <!-- Reading Progress Bar -->
   <div class="reading-progress-bar" id="readingProgress"></div>
 
-  <!-- Top Navigation Bar -->
+<!-- Top Navigation Bar -->
   <header class="top-nav">
     <div style="display: flex; align-items: center; gap: 1rem;">
       <button class="menu-toggle-btn" id="mobileMenuBtn" aria-label="Abrir Menú">
@@ -56,7 +56,7 @@
   <!-- App Main Layout Container -->
   <div class="app-container">
 
-    <!-- Sticky Navigation Sidebar -->
+<!-- Sticky Navigation Sidebar -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-heading">Módulos del Curso</div>
       <ul class="nav-menu">
@@ -162,7 +162,7 @@
     <!-- Main Content Area -->
     <main class="content-area">
 
-      <!-- Hero Header -->
+<!-- Hero Header -->
       <section class="hero-banner">
         <div class="hero-tag">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -170,16 +170,46 @@
           </svg>
           Ingeniería de E-Commerce & Arquitectura Shopify
         </div>
-        <h1 class="hero-title">Dominio de Modelos de Datos, Metaobjects y Liquid</h1>
         <p class="hero-desc">
-          Guía técnica exhaustiva para desarrolladores y agencias. Aprende a estructurar catálogos enterprise, manipular APIs GraphQL, extender modelos mediante Metaobjects y construir secciones dinámicas ultra-optimizadas para mobile y desktop.
+          Guía técnica exhaustiva y plataforma interactiva para desarrolladores y agencias. Aprende a estructurar catálogos enterprise, manipular APIs GraphQL, extender modelos mediante Metaobjects y construir temas modulares de alto rendimiento.
         </p>
       </section>
 
+<!-- Quick Module Switcher Toolbar -->
+      <div class="module-switcher-bar">
+        <div class="module-selector-group">
+          <label for="moduleSelectDropdown" style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); white-space: nowrap;">
+            📚 Módulo Activo:
+          </label>
+          <select id="moduleSelectDropdown" class="module-select-dropdown">
+            <option value="modulo-1">Módulo 1: Modelo de Datos de Productos</option>
+            <option value="modulo-2">Módulo 2: Metafields y Metaobjects</option>
+            <option value="modulo-3">Módulo 3: Filtrado y Búsqueda</option>
+            <option value="modulo-4-proyecto">Módulo 4: Proyecto Práctico Portafolio</option>
+            <option value="modulo-lab-dev-store">Módulo 5: Lab: Tienda Dev & Simular Transacción</option>
+            <option value="modulo-customizing-themes">Módulo 6: Customizing Themes</option>
+            <option value="modulo-exploring-extending-data">Módulo 7: Exploring & Extending Data Model</option>
+            <option value="modulo-5-lab">Módulo 8: Laboratorio Sandbox Interactivo</option>
+          </select>
+        </div>
+
+        <div class="module-nav-arrows">
+          <span id="currentModuleBadge" class="badge-tag" style="background: rgba(149, 191, 71, 0.2); color: var(--brand-shopify);">
+            Módulo 1 de 8
+          </span>
+          <button type="button" id="prevModuleBtn" class="mod-arrow-btn" title="Módulo Anterior">
+            ← Anterior
+          </button>
+          <button type="button" id="nextModuleBtn" class="mod-arrow-btn" title="Siguiente Módulo">
+            Siguiente →
+          </button>
+        </div>
+      </div>
+
       <!-- ========================================================= -->
-      <!-- MODULO 1: MODELO DE DATOS DE PRODUCTOS                    -->
+      <!-- MODULE: 01-product-data-model.html -->
       <!-- ========================================================= -->
-      <section class="module-section" id="modulo-1">
+<section class="module-section" id="modulo-1">
         <div class="section-header">
           <span class="section-badge">Módulo 01</span>
           <h2 class="section-title">1. Modelo de Datos de Productos en Shopify</h2>
@@ -491,12 +521,25 @@ pro-x900,,,,,,Color,Midnight Black,Edición,Studio DAC,AC-X900-BLK-DAC,429.00,sh
 pro-x900,,,,,,Color,Arctic Silver,Edición,Standard,AC-X900-SLV,349.00,shopify,30</code></pre>
           </div>
         </div>
+
+        <!-- Paginación de Módulo -->
+        <div class="module-pagination-nav">
+          <div></div>
+          <a href="#modulo-2" class="pag-btn next-btn">
+            <span class="pag-label">Siguiente Módulo →</span>
+            <span class="pag-title">2. Metafields y Metaobjects</span>
+          </a>
+        </div>
       </section>
 
       <!-- ========================================================= -->
       <!-- MODULO 2: METAFIELDS Y METAOBJECTS                        -->
       <!-- ========================================================= -->
-      <section class="module-section" id="modulo-2">
+
+      <!-- ========================================================= -->
+      <!-- MODULE: 02-metafields-metaobjects.html -->
+      <!-- ========================================================= -->
+<section class="module-section" id="modulo-2">
         <div class="section-header">
           <span class="section-badge">Módulo 02</span>
           <h2 class="section-title">2. Dominio Total de Metafields y Metaobjects</h2>
@@ -625,12 +668,28 @@ pro-x900,,,,,,Color,Arctic Silver,Edición,Standard,AC-X900-SLV,349.00,shopify,3
             </div>
           </div>
         </div>
+
+        <!-- Paginación de Módulo -->
+        <div class="module-pagination-nav">
+          <a href="#modulo-1" class="pag-btn">
+            <span class="pag-label">← Módulo Anterior</span>
+            <span class="pag-title">1. Modelo de Datos de Productos</span>
+          </a>
+          <a href="#modulo-3" class="pag-btn next-btn">
+            <span class="pag-label">Siguiente Módulo →</span>
+            <span class="pag-title">3. Filtrado y Búsqueda</span>
+          </a>
+        </div>
       </section>
 
       <!-- ========================================================= -->
       <!-- MODULO 3: FILTRADO Y BUSQUEDA                             -->
       <!-- ========================================================= -->
-      <section class="module-section" id="modulo-3">
+
+      <!-- ========================================================= -->
+      <!-- MODULE: 03-search-filtering.html -->
+      <!-- ========================================================= -->
+<section class="module-section" id="modulo-3">
         <div class="section-header">
           <span class="section-badge">Módulo 03</span>
           <h2 class="section-title">3. Filtrado y Búsqueda con Datos Personalizados</h2>
@@ -713,12 +772,28 @@ class CollectionFilters {
 }</code></pre>
           </div>
         </div>
+
+        <!-- Paginación de Módulo -->
+        <div class="module-pagination-nav">
+          <a href="#modulo-2" class="pag-btn">
+            <span class="pag-label">← Módulo Anterior</span>
+            <span class="pag-title">2. Metafields y Metaobjects</span>
+          </a>
+          <a href="#modulo-4-proyecto" class="pag-btn next-btn">
+            <span class="pag-label">Siguiente Módulo →</span>
+            <span class="pag-title">4. Proyecto Práctico Portafolio</span>
+          </a>
+        </div>
       </section>
 
       <!-- ========================================================= -->
       <!-- MODULO 4: PROYECTO PRACTICO DE PORTAFOLIO                 -->
       <!-- ========================================================= -->
-      <section class="module-section" id="modulo-4-proyecto">
+
+      <!-- ========================================================= -->
+      <!-- MODULE: 04-portfolio-project.html -->
+      <!-- ========================================================= -->
+<section class="module-section" id="modulo-4-proyecto">
         <div class="section-header">
           <span class="section-badge" style="background: rgba(168, 85, 247, 0.15); color: var(--accent-purple);">Módulo 04 • Proyecto Práctico</span>
           <h2 class="section-title">4. Proyecto de Portafolio: Ficha de Producto Ultra-Técnica</h2>
@@ -916,12 +991,28 @@ class CollectionFilters {
             </div>
           </div>
         </div>
+
+        <!-- Paginación de Módulo -->
+        <div class="module-pagination-nav">
+          <a href="#modulo-3" class="pag-btn">
+            <span class="pag-label">← Módulo Anterior</span>
+            <span class="pag-title">3. Filtrado y Búsqueda</span>
+          </a>
+          <a href="#modulo-lab-dev-store" class="pag-btn next-btn">
+            <span class="pag-label">Siguiente Módulo →</span>
+            <span class="pag-title">5. Lab: Tienda Dev & Simular Transacción</span>
+          </a>
+        </div>
       </section>
 
       <!-- ================================================================= -->
       <!-- LAB: CREAR DEV STORE CON DATOS Y SIMULAR TRANSACCIÓN              -->
       <!-- ================================================================= -->
-      <section class="module-section" id="modulo-lab-dev-store">
+
+      <!-- ========================================================= -->
+      <!-- MODULE: 05-dev-store-lab.html -->
+      <!-- ========================================================= -->
+<section class="module-section" id="modulo-lab-dev-store">
         <div class="section-header">
           <span class="section-badge" style="background: rgba(149, 191, 71, 0.2); color: var(--brand-shopify);">Laboratorio Guiado • Fundamentos</span>
           <h2 class="section-title">Lab: Build a dev store with product data and simulate a transaction</h2>
@@ -1171,10 +1262,27 @@ class CollectionFilters {
           </div>
         </div>
 
+        <!-- Paginación de Módulo -->
+        <div class="module-pagination-nav">
+          <a href="#modulo-4-proyecto" class="pag-btn">
+            <span class="pag-label">← Módulo Anterior</span>
+            <span class="pag-title">4. Proyecto Práctico Portafolio</span>
+          </a>
+          <a href="#modulo-customizing-themes" class="pag-btn next-btn">
+            <span class="pag-label">Siguiente Módulo →</span>
+            <span class="pag-title">6. Customizing Themes</span>
+          </a>
+        </div>
+      </section>
+
       <!-- ========================================================= -->
       <!-- MODULO: CUSTOMIZING THEMES (PERSONALIZACIÓN DE TEMAS)     -->
       <!-- ========================================================= -->
-      <section class="module-section" id="modulo-customizing-themes">
+
+      <!-- ========================================================= -->
+      <!-- MODULE: 06-customizing-themes.html -->
+      <!-- ========================================================= -->
+<section class="module-section" id="modulo-customizing-themes">
         <div class="section-header">
           <span class="section-badge" style="background: rgba(56, 189, 248, 0.2); color: var(--accent-cyan);">Módulo Avanzado • Storefronts & Themes</span>
           <h2 class="section-title">Customizing Themes (Personalización de Temas en Shopify)</h2>
@@ -1761,11 +1869,26 @@ class CollectionFilters {
 
         </div>
 
+        <!-- Paginación de Módulo -->
+        <div class="module-pagination-nav">
+          <a href="#modulo-lab-dev-store" class="pag-btn">
+            <span class="pag-label">← Módulo Anterior</span>
+            <span class="pag-title">5. Lab: Tienda Dev & Simular Transacción</span>
+          </a>
+          <a href="#modulo-exploring-extending-data" class="pag-btn next-btn">
+            <span class="pag-label">Siguiente Módulo →</span>
+            <span class="pag-title">7. Exploring & Extending Data Model</span>
+          </a>
+        </div>
       </section>
       <!-- ========================================================= -->
       <!-- MODULO: EXPLORING AND EXTENDING SHOPIFY'S DATA MODEL      -->
       <!-- ========================================================= -->
-      <section class="module-section" id="modulo-exploring-extending-data">
+
+      <!-- ========================================================= -->
+      <!-- MODULE: 07-exploring-data-model.html -->
+      <!-- ========================================================= -->
+<section class="module-section" id="modulo-exploring-extending-data">
         <div class="section-header">
           <span class="section-badge" style="background: rgba(251, 191, 36, 0.2); color: var(--accent-amber);">Módulo Avanzado • Data Architecture</span>
           <h2 class="section-title">Exploring and Extending Shopify’s Data Model</h2>
@@ -2297,14 +2420,29 @@ class CollectionFilters {
 
         </div>
 
+        <!-- Paginación de Módulo -->
+        <div class="module-pagination-nav">
+          <a href="#modulo-customizing-themes" class="pag-btn">
+            <span class="pag-label">← Módulo Anterior</span>
+            <span class="pag-title">6. Customizing Themes</span>
+          </a>
+          <a href="#modulo-5-lab" class="pag-btn next-btn">
+            <span class="pag-label">Siguiente Módulo →</span>
+            <span class="pag-title">8. Laboratorio Sandbox Interactivo</span>
+          </a>
+        </div>
       </section>
       <!-- ========================================================= -->
       <!-- MODULO 5: LABORATORIO PRACTICO SANDBOX                    -->
       <!-- ========================================================= -->
-      <section class="module-section" id="modulo-5-lab">
+
+      <!-- ========================================================= -->
+      <!-- MODULE: 08-sandbox-practice-lab.html -->
+      <!-- ========================================================= -->
+<section class="module-section" id="modulo-5-lab">
         <div class="section-header">
-          <span class="section-badge" style="background: rgba(168, 85, 247, 0.2); color: var(--accent-purple);">Módulo 05 • Sandbox Interactivo</span>
-          <h2 class="section-title">5. Laboratorio Práctico: Creador y Renderizador de Metafields</h2>
+          <span class="section-badge" style="background: rgba(168, 85, 247, 0.2); color: var(--accent-purple);">Módulo 08 • Sandbox Interactivo</span>
+          <h2 class="section-title">8. Laboratorio Práctico: Creador y Renderizador de Metafields</h2>
         </div>
 
         <p>
@@ -2466,6 +2604,18 @@ class CollectionFilters {
 
           </div>
         </div>
+
+        <!-- Paginación de Módulo -->
+        <div class="module-pagination-nav">
+          <a href="#modulo-exploring-extending-data" class="pag-btn">
+            <span class="pag-label">← Módulo Anterior</span>
+            <span class="pag-title">7. Exploring & Extending Data Model</span>
+          </a>
+          <a href="#modulo-1" class="pag-btn next-btn">
+            <span class="pag-label">Volver al Inicio ↺</span>
+            <span class="pag-title">1. Modelo de Datos de Productos</span>
+          </a>
+        </div>
       </section>
 
       <!-- Footer -->
@@ -2476,14 +2626,14 @@ class CollectionFilters {
     </main>
   </div>
 
-  <!-- Prism.js Syntax Highlighting Script -->
+  <!-- Prism.js Syntax Highlighter -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-liquid.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-graphql.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-graphql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
 
-  <!-- Application Logic Scripts -->
+  <!-- Application Logic -->
   <script src="scripts/data-models.js"></script>
   <script src="scripts/preview-engine.js"></script>
   <script src="scripts/practice-lab.js"></script>
