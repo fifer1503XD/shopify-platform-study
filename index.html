@@ -163,6 +163,7 @@
           </a>
           <ul class="nav-sub-menu">
             <li><a href="#plp-arquitectura" class="nav-sub-link">Arquitectura OS 2.0 & Archivos</a></li>
+            <li><a href="#plp-collection-tags" class="nav-sub-link">Tags de Colección & Liquid</a></li>
             <li><a href="#plp-paso-a-paso" class="nav-sub-link">Paso a Paso & Liquid Loops</a></li>
             <li><a href="#plp-interactive-sandbox" class="nav-sub-link">Simulador PLP & Metafields</a></li>
             <li><a href="#plp-knowledge-check" class="nav-sub-link">Knowledge Check (Quiz)</a></li>
@@ -2718,6 +2719,120 @@ class CollectionFilters {
             <p>
               Shopify <strong>exige</strong> que cualquier iteración sobre <code>collection.products</code> esté envuelta en un tag <code>{% paginate collection.products by N %}</code> (máximo 50 productos por página). Intentar iterar sin paginar arrojará un error de compilación Liquid o limitará automáticamente a 50 ítems. La mejor práctica para tiendas enterprise es paginar entre <strong>12 y 24 productos</strong> para optimizar el DOM Size y la métrica INP (Interaction to Next Paint).
             </p>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC: TAGS DE COLECCIÓN EN LIQUID & ARQUITECTURA      -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="plp-collection-tags">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+              <line x1="7" y1="7" x2="7.01" y2="7"></line>
+            </svg>
+            Tags de Colección: Objetos Liquid, Filtrado por URLs y Buenas Prácticas
+          </h3>
+
+          <p>
+            En Shopify, una <strong>Colección</strong> no posee un atributo directo de etiquetas propio en el panel de administración. En su lugar, el motor de Liquid sintetiza y expone las etiquetas de <em>todos los productos asociados a dicha colección</em> a través de los objetos <code>collection.tags</code>, <code>collection.all_tags</code> y el arreglo global <code>current_tags</code>.
+          </p>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Objeto Liquid</th>
+                  <th>Alcance (Scope)</th>
+                  <th>Comportamiento y Diferencias Clave</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>collection.all_tags</code></td>
+                  <td>Colección Completa</td>
+                  <td>Contiene <strong>todas las etiquetas únicas</strong> presentes en la totalidad de productos de la colección (hasta un límite de 1,000 tags), sin verse afectado por la paginación ni por los tags seleccionados actualmente.</td>
+                </tr>
+                <tr>
+                  <td><code>collection.tags</code></td>
+                  <td>Contexto Filtrado / Vista Actual</td>
+                  <td>Devuelve las etiquetas disponibles en los productos resultantes de la página actual o del filtrado activo. Si hay un tag filtrando la URL, <code>collection.tags</code> solo contendrá los tags de los productos que coincidan.</td>
+                </tr>
+                <tr>
+                  <td><code>current_tags</code></td>
+                  <td>Parámetros de URL Activos</td>
+                  <td>Arreglo de strings con los tags que el usuario está utilizando actualmente para filtrar la colección a través de la URL (ej: <code>/collections/hoodies/algodon+oversize</code>).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 style="margin: 1.5rem 0 0.5rem 0; color: var(--text-primary); font-size: 1.05rem;">
+            1. Enrutamiento Nativo de URLs por Tags en Shopify
+          </h4>
+          <p>
+            Shopify permite filtrar colecciones mediante segmentos en el path de la URL sin necesidad de parámetros de consulta:
+          </p>
+          <ul style="margin: 0.5rem 0 1rem 1.25rem; color: var(--text-secondary); line-height: 1.6;">
+            <li><strong>Filtro simple (1 Tag):</strong> <code>/collections/running-shoes/maraton</code> (Carga la colección filtrada por el tag "maraton").</li>
+            <li><strong>Filtro compuesto (Múltiples Tags - AND lógico):</strong> <code>/collections/running-shoes/maraton+impermeable</code> (Carga productos que tengan <em>ambos</em> tags simultáneamente).</li>
+          </ul>
+
+          <h4 style="margin: 1.5rem 0 0.5rem 0; color: var(--text-primary); font-size: 1.05rem;">
+            2. Filtros de Liquid para Manipulación de Tags en Navegación
+          </h4>
+          <p>
+            Liquid provee filtros específicos para generar enlaces HTML <code>&lt;a&gt;</code> que agregan, remueven o conmutan tags en la colección actual:
+          </p>
+
+          <div class="code-block-wrapper">
+            <div class="code-block-header">
+              <span>snippets/collection-tag-filter.liquid</span>
+              <button class="copy-btn" data-clipboard-target="#liquid-tags-filter-code">Copiar</button>
+            </div>
+            <pre><code class="language-liquid" id="liquid-tags-filter-code">&lt;!-- Barra de Píldoras de Tags (Tag Pills Navigation) --&gt;
+&lt;div class="collection-tag-pills"&gt;
+  &lt;a href="{{ collection.url }}" class="tag-pill {% if current_tags == blank %}is-active{% endif %}"&gt;
+    Todos ({{ collection.all_products_count }})
+  &lt;/a&gt;
+
+  {%- for tag in collection.all_tags -%}
+    {%- if current_tags contains tag -%}
+      &lt;!-- Tag Activo: Genera enlace para deseleccionar --&gt;
+      {{ tag | link_to_remove_tag: tag | replace: '&lt;a', '&lt;a class="tag-pill is-active"' }}
+    {%- else -%}
+      &lt;!-- Tag Inactivo: Genera enlace para agregar el tag al filtro --&gt;
+      {{ tag | link_to_add_tag: tag | replace: '&lt;a', '&lt;a class="tag-pill"' }}
+    {%- endif -%}
+  {%- endfor -%}
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <h4 style="margin: 1.5rem 0 0.5rem 0; color: var(--text-primary); font-size: 1.05rem;">
+            3. Patrón Prefijado (Grouped Tags) vs Storefront Filtering (OS 2.0)
+          </h4>
+          <p>
+            Históricamente se utilizaban etiquetas con prefijos como <code>color_negro</code>, <code>talla_xl</code> o <code>marca_nike</code> para agrupar filtros en temas clásicos:
+          </p>
+
+          <div class="callout callout-warning">
+            <div class="callout-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              Tradeoffs de Arquitectura: ¿Tags o Metafields / Search & Discovery?
+            </div>
+            <p>
+              Aunque los tags siguen siendo muy útiles para <strong>reglas de Smart Collections</strong> (ej. automatizar colecciones de Rebajas) y <strong>badges en frontend</strong> (ej. tag <code>"pre-order"</code> o <code>"outlet"</code>), <strong>no se recomienda utilizarlos como sistema de filtros principal en tiendas modernas</strong> por las siguientes razones:
+            </p>
+            <ul style="margin: 0.5rem 0 0 1.25rem; color: var(--text-secondary); line-height: 1.6;">
+              <li><strong>Sin control de tipo:</strong> Un error tipográfico en el Admin (<code>Color: Rojo</code> vs <code>color_rojo</code>) rompe la taxonomía.</li>
+              <li><strong>Sin rangos de valores:</strong> Los tags no pueden filtrar rangos numéricos continuos (ej. precio mínimo/máximo o tallas numéricas).</li>
+              <li><strong>Riesgo SEO de contenido duplicado:</strong> Cada combinación de <code>/collections/handle/tag1+tag2</code> genera una URL que compite en rastreo si no se gestiona con etiquetas <code>canonical</code> y directivas <code>noindex</code> adecuadas.</li>
+              <li><strong>Migración recomendada:</strong> Para filtrado por atributos complejos se debe utilizar <code>collection.filters</code> con Metafields de producto y la app <strong>Shopify Search & Discovery</strong>.</li>
+            </ul>
           </div>
         </div>
 
