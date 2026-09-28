@@ -46,6 +46,7 @@ const footer = `
   <script src="scripts/data-models.js"></script>
   <script src="scripts/preview-engine.js"></script>
   <script src="scripts/practice-lab.js"></script>
+  <script src="scripts/plp-lab.js"></script>
   <script src="scripts/app.js"></script>
 </body>
 </html>
@@ -72,7 +73,8 @@ const moduleFiles = [
   '05-dev-store-lab.html',
   '06-customizing-themes.html',
   '07-exploring-data-model.html',
-  '08-sandbox-practice-lab.html'
+  '08-sandbox-practice-lab.html',
+  '09-plp-collection-lab.html'
 ];
 
 const modulesContent = moduleFiles.map(file => {

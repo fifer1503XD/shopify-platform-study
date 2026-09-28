@@ -45,7 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 'modulo-lab-dev-store', title: '🛍️ Lab: Tienda Dev & Simular Transacción' },
     { id: 'modulo-customizing-themes', title: '🎨 Módulo: Customizing Themes' },
     { id: 'modulo-exploring-extending-data', title: '🧩 Módulo: Exploring & Extending Data Model' },
-    { id: 'modulo-5-lab', title: '★ 5. Laboratorio Práctico Sandbox' }
+    { id: 'modulo-5-lab', title: '★ 8. Laboratorio Sandbox PDP' },
+    { id: 'modulo-plp-lab', title: '🛍️ 9. Lab: Creación de PLP & Catálogo' }
   ];
 
   const moduleSections = document.querySelectorAll('.module-section');
@@ -463,4 +464,37 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // Knowledge Check: Module 9 PLP Architecture & Performance
+  const btnCheckPlpQuiz = document.getElementById('btnCheckPlpQuiz');
+  if (btnCheckPlpQuiz) {
+    btnCheckPlpQuiz.addEventListener('click', () => {
+      const q1 = document.querySelector('input[name="plp_q1"]:checked')?.value;
+      const q2 = document.querySelector('input[name="plp_q2"]:checked')?.value;
+
+      const f1 = document.getElementById('feedback-plp-q1');
+      const f2 = document.getElementById('feedback-plp-q2');
+
+      if (f1) {
+        if (q1 === 'b') {
+          f1.className = 'quiz-feedback correct';
+          f1.innerHTML = '<strong>✓ ¡Correcto!</strong> El límite arquitectónico del tag <code>{% paginate %}</code> en Liquid es de <strong>50 productos por página</strong>.';
+        } else {
+          f1.className = 'quiz-feedback incorrect';
+          f1.innerHTML = '<strong>✕ Incorrecto.</strong> Shopify impone un límite estricto de máximo 50 productos por página en el servidor para proteger la latencia del render.';
+        }
+      }
+
+      if (f2) {
+        if (q2 === 'b') {
+          f2.className = 'quiz-feedback correct';
+          f2.innerHTML = '<strong>✓ ¡Exacto!</strong> La arquitectura atómica con <code>card-product.liquid</code> permite reutilizar exactamente el mismo markup en la PLP, carruseles de la Home, recomendaciones y búsqueda, garantizando coherencia visual y mantenimiento centralizado.';
+        } else {
+          f2.className = 'quiz-feedback incorrect';
+          f2.innerHTML = '<strong>✕ Incorrecto.</strong> La razón principal es el principio DRY (Don\'t Repeat Yourself) y la reutilización modular en múltiples secciones y plantillas del tema.';
+        }
+      }
+    });
+  }
 });
+

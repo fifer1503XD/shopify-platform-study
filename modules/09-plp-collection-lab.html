@@ -1,0 +1,653 @@
+      <section class="module-section" id="modulo-plp-lab">
+        <div class="section-header">
+          <span class="section-badge" style="background: linear-gradient(135deg, #10b981, #06b6d4);">Módulo 09 • Lab Práctico</span>
+          <h2 class="section-title">9. Creación y Arquitectura de PLP (Product Listing Page)</h2>
+        </div>
+
+        <p>
+          Una <strong>Product Listing Page (PLP)</strong> o página de colección es el epicentro de la experiencia de compra en Shopify. Mientras que la PDP convierte al comprador decidido, la PLP es responsable de guiar el descubrimiento, estructurar la navegación por facetas (filtros) y mantener tiempos de carga ultrarrápidos (&lt;1s First Contentful Paint). En este módulo aprenderás la arquitectura técnica detrás de las colecciones en <strong>Shopify Online Store 2.0</strong> y construirás una PLP interactiva paso a paso utilizando los productos y metafields definidos en el catálogo.
+        </p>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC: ARQUITECTURA DE PLP EN SHOPIFY OS 2.0          -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="plp-arquitectura">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Arquitectura de Archivos y Flujo de Renderizado en Temas OS 2.0
+          </h3>
+
+          <p>
+            En los temas modernos de Shopify, la página de colección no es un archivo monolítico. Se desacopla en una jerarquía modular de <em>Templates JSON</em>, <em>Secciones Liquid</em> y <em>Snippets reutilizables</em>:
+          </p>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Archivo / Componente</th>
+                  <th>Ubicación en Tema</th>
+                  <th>Responsabilidad Técnica</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>templates/collection.json</code></td>
+                  <td>Templates</td>
+                  <td>Define el orden de secciones (banner, filtros, grid de productos, enriquecedores SEO) y almacena la configuración del Theme Editor.</td>
+                </tr>
+                <tr>
+                  <td><code>sections/main-collection-product-grid.liquid</code></td>
+                  <td>Sections</td>
+                  <td>Controla el wrapper del grid, la paginación (<code>paginate</code>), el contenedor de facetas y la inyección del bucle <code>for product in collection.products</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>snippets/facets.liquid</code></td>
+                  <td>Snippets</td>
+                  <td>Renderiza el sistema de filtrado nativo mediante el objeto <code>collection.filters</code> (soporta filtros por precio, tags, disponibilidad y metafields).</td>
+                </tr>
+                <tr>
+                  <td><code>snippets/card-product.liquid</code></td>
+                  <td>Snippets</td>
+                  <td>Componente atómico de tarjeta de producto. Renderiza thumbnail, badges, precio con descuento, color swatches y metafields de producto.</td>
+                </tr>
+                <tr>
+                  <td><code>snippets/pagination.liquid</code></td>
+                  <td>Snippets</td>
+                  <td>Renderiza los enlaces accesibles de navegación entre páginas del catálogo respetando la estructura semántica SEO.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout callout-architect">
+            <div class="callout-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+                <polyline points="2 12 12 17 22 12"></polyline>
+              </svg>
+              Regla de Oro de Rendimiento: Paginación Mandatoria
+            </div>
+            <p>
+              Shopify <strong>exige</strong> que cualquier iteración sobre <code>collection.products</code> esté envuelta en un tag <code>{% paginate collection.products by N %}</code> (máximo 50 productos por página). Intentar iterar sin paginar arrojará un error de compilación Liquid o limitará automáticamente a 50 ítems. La mejor práctica para tiendas enterprise es paginar entre <strong>12 y 24 productos</strong> para optimizar el DOM Size y la métrica INP (Interaction to Next Paint).
+            </p>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC: GUÍA PASO A PASO                                -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="plp-paso-a-paso">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 11 12 14 22 4"></polyline>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+            Guía Paso a Paso: De Productos Creados a una PLP Dinámica
+          </h3>
+
+          <!-- Step 1 -->
+          <div class="lab-instruction-card">
+            <div class="lab-step-number">1</div>
+            <div class="lab-step-body">
+              <h4>Paso 1: Configurar la Colección en Shopify Admin (Smart vs Manual)</h4>
+              <p>
+                Una colección puede crearse de dos formas:
+              </p>
+              <ul style="margin: 0.5rem 0 0.75rem 1.25rem; color: var(--text-secondary); line-height: 1.6;">
+                <li><strong>Manual:</strong> Curas individualmente cada producto añadiéndolo a mano. Ideal para colecciones de autor o "Lo más vendido del mes".</li>
+                <li><strong>Automática (Smart Collection):</strong> Creas condiciones lógicas como <code>Product tag is equal to "sustainable"</code> o <code>Product type is equal to "Wearables"</code>. Cualquier producto nuevo que coincida se indexa automáticamente.</li>
+              </ul>
+              <div class="code-block-wrapper">
+                <div class="code-block-header">
+                  <span>Colección Automática vía Admin GraphQL API</span>
+                  <button class="copy-btn" data-clipboard-target="#gql-collection-create">Copiar</button>
+                </div>
+                <pre><code class="language-graphql" id="gql-collection-create">mutation CreateSmartCollection {
+  collectionCreate(input: {
+    title: "Colección Sustentable & Tech",
+    descriptionHtml: "&lt;p&gt;Prendas y gadgets con certificación ecológica.&lt;/p&gt;",
+    ruleSet: {
+      appliedDisjunctively: false,
+      rules: [
+        {
+          column: TAG,
+          relation: EQUALS,
+          condition: "eco-friendly"
+        },
+        {
+          column: VARIANT_PRICE,
+          relation: GREATER_THAN,
+          condition: "0"
+        }
+      ]
+    }
+  }) {
+    collection {
+      id
+      handle
+      title
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="lab-instruction-card">
+            <div class="lab-step-number">2</div>
+            <div class="lab-step-body">
+              <h4>Paso 2: Construir la Sección Liquid con Paginación (`main-collection-product-grid.liquid`)</h4>
+              <p>
+                Implementa la estructura de grid responsivo con soporte para ordenamiento y paginación en el servidor:
+              </p>
+              <div class="code-block-wrapper">
+                <div class="code-block-header">
+                  <span>sections/main-collection-product-grid.liquid</span>
+                  <button class="copy-btn" data-clipboard-target="#liquid-grid-code">Copiar</button>
+                </div>
+                <pre><code class="language-liquid" id="liquid-grid-code">{%- paginate collection.products by section.settings.products_per_page -%}
+  &lt;div class="collection-page-container"&gt;
+    
+    &lt;!-- Barra Superior: Total de Resultados y Ordenamiento --&gt;
+    &lt;div class="collection-toolbar"&gt;
+      &lt;span class="results-count"&gt;
+        {{ collection.products_count }} {{ 'products.general.items_found' | t }}
+      &lt;/span&gt;
+
+      &lt;div class="sort-by-wrapper"&gt;
+        &lt;label for="SortBy"&gt;Ordenar por:&lt;/label&gt;
+        &lt;select id="SortBy" name="sort_by" class="sort-select" onchange="location.href = this.value;"&gt;
+          {%- for option in collection.sort_options -%}
+            &lt;option value="{{ option.value | prepend: '?sort_by=' }}" 
+              {% if option.value == collection.sort_by %}selected{% endif %}&gt;
+              {{ option.name }}
+            &lt;/option&gt;
+          {%- endfor -%}
+        &lt;/select&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class="collection-layout"&gt;
+      &lt;!-- Sidebar de Filtros Nativos --&gt;
+      &lt;aside class="collection-facets-sidebar"&gt;
+        {% render 'facets', results: collection %}
+      &lt;/aside&gt;
+
+      &lt;!-- Grid de Productos --&gt;
+      &lt;div class="product-grid" id="ProductGridContainer"&gt;
+        {%- if collection.products.size &gt; 0 -%}
+          &lt;ul class="grid grid-3-col"&gt;
+            {%- for product in collection.products -%}
+              &lt;li class="grid-item"&gt;
+                {% render 'card-product', 
+                  card_product: product, 
+                  show_metafields: section.settings.show_metafields,
+                  show_swatches: true 
+                %}
+              &lt;/li&gt;
+            {%- endfor -%}
+          &lt;/ul&gt;
+          
+          {%- if paginate.pages &gt; 1 -%}
+            {% render 'pagination', paginate: paginate %}
+          {%- endif -%}
+        {%- else -%}
+          &lt;div class="no-products-found"&gt;
+            &lt;p&gt;No se encontraron productos en esta colección.&lt;/p&gt;
+          &lt;/div&gt;
+        {%- endif -%}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+{%- endpaginate -%}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="lab-instruction-card">
+            <div class="lab-step-number">3</div>
+            <div class="lab-step-body">
+              <h4>Paso 3: Creación del Snippet Reutilizable `card-product.liquid` con Metafields</h4>
+              <p>
+                La tarjeta de producto debe renderizar de forma limpia los metadatos extendidos del producto (ej: badge de sustentabilidad, material, opciones de color):
+              </p>
+              <div class="code-block-wrapper">
+                <div class="code-block-header">
+                  <span>snippets/card-product.liquid</span>
+                  <button class="copy-btn" data-clipboard-target="#liquid-card-code">Copiar</button>
+                </div>
+                <pre><code class="language-liquid" id="liquid-card-code">&lt;div class="product-card" data-product-id="{{ card_product.id }}"&gt;
+  &lt;!-- Imagen y Badges --&gt;
+  &lt;div class="card-media-wrapper"&gt;
+    {%- if card_product.compare_at_price &gt; card_product.price -%}
+      &lt;span class="badge badge-sale"&gt;Oferta&lt;/span&gt;
+    {%- elsif card_product.tags contains 'nuevo' -%}
+      &lt;span class="badge badge-new"&gt;Nuevo&lt;/span&gt;
+    {%- endif -%}
+
+    &lt;a href="{{ card_product.url }}" class="media-link"&gt;
+      &lt;img 
+        src="{{ card_product.featured_image | image_url: width: 600 }}" 
+        alt="{{ card_product.featured_image.alt | default: card_product.title | escape }}"
+        loading="lazy"
+        width="600"
+        height="600"
+        class="card-img"
+      /&gt;
+    &lt;/a&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Información del Producto --&gt;
+  &lt;div class="card-content"&gt;
+    &lt;span class="card-vendor"&gt;{{ card_product.vendor }}&lt;/span&gt;
+    &lt;h3 class="card-title"&gt;
+      &lt;a href="{{ card_product.url }}"&gt;{{ card_product.title }}&lt;/a&gt;
+    &lt;/h3&gt;
+
+    &lt;!-- Render de Metafields en Card --&gt;
+    {%- if card_product.metafields.custom.sustainability_score.value != blank -%}
+      &lt;div class="card-meta-tag eco-tag"&gt;
+        🌿 Eco Score: {{ card_product.metafields.custom.sustainability_score.value }}
+      &lt;/div&gt;
+    {%- endif -%}
+
+    &lt;!-- Precios --&gt;
+    &lt;div class="card-price-row"&gt;
+      &lt;span class="price-regular"&gt;{{ card_product.price | money }}&lt;/span&gt;
+      {%- if card_product.compare_at_price &gt; card_product.price -%}
+        &lt;s class="price-compare"&gt;{{ card_product.compare_at_price | money }}&lt;/s&gt;
+      {%- endif -%}
+    &lt;/div&gt;
+
+    &lt;!-- Swatches de Color (Variantes) --&gt;
+    {%- for option in card_product.options_with_values -%}
+      {%- if option.name == 'Color' or option.name == 'Colour' -%}
+        &lt;div class="card-swatches"&gt;
+          {%- for value in option.values -%}
+            &lt;span class="swatch-dot" title="{{ value }}"&gt;&lt;/span&gt;
+          {%- endfor -%}
+        &lt;/div&gt;
+      {%- endif -%}
+    {%- endfor -%}
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC: SIMULADOR & SANDBOX INTERACTIVO DE PLP          -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="plp-interactive-sandbox">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            Laboratorio Sandbox: Simulador de PLP & Grid de Catálogo
+          </h3>
+
+          <p>
+            Experimenta en tiempo real con este simulador interactivo de PLP. Puedes filtrar por categoría, precio, tags y metafields, cambiar el ordenamiento, alternar entre vistas de grid y ver el código Liquid generado dinámicamente para cada producto.
+          </p>
+
+          <div class="practice-lab-container">
+            
+            <!-- Simulator Controls Header -->
+            <div class="lab-header-banner">
+              <div>
+                <span class="lab-badge" style="background: linear-gradient(135deg, #059669, #0284c7);">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
+                  </svg>
+                  PLP Live Simulator • Colección Activa
+                </span>
+                <h4 style="margin: 0.5rem 0 0 0; font-size: 1.15rem; color: var(--text-primary);">
+                  Explorador Dinámico de Catálogo con Metafields
+                </h4>
+              </div>
+
+              <div class="preset-buttons-group">
+                <button type="button" class="preset-btn" id="plpPresetAll">🌐 Todos los Productos</button>
+                <button type="button" class="preset-btn" id="plpPresetTech">⚡ Colección Tech</button>
+                <button type="button" class="preset-btn" id="plpPresetEco">🌿 Colección Eco / Apparel</button>
+                <button type="button" class="preset-btn" id="plpSyncCreatedBtn" style="background: rgba(16, 185, 129, 0.2); border-color: #10b981; color: #34d399;">
+                  🔄 Cargar Productos de Lab PDP
+                </button>
+              </div>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="lab-tabs-bar" style="margin-bottom: 1.5rem;">
+              <button type="button" class="lab-tab-btn active" data-plp-tab="storefront">🛍️ Simulador Storefront (PLP Grid)</button>
+              <button type="button" class="lab-tab-btn" data-plp-tab="liquid">📄 Liquid Template & Snippet</button>
+              <button type="button" class="lab-tab-btn" data-plp-tab="graphql">📦 GraphQL Storefront Query</button>
+            </div>
+
+            <!-- TAB 1: STOREFRONT SIMULATOR -->
+            <div id="plpTabStorefront" class="plp-tab-pane" style="display: block;">
+              
+              <!-- Toolbar Top -->
+              <div class="plp-toolbar-panel">
+                <div class="plp-search-box">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input type="text" id="plpSearchInput" placeholder="Buscar por título, tag o vendor..." class="form-input" style="padding-left: 2.2rem; margin: 0;">
+                </div>
+
+                <div class="plp-toolbar-actions">
+                  <div class="plp-sort-group">
+                    <label for="plpSortSelect">Ordenar:</label>
+                    <select id="plpSortSelect" class="form-select" style="margin: 0; padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+                      <option value="featured">Destacados</option>
+                      <option value="price-asc">Precio: Menor a Mayor</option>
+                      <option value="price-desc">Precio: Mayor a Menor</option>
+                      <option value="title-asc">Nombre: A - Z</option>
+                      <option value="eco-high">Mayor Eco Score (Metafield)</option>
+                    </select>
+                  </div>
+
+                  <div class="plp-view-toggles">
+                    <button type="button" class="plp-view-btn active" data-view="grid-3" title="Grid 3 Columnas">⊞ 3</button>
+                    <button type="button" class="plp-view-btn" data-view="grid-4" title="Grid 4 Columnas">㗊 4</button>
+                    <button type="button" class="plp-view-btn" data-view="list" title="Vista Lista">☰ Lista</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Main Catalog Layout: Sidebar Filters + Products Grid -->
+              <div class="plp-main-layout">
+                
+                <!-- Left Sidebar Filters -->
+                <aside class="plp-facets-sidebar">
+                  <div class="facet-sidebar-header">
+                    <span style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary);">Filtros de Catálogo</span>
+                    <button type="button" id="plpResetFiltersBtn" class="facet-reset-btn">Limpiar</button>
+                  </div>
+
+                  <!-- Category / Type Facet -->
+                  <div class="facet-group">
+                    <div class="facet-title">Categoría / Tipo</div>
+                    <div class="facet-options-list" id="plpCategoryFilters">
+                      <label class="facet-checkbox-label">
+                        <input type="checkbox" value="Wearables" class="plp-cat-filter"> Wearables & Tech <span class="facet-count">(2)</span>
+                      </label>
+                      <label class="facet-checkbox-label">
+                        <input type="checkbox" value="Apparel" class="plp-cat-filter"> Ropa & Moda <span class="facet-count">(3)</span>
+                      </label>
+                      <label class="facet-checkbox-label">
+                        <input type="checkbox" value="Calzado" class="plp-cat-filter"> Calzado & Sneakers <span class="facet-count">(1)</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Price Range Facet -->
+                  <div class="facet-group">
+                    <div class="facet-title">Rango de Precio (USD)</div>
+                    <div class="price-inputs-row">
+                      <input type="number" id="plpPriceMin" class="form-input" placeholder="Min $0" min="0" value="0">
+                      <span>-</span>
+                      <input type="number" id="plpPriceMax" class="form-input" placeholder="Max $1000" min="0" value="1000">
+                    </div>
+                  </div>
+
+                  <!-- Metafields Filter -->
+                  <div class="facet-group">
+                    <div class="facet-title">Metafields & Atributos</div>
+                    <div class="facet-options-list">
+                      <label class="facet-checkbox-label">
+                        <input type="checkbox" id="plpFilterEco" value="eco"> 🌿 Solo Eco-Sostenibles
+                      </label>
+                      <label class="facet-checkbox-label">
+                        <input type="checkbox" id="plpFilterDiscount" value="sale"> 🏷️ Con Descuento / Oferta
+                      </label>
+                      <label class="facet-checkbox-label">
+                        <input type="checkbox" id="plpFilterInStock" value="stock" checked> ✓ Solo En Stock
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Active Filters Chips -->
+                  <div class="active-facets-container" id="plpActiveFacets">
+                    <!-- Dynamic chips inserted here -->
+                  </div>
+                </aside>
+
+                <!-- Right Products Grid Container -->
+                <div class="plp-grid-container">
+                  <div class="plp-results-meta">
+                    <span id="plpResultsCount" style="font-weight: 700; color: var(--text-primary); font-size: 0.9rem;">Mostrando 6 productos</span>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">Paginación simulada: 6 por página</span>
+                  </div>
+
+                  <div id="plpProductGrid" class="plp-product-grid grid-3">
+                    <!-- Product Cards will be dynamically injected here -->
+                  </div>
+
+                  <!-- Pagination Bar -->
+                  <div class="plp-pagination-bar" id="plpPaginationBar">
+                    <button type="button" class="plp-page-btn disabled" id="plpPrevPage">« Anterior</button>
+                    <span class="plp-page-num active">1</span>
+                    <span class="plp-page-num">2</span>
+                    <button type="button" class="plp-page-btn" id="plpNextPage">Siguiente »</button>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- TAB 2: LIQUID TEMPLATE & SNIPPET -->
+            <div id="plpTabLiquid" class="plp-tab-pane" style="display: none;">
+              <div class="code-block-wrapper">
+                <div class="code-block-header">
+                  <span>sections/main-collection-product-grid.liquid (Producción)</span>
+                  <button class="copy-btn" data-clipboard-target="#plpTabLiquidCode">Copiar</button>
+                </div>
+                <pre><code class="language-liquid" id="plpTabLiquidCode">{%- comment -%}
+  Template de Colección Liquid Enterprise
+  Soporta Facetas Nativas y Metafields en Card
+{%- endcomment -%}
+
+{%- paginate collection.products by 12 -%}
+  &lt;div class="collection-wrapper page-width"&gt;
+    &lt;header class="collection-header"&gt;
+      &lt;h1 class="collection-title"&gt;{{ collection.title | escape }}&lt;/h1&gt;
+      {%- if collection.description != blank -%}
+        &lt;div class="collection-desc rte"&gt;{{ collection.description }}&lt;/div&gt;
+      {%- endif -%}
+    &lt;/header&gt;
+
+    &lt;div class="collection-content-layout"&gt;
+      &lt;!-- Filtros con Search & Discovery --&gt;
+      &lt;aside class="facets-wrapper"&gt;
+        {% render 'facets', results: collection, enable_filtering: true %}
+      &lt;/aside&gt;
+
+      &lt;!-- Grid de Productos --&gt;
+      &lt;div class="product-grid-container" id="ProductGridContainer"&gt;
+        &lt;ul class="grid product-grid grid--3-col-desktop grid--2-col-tablet"&gt;
+          {%- for product in collection.products -%}
+            &lt;li class="grid__item"&gt;
+              {% render 'card-product', 
+                card_product: product, 
+                media_aspect_ratio: 'square',
+                show_secondary_image: true,
+                show_vendor: true,
+                show_rating: true,
+                show_sustainability_metafield: true
+              %}
+            &lt;/li&gt;
+          {%- endfor -%}
+        &lt;/ul&gt;
+
+        {%- if paginate.pages &gt; 1 -%}
+          {% render 'pagination', paginate: paginate, anchor: '' %}
+        {%- endif -%}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+{%- endpaginate -%}</code></pre>
+              </div>
+            </div>
+
+            <!-- TAB 3: GRAPHQL STOREFRONT QUERY -->
+            <div id="plpTabGraphql" class="plp-tab-pane" style="display: none;">
+              <div class="code-block-wrapper">
+                <div class="code-block-header">
+                  <span>Storefront API GraphQL: Colección con Filtros y Metafields</span>
+                  <button class="copy-btn" data-clipboard-target="#plpTabGraphqlCode">Copiar</button>
+                </div>
+                <pre><code class="language-graphql" id="plpTabGraphqlCode">query GetCollectionWithFacetsAndMetafields($handle: String!, $filters: [ProductFilter!]) {
+  collection(handle: $handle) {
+    id
+    title
+    description
+    products(first: 12, filters: $filters, sortKey: PRICE, reverse: false) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      filters {
+        id
+        label
+        type
+        values {
+          id
+          label
+          count
+          input
+        }
+      }
+      edges {
+        node {
+          id
+          title
+          handle
+          vendor
+          productType
+          featuredImage {
+            url
+            altText
+            width
+            height
+          }
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          # Metafields en la Storefront API
+          sustainabilityScore: metafield(namespace: "custom", key: "sustainability_score") {
+            value
+            type
+          }
+          materialComposition: metafield(namespace: "custom", key: "material") {
+            value
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC: KNOWLEDGE CHECK (QUIZ)                          -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="plp-knowledge-check">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            Knowledge Check: Arquitectura y Rendimiento en PLPs
+          </h3>
+
+          <div class="quiz-container">
+            <!-- Quiz Question 1 -->
+            <div class="quiz-card" id="quiz-plp-q1">
+              <div class="quiz-question">
+                <strong>1. ¿Cuál es el límite máximo nativo de productos por página permitido por el tag <code>{% paginate %}</code> en Liquid?</strong>
+              </div>
+              <div class="quiz-options">
+                <label class="quiz-option">
+                  <input type="radio" name="plp_q1" value="a">
+                  <span>A) 24 productos</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="plp_q1" value="b">
+                  <span>B) 50 productos</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="plp_q1" value="c">
+                  <span>C) 100 productos</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="plp_q1" value="d">
+                  <span>D) Ilimitado si se usa AJAX</span>
+                </label>
+              </div>
+              <div class="quiz-feedback" id="feedback-plp-q1"></div>
+            </div>
+
+            <!-- Quiz Question 2 -->
+            <div class="quiz-card" id="quiz-plp-q2">
+              <div class="quiz-question">
+                <strong>2. ¿Por qué se recomienda desacoplar la tarjeta de producto en <code>snippets/card-product.liquid</code> en lugar de escribir el HTML directamente en el bucle de la colección?</strong>
+              </div>
+              <div class="quiz-options">
+                <label class="quiz-option">
+                  <input type="radio" name="plp_q2" value="a">
+                  <span>A) Porque Liquid no permite tags HTML dentro de <code>main-collection-product-grid.liquid</code>.</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="plp_q2" value="b">
+                  <span>B) Para reutilizar el mismo componente visual y de lógica en la PLP, carruseles de la Home, recomendaciones y resultados de búsqueda sin duplicar código.</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="plp_q2" value="c">
+                  <span>C) Para forzar la descarga de CSS adicional en cada card.</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="plp_q2" value="d">
+                  <span>D) Porque Shopify Admin no permite metafields si no están en un snippet.</span>
+                </label>
+              </div>
+              <div class="quiz-feedback" id="feedback-plp-q2"></div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="btnCheckPlpQuiz" style="margin-top: 1rem;">
+              Validar Respuestas del Quiz
+            </button>
+          </div>
+        </div>
+
+      </section>
