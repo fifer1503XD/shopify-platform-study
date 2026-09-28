@@ -1418,5 +1418,189 @@
   gap: 1rem;
 }
 
+/* ========================================================= */
+/* MODULE 12: SHOPIFY ADMIN NAVIGATION EXPLORER STYLES        */
+/* ========================================================= */
+
+.admin-explorer-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .admin-explorer-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Sidebar Mock */
+.admin-sidebar-mock {
+  background: #121212;
+  border: 1px solid #262626;
+  border-radius: 8px;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.admin-mock-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.25rem;
+}
+
+.admin-sidebar-toggle-icon {
+  color: #8c8c8c;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.admin-mock-search {
+  background: #1e1e1e;
+  border: 1px solid #303030;
+  border-radius: 6px;
+  padding: 0.45rem 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #8c8c8c;
+}
+
+.admin-mock-shortcut {
+  font-size: 0.7rem;
+  background: #2a2a2a;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  color: #a3a3a3;
+  font-family: var(--font-mono);
+}
+
+.admin-mock-menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.admin-menu-item {
+  background: transparent;
+  border: none;
+  color: #cccccc;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.45rem 0.65rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: left;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+
+.admin-menu-item:hover {
+  background: #1e1e1e;
+  color: #ffffff;
+}
+
+.admin-menu-item.active {
+  background: #2b2b2b;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.admin-menu-icon {
+  font-size: 0.95rem;
+  width: 18px;
+  text-align: center;
+}
+
+.admin-badge-count {
+  margin-left: auto;
+  background: #2e2e2e;
+  color: #e5e5e5;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: 9999px;
+}
+
+.admin-menu-heading {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #8c8c8c;
+  padding: 0.6rem 0.65rem 0.2rem 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-sub-menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding-left: 1.8rem;
+}
+
+.admin-sub-item {
+  background: transparent;
+  border: none;
+  color: #999999;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.admin-sub-item:hover {
+  background: #1e1e1e;
+  color: #ffffff;
+}
+
+.admin-sub-item.active {
+  background: #2b2b2b;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Detail Inspection Pane */
+.admin-detail-pane {
+  background: #182234;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-pane-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.admin-path-chip {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+
 
 

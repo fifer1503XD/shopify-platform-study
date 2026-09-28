@@ -48,7 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 'modulo-5-lab', title: '★ 8. Laboratorio Sandbox PDP' },
     { id: 'modulo-plp-lab', title: '🛍️ 9. Lab: Creación de PLP & Catálogo' },
     { id: 'modulo-theme-components', title: '🔍 10. Auditoría de Componentes del Tema' },
-    { id: 'modulo-casio-clone', title: '⌚ 11. Práctica Final: Clon Casio Colombia' }
+    { id: 'modulo-casio-clone', title: '⌚ 11. Práctica Final: Clon Casio Colombia' },
+    { id: 'modulo-admin-menus', title: '🖥️ 12. Guía del Shopify Admin & Menús' }
   ];
 
   const moduleSections = document.querySelectorAll('.module-section');
@@ -558,6 +559,38 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           f2.className = 'quiz-feedback incorrect';
           f2.innerHTML = '<strong>✕ Incorrecto.</strong> La arquitectura nativa de Shopify utiliza la Section Rendering API junto con la Ajax Cart API para refrescar los drawers dinámicamente.';
+        }
+      }
+    });
+  }
+
+  // Knowledge Check: Module 12 Shopify Admin Navigation
+  const btnCheckAdminQuiz = document.getElementById('btnCheckAdminQuiz');
+  if (btnCheckAdminQuiz) {
+    btnCheckAdminQuiz.addEventListener('click', () => {
+      const q1 = document.querySelector('input[name="admin_q1"]:checked')?.value;
+      const q2 = document.querySelector('input[name="admin_q2"]:checked')?.value;
+
+      const f1 = document.getElementById('feedback-admin-q1');
+      const f2 = document.getElementById('feedback-admin-q2');
+
+      if (f1) {
+        if (q1 === 'b') {
+          f1.className = 'quiz-feedback correct';
+          f1.innerHTML = '<strong>✓ ¡Correcto!</strong> En <code>Content &gt; Metaobjects</code> se definen y gestionan los esquemas y registros de datos personalizados desacoplados (como Diseñadores, Guías de Tallas o FAQs).';
+        } else {
+          f1.className = 'quiz-feedback incorrect';
+          f1.innerHTML = '<strong>✕ Incorrecto.</strong> Las estructuras de datos personalizadas se administran en <code>Content &gt; Metaobjects</code>.';
+        }
+      }
+
+      if (f2) {
+        if (q2 === 'b') {
+          f2.className = 'quiz-feedback correct';
+          f2.innerHTML = '<strong>✓ ¡Exacto!</strong> <code>Markets</code> es el centro de control para fijación de precios en moneda local, traducción de catálogos por región y asignación de dominios internacionales o subcarpetas geográficas.';
+        } else {
+          f2.className = 'quiz-feedback incorrect';
+          f2.innerHTML = '<strong>✕ Incorrecto.</strong> La configuración de comercio internacional reside en el menú <code>Markets</code>.';
         }
       }
     });

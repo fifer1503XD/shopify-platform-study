@@ -195,6 +195,17 @@
             <li><a href="#casio-knowledge-check" class="nav-sub-link">5. Knowledge Check (Quiz)</a></li>
           </ul>
         </li>
+
+        <li class="nav-item">
+          <a href="#modulo-admin-menus" class="nav-link">
+            <span style="color: #34d399; font-weight: 700;">🖥️ 12. Guía del Shopify Admin & Menús</span>
+          </a>
+          <ul class="nav-sub-menu">
+            <li><a href="#admin-desglose-menus" class="nav-sub-link">1. Desglose Menú por Menú (12 Módulos)</a></li>
+            <li><a href="#admin-interactive-explorer" class="nav-sub-link">2. Explorador Interactivo del Admin</a></li>
+            <li><a href="#admin-knowledge-check" class="nav-sub-link">3. Knowledge Check (Quiz)</a></li>
+          </ul>
+        </li>
       </ul>
     </aside>
 
@@ -232,12 +243,13 @@
             <option value="modulo-plp-lab">Módulo 9: Lab Práctico: Creación de PLP & Catálogo</option>
             <option value="modulo-theme-components">Módulo 10: Auditoría de Componentes del Tema</option>
             <option value="modulo-casio-clone">Módulo 11: Práctica Final: Clon Casio Colombia</option>
+            <option value="modulo-admin-menus">Módulo 12: Guía del Shopify Admin & Menús</option>
           </select>
         </div>
 
         <div class="module-nav-arrows">
           <span id="currentModuleBadge" class="badge-tag" style="background: rgba(149, 191, 71, 0.2); color: var(--brand-shopify);">
-            Módulo 1 de 11
+            Módulo 1 de 12
           </span>
           <button type="button" id="prevModuleBtn" class="mod-arrow-btn" title="Módulo Anterior">
             ← Anterior
@@ -4414,6 +4426,382 @@ shopify theme check --category liquid,performance</code></pre>
       </section>
 
 
+      <!-- ========================================================= -->
+      <!-- MODULE: 12-shopify-admin-navigation-guide.html -->
+      <!-- ========================================================= -->
+      <section class="module-section" id="modulo-admin-menus">
+        <div class="section-header">
+          <span class="section-badge" style="background: linear-gradient(135deg, #10b981, #047857);">Módulo 12 • Operaciones & Back-Office</span>
+          <h2 class="section-title">12. Guía Exhaustiva del Shopify Admin: Arquitectura de Menús y Navegación</h2>
+        </div>
+
+        <p>
+          El <strong>Shopify Admin</strong> es el centro de comando operacional donde convergen la gestión de catálogo, el procesamiento de pedidos, la segmentación de clientes, el contenido personalizado y los canales de venta. Para un desarrollador o arquitecto, entender qué reside en cada menú es vital para saber qué APIs consumir, dónde configurar fuentes de datos dinámicas y cómo asesorar a los comerciantes.
+        </p>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 1: DESGLOSE ESTRUCTURAL DE LOS MENÚS             -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="admin-desglose-menus">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="9" y1="3" x2="9" y2="21"></line>
+            </svg>
+            1. Desglose Técnico Menú por Menú
+          </h3>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Menú del Admin</th>
+                  <th>Subsecciones Clave</th>
+                  <th>Qué encuentras y para qué se usa</th>
+                  <th>Entidades API Relacionadas</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>🔍 Search (⌘K)</strong></td>
+                  <td>Búsqueda Global Omnicanal</td>
+                  <td>Acceso directo a cualquier recurso (productos, clientes, órdenes, páginas de configuración) mediante comandos de teclado rápidos.</td>
+                  <td>GraphQL Search API</td>
+                </tr>
+                <tr>
+                  <td><strong>🏠 Home</strong></td>
+                  <td>Action Feed, Insights, Setup Guide</td>
+                  <td>Panel de bienvenida con métricas en tiempo real del día, tareas pendientes que requieren acción y recomendaciones inteligentes con Shopify Sidekick.</td>
+                  <td>Shop Metrics & Notifications</td>
+                </tr>
+                <tr>
+                  <td><strong>📦 Orders</strong></td>
+                  <td>All Orders, Drafts, Abandoned Checkouts</td>
+                  <td>Gestión integral del ciclo de vida de compras: fulfillment (despacho), captura de pagos, devoluciones, reembolsos y recuperación de carritos no completados.</td>
+                  <td><code>Order</code>, <code>DraftOrder</code>, <code>FulfillmentOrder</code>, <code>Refund</code></td>
+                </tr>
+                <tr>
+                  <td><strong>🏷️ Products</strong></td>
+                  <td>Products, Collections, Inventory, Transfers, Gift Cards</td>
+                  <td>Administración del catálogo: variantes, control de existencias multialmacén (locations), colecciones manuales/smart y transferencias de stock entre sucursales.</td>
+                  <td><code>Product</code>, <code>ProductVariant</code>, <code>Collection</code>, <code>InventoryLevel</code></td>
+                </tr>
+                <tr>
+                  <td><strong>👤 Customers</strong></td>
+                  <td>Customers, Segments</td>
+                  <td>Base de datos de compradores, historial de compras, perfiles B2B y creación de segmentos dinámicos basados en comportamiento (ej: clientes con más de 3 compras).</td>
+                  <td><code>Customer</code>, <code>Company</code>, <code>CustomerSegment</code></td>
+                </tr>
+                <tr>
+                  <td><strong>📈 Growth</strong></td>
+                  <td>Marketing, Campaigns, Automations</td>
+                  <td>Hub de adquisición y retención: creación de campañas con Shopify Email, integraciones publicitarias (Meta, Google, TikTok) y automatizaciones de flujos de marketing.</td>
+                  <td><code>MarketingActivity</code>, <code>MarketingCampaign</code></td>
+                </tr>
+                <tr>
+                  <td><strong>🎟️ Discounts</strong></td>
+                  <td>Codes, Automatic Discounts</td>
+                  <td>Estrategias de precios promocionales: montos fijos, porcentajes, Buy X Get Y (BXGY) y envío gratis. Soporte para reglas avanzadas con <strong>Shopify Functions</strong>.</td>
+                  <td><code>DiscountCodeNode</code>, <code>DiscountAutomaticNode</code></td>
+                </tr>
+                <tr>
+                  <td><strong>📂 Content</strong></td>
+                  <td>Metaobjects, Files</td>
+                  <td>El CMS desacoplado de Shopify: definición e instanciación de <strong>Metaobjects</strong> (tablas de datos personalizadas) y repositorio CDN central de archivos, imágenes y PDFs.</td>
+                  <td><code>Metaobject</code>, <code>MetaobjectDefinition</code>, <code>File</code></td>
+                </tr>
+                <tr>
+                  <td><strong>🌍 Markets</strong></td>
+                  <td>Primary Market, International Markets, Preferences</td>
+                  <td>Configuración de comercio transfronterizo: monedas locales automáticas (FX), listas de precios diferenciadas por país, dominios locales y cálculo de aranceles.</td>
+                  <td><code>Market</code>, <code>PriceList</code>, <code>Country</code></td>
+                </tr>
+                <tr>
+                  <td><strong>📊 Analytics</strong></td>
+                  <td>Dashboards, Reports, Live View</td>
+                  <td>Inteligencia de negocios: informes financieros, tasas de conversión, fuentes de tráfico, valor promedio del pedido (AOV) y visualizador 3D en tiempo real de visitas.</td>
+                  <td>Shopify Analytics & Reporting API</td>
+                </tr>
+                <tr>
+                  <td><strong>🛍️ Online Store</strong></td>
+                  <td>Themes, Blog Posts, Pages, Navigation, Preferences</td>
+                  <td>El frontend web de la tienda: editor visual de temas OS 2.0, artículos de blog, páginas institucionales, menús de navegación y configuración SEO/Pixel global.</td>
+                  <td><code>Theme</code>, <code>Article</code>, <code>Page</code>, <code>Menu</code></td>
+                </tr>
+                <tr>
+                  <td><strong>🧩 Apps</strong></td>
+                  <td>Installed Apps, App Store, Sales Channels</td>
+                  <td>Directorio de extensiones y aplicaciones instaladas. Permite gestionar Theme App Extensions, webhooks y herramientas de terceros.</td>
+                  <td><code>AppInstallation</code>, <code>WebhookSubscription</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 2: SIMULADOR INTERACTIVO DEL SHOPIFY ADMIN MENU  -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="admin-interactive-explorer">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+            2. Explorador Interactivo del Menú Shopify Admin
+          </h3>
+
+          <p>
+            Haz clic en cualquiera de los elementos del menú lateral de Shopify para explorar en detalle qué contiene cada vista, sus URLs internas, los datos que administra y cómo interactúan los desarrolladores con esa sección:
+          </p>
+
+          <div class="practice-lab-container" style="background: #0f172a; border-color: #1e293b;">
+            
+            <div class="lab-header-banner" style="border-bottom-color: #1e293b;">
+              <div>
+                <span class="lab-badge" style="background: #047857; color: #a7f3d0;">
+                  ⚡ SHOPIFY ADMIN NAV EXPLORER
+                </span>
+                <h4 style="margin: 0.5rem 0 0 0; color: #f8fafc;">
+                  Simulador de Navegación de Back-Office
+                </h4>
+              </div>
+              <span style="font-size: 0.8rem; color: #94a3b8;">Selecciona un menú a la izquierda</span>
+            </div>
+
+            <!-- 2 Columns: Admin Sidebar Mock on Left, Detail Card on Right -->
+            <div class="admin-explorer-layout">
+              
+              <!-- Left: Shopify Admin Sidebar Mock -->
+              <div class="admin-sidebar-mock">
+                
+                <!-- Shopify Bag Logo -->
+                <div class="admin-mock-brand">
+                  <svg width="28" height="28" viewBox="0 0 109 124" fill="none">
+                    <path d="M74.8 14.8C74.6 14.8 74.4 14.8 74.2 14.9L64.4 7.5C62.7 6.2 60.5 5.5 58.4 5.7C56.2 5.9 54.2 6.9 52.8 8.6L44.8 18.2C44.4 18.2 44 18.2 43.6 18.3C38.6 19.3 35.2 23.9 35.8 28.9L40 64.9L17.1 72.8C10.5 75.1 6.8 82.2 8.7 88.9L22.9 138.8C24.5 144.3 29.5 148.1 35.2 148.1H97.7C103.1 148.1 107.9 144.6 109.8 139.5L134.4 73.6C136.6 67.7 133.5 61.1 127.6 59L107.4 51.9L107.8 29.8C107.9 21.6 101.4 14.9 93.2 14.8H74.8Z" fill="#95BF47"/>
+                    <path d="M74.8 14.8V51.9L93.2 51.9C93.2 51.9 93.3 51.9 93.3 51.9L127.6 59C133.5 61.1 136.6 67.7 134.4 73.6L109.8 139.5C107.9 144.6 103.1 148.1 97.7 148.1H35.2C29.5 148.1 24.5 144.3 22.9 138.8L8.7 88.9C6.8 82.2 10.5 75.1 17.1 72.8L40 64.9V28.9C40 21.1 46.3 14.8 54.1 14.8H74.8Z" fill="#5E8E3E"/>
+                  </svg>
+                  <span class="admin-sidebar-toggle-icon">◫</span>
+                </div>
+
+                <!-- Search Input Bar -->
+                <div class="admin-mock-search">
+                  <span>🔍 Search</span>
+                  <span class="admin-mock-shortcut">⌘K</span>
+                </div>
+
+                <!-- Menu Items List -->
+                <div class="admin-mock-menu-list">
+                  <button type="button" class="admin-menu-item active" data-admin-menu="home">
+                    <span class="admin-menu-icon">🏠</span> Home
+                  </button>
+                  <button type="button" class="admin-menu-item" data-admin-menu="orders">
+                    <span class="admin-menu-icon">📦</span> Orders
+                    <span class="admin-badge-count">48</span>
+                  </button>
+                  <button type="button" class="admin-menu-item" data-admin-menu="products">
+                    <span class="admin-menu-icon">🏷️</span> Products
+                  </button>
+                  <button type="button" class="admin-menu-item" data-admin-menu="customers">
+                    <span class="admin-menu-icon">👤</span> Customers
+                  </button>
+                  <button type="button" class="admin-menu-item" data-admin-menu="growth">
+                    <span class="admin-menu-icon">📈</span> Growth
+                  </button>
+                  <button type="button" class="admin-menu-item" data-admin-menu="discounts">
+                    <span class="admin-menu-icon">🎟️</span> Discounts
+                  </button>
+                  <button type="button" class="admin-menu-item" data-admin-menu="content">
+                    <span class="admin-menu-icon">📂</span> Content
+                  </button>
+                  <button type="button" class="admin-menu-item" data-admin-menu="markets">
+                    <span class="admin-menu-icon">🌍</span> Markets
+                  </button>
+                  <button type="button" class="admin-menu-item" data-admin-menu="analytics">
+                    <span class="admin-menu-icon">📊</span> Analytics
+                  </button>
+
+                  <div class="admin-menu-heading">Sales channels <span>›</span></div>
+                  <button type="button" class="admin-menu-item sub-parent" data-admin-menu="online-store">
+                    <span class="admin-menu-icon">🏪</span> Online Store
+                  </button>
+                  <div class="admin-sub-menu-list">
+                    <button type="button" class="admin-sub-item" data-admin-menu="online-store-pages">Pages</button>
+                    <button type="button" class="admin-sub-item" data-admin-menu="online-store-preferences">Preferences</button>
+                  </div>
+
+                  <div class="admin-menu-heading">Apps <span>›</span></div>
+                  <button type="button" class="admin-menu-item" data-admin-menu="apps">
+                    <span class="admin-menu-icon">🧩</span> Apps & Extensions
+                  </button>
+                </div>
+
+              </div>
+
+              <!-- Right: Detail Inspection Pane -->
+              <div class="admin-detail-pane" id="adminDetailPane">
+                
+                <div class="admin-pane-header">
+                  <div>
+                    <span class="admin-path-chip" id="adminMenuPath">/admin/orders</span>
+                    <h3 id="adminMenuTitle" style="margin: 0.4rem 0 0 0; color: #f8fafc; font-size: 1.3rem;">
+                      Orders (Gestión de Pedidos)
+                    </h3>
+                  </div>
+                  <span id="adminCategoryBadge" class="badge-tag" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">
+                    Core Operations
+                  </span>
+                </div>
+
+                <p id="adminMenuDesc" style="font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; margin: 0.75rem 0 1rem 0;">
+                  Control central de las transacciones generadas en la tienda. Permite procesar envíos (fulfillment), gestionar devoluciones, emitir reembolsos parciales o totales y recuperar carritos abandonados.
+                </p>
+
+                <!-- Subsections list -->
+                <div style="background: #1e293b; border-radius: 6px; padding: 1rem; border: 1px solid #334155; margin-bottom: 1rem;">
+                  <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; margin-bottom: 0.5rem;">
+                    Subsecciones y Vistas Internas:
+                  </div>
+                  <ul id="adminSubsectionsList" style="margin: 0; padding-left: 1.25rem; color: #e2e8f0; font-size: 0.85rem; line-height: 1.6;">
+                    <li><strong>All Orders:</strong> Listado completo con filtros por estado de pago (Paid, Pending) y cumplimiento (Fulfilled, Unfulfilled).</li>
+                    <li><strong>Draft Orders:</strong> Pedidos manuales creados por el merchant (ej: ventas telefónicas o cotizaciones B2B).</li>
+                    <li><strong>Abandoned Checkouts:</strong> Sesiones donde el cliente inició el checkout pero no completó el pago.</li>
+                  </ul>
+                </div>
+
+                <!-- Technical & API mapping -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                  <div style="background: #1e293b; border-radius: 6px; padding: 0.85rem; border: 1px solid #334155;">
+                    <div style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 0.3rem;">
+                      Entidades GraphQL / REST:
+                    </div>
+                    <div id="adminApiEntities" style="font-family: var(--font-mono); font-size: 0.85rem; color: #38bdf8;">
+                      Order, DraftOrder, FulfillmentOrder, Refund
+                    </div>
+                  </div>
+
+                  <div style="background: #1e293b; border-radius: 6px; padding: 0.85rem; border: 1px solid #334155;">
+                    <div style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 0.3rem;">
+                      Rol del Desarrollador:
+                    </div>
+                    <div id="adminDevRole" style="font-size: 0.85rem; color: #cbd5e1;">
+                      Configurar Webhooks (orders/create, orders/fulfilled), integrar con ERPs y automatizar fulfillments con 3PLs.
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Code / Practical example -->
+                <div class="code-block-wrapper" style="margin: 0;">
+                  <div class="code-block-header">
+                    <span id="adminCodeTitle">Ejemplo de Consulta GraphQL Admin API</span>
+                    <button class="copy-btn" data-clipboard-target="#adminCodeBlock">Copiar</button>
+                  </div>
+                  <pre><code class="language-graphql" id="adminCodeBlock">query GetRecentOrders {
+  orders(first: 10, sortKey: CREATED_AT, reverse: true) {
+    edges {
+      node {
+        id
+        name
+        createdAt
+        displayFinancialStatus
+        displayFulfillmentStatus
+        totalPriceSet {
+          shopMoney {
+            amount
+            currencyCode
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 3: KNOWLEDGE CHECK (QUIZ)                        -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="admin-knowledge-check">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            Knowledge Check: Operaciones del Admin y Gobernanza de Datos
+          </h3>
+
+          <div class="quiz-container">
+            <!-- Quiz Question 1 -->
+            <div class="quiz-card" id="quiz-admin-q1">
+              <div class="quiz-question">
+                <strong>1. Si un desarrollador necesita definir una nueva estructura de datos de "Guías de Tallas" o "Diseñadores" reutilizable en toda la tienda, ¿en qué menú del Shopify Admin debe gestionarlo?</strong>
+              </div>
+              <div class="quiz-options">
+                <label class="quiz-option">
+                  <input type="radio" name="admin_q1" value="a">
+                  <span>A) En <code>Online Store &gt; Preferences</code>.</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="admin_q1" value="b">
+                  <span>B) En <code>Content &gt; Metaobjects</code>.</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="admin_q1" value="c">
+                  <span>C) En <code>Growth &gt; Automations</code>.</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="admin_q1" value="d">
+                  <span>D) En <code>Markets &gt; Preferences</code>.</span>
+                </label>
+              </div>
+              <div class="quiz-feedback" id="feedback-admin-q1"></div>
+            </div>
+
+            <!-- Quiz Question 2 -->
+            <div class="quiz-card" id="quiz-admin-q2">
+              <div class="quiz-question">
+                <strong>2. ¿Qué menú permite fijar listas de precios en monedas locales internacionales y asignar subdominios específicos por país (ej. `us.mitienda.com`)?</strong>
+              </div>
+              <div class="quiz-options">
+                <label class="quiz-option">
+                  <input type="radio" name="admin_q2" value="a">
+                  <span>A) <code>Discounts</code></span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="admin_q2" value="b">
+                  <span>B) <code>Markets</code></span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="admin_q2" value="c">
+                  <span>C) <code>Analytics</code></span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="admin_q2" value="d">
+                  <span>D) <code>Customers</code></span>
+                </label>
+              </div>
+              <div class="quiz-feedback" id="feedback-admin-q2"></div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="btnCheckAdminQuiz" style="margin-top: 1rem;">
+              Validar Respuestas del Admin
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+
     </main>
   </div>
 
@@ -4431,6 +4819,7 @@ shopify theme check --category liquid,performance</code></pre>
   <script src="scripts/plp-lab.js"></script>
   <script src="scripts/theme-inspector.js"></script>
   <script src="scripts/casio-clone.js"></script>
+  <script src="scripts/admin-explorer.js"></script>
   <script src="scripts/app.js"></script>
 </body>
 </html>

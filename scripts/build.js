@@ -49,6 +49,7 @@ const footer = `
   <script src="scripts/plp-lab.js"></script>
   <script src="scripts/theme-inspector.js"></script>
   <script src="scripts/casio-clone.js"></script>
+  <script src="scripts/admin-explorer.js"></script>
   <script src="scripts/app.js"></script>
 </body>
 </html>
@@ -78,7 +79,8 @@ const moduleFiles = [
   '08-sandbox-practice-lab.html',
   '09-plp-collection-lab.html',
   '10-theme-components-audit.html',
-  '11-casio-store-clone.html'
+  '11-casio-store-clone.html',
+  '12-shopify-admin-navigation-guide.html'
 ];
 
 const modulesContent = moduleFiles.map(file => {
