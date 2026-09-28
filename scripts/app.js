@@ -46,7 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 'modulo-customizing-themes', title: '🎨 Módulo: Customizing Themes' },
     { id: 'modulo-exploring-extending-data', title: '🧩 Módulo: Exploring & Extending Data Model' },
     { id: 'modulo-5-lab', title: '★ 8. Laboratorio Sandbox PDP' },
-    { id: 'modulo-plp-lab', title: '🛍️ 9. Lab: Creación de PLP & Catálogo' }
+    { id: 'modulo-plp-lab', title: '🛍️ 9. Lab: Creación de PLP & Catálogo' },
+    { id: 'modulo-theme-components', title: '🔍 10. Auditoría de Componentes del Tema' },
+    { id: 'modulo-casio-clone', title: '⌚ 11. Práctica Final: Clon Casio Colombia' }
   ];
 
   const moduleSections = document.querySelectorAll('.module-section');
@@ -492,6 +494,70 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           f2.className = 'quiz-feedback incorrect';
           f2.innerHTML = '<strong>✕ Incorrecto.</strong> La razón principal es el principio DRY (Don\'t Repeat Yourself) y la reutilización modular en múltiples secciones y plantillas del tema.';
+        }
+      }
+    });
+  }
+
+  // Knowledge Check: Module 10 Theme Component Audit
+  const btnCheckThemeQuiz = document.getElementById('btnCheckThemeQuiz');
+  if (btnCheckThemeQuiz) {
+    btnCheckThemeQuiz.addEventListener('click', () => {
+      const q1 = document.querySelector('input[name="theme_q1"]:checked')?.value;
+      const q2 = document.querySelector('input[name="theme_q2"]:checked')?.value;
+
+      const f1 = document.getElementById('feedback-theme-q1');
+      const f2 = document.getElementById('feedback-theme-q2');
+
+      if (f1) {
+        if (q1 === 'b') {
+          f1.className = 'quiz-feedback correct';
+          f1.innerHTML = '<strong>✓ ¡Correcto!</strong> <code>{{ content_for_header }}</code> es obligatorio en <code>layout/theme.liquid</code> para inyectar scripts de Shopify, apps instaladas, analytics y metadatos dinámicos.';
+        } else {
+          f1.className = 'quiz-feedback incorrect';
+          f1.innerHTML = '<strong>✕ Incorrecto.</strong> La etiqueta requerida es <code>{{ content_for_header }}</code>.';
+        }
+      }
+
+      if (f2) {
+        if (q2 === 'a') {
+          f2.className = 'quiz-feedback correct';
+          f2.innerHTML = '<strong>✓ ¡Exacto!</strong> En OS 2.0 se debe migrar de <code>{% include %}</code> a <code>{% render %}</code>, pasando parámetros explícitos para aislar el scope de variables y maximizar la velocidad de compilación en el servidor.';
+        } else {
+          f2.className = 'quiz-feedback incorrect';
+          f2.innerHTML = '<strong>✕ Incorrecto.</strong> La refactorización oficial recomendada por Shopify es reemplazar <code>{% include %}</code> por <code>{% render %}</code> con scope aislado.';
+        }
+      }
+    });
+  }
+
+  // Knowledge Check: Module 11 Casio Store Architecture
+  const btnCheckCasioQuiz = document.getElementById('btnCheckCasioQuiz');
+  if (btnCheckCasioQuiz) {
+    btnCheckCasioQuiz.addEventListener('click', () => {
+      const q1 = document.querySelector('input[name="casio_q1"]:checked')?.value;
+      const q2 = document.querySelector('input[name="casio_q2"]:checked')?.value;
+
+      const f1 = document.getElementById('feedback-casio-q1');
+      const f2 = document.getElementById('feedback-casio-q2');
+
+      if (f1) {
+        if (q1 === 'b') {
+          f1.className = 'quiz-feedback correct';
+          f1.innerHTML = '<strong>✓ ¡Correcto!</strong> Usar <code>&lt;picture&gt;</code> con fuentes móviles diferenciadas y <code>fetchpriority="high"</code> en el primer slide optimiza el LCP (Largest Contentful Paint) sin descargar bytes innecesarios en smartphones.';
+        } else {
+          f1.className = 'quiz-feedback incorrect';
+          f1.innerHTML = '<strong>✕ Incorrecto.</strong> La técnica de alto rendimiento es entregar imágenes mobile recortadas específicamente mediante el tag <code>&lt;picture&gt;</code> y priorizar la carga del primer slide.';
+        }
+      }
+
+      if (f2) {
+        if (q2 === 'a') {
+          f2.className = 'quiz-feedback correct';
+          f2.innerHTML = '<strong>✓ ¡Exacto!</strong> La combinación de <strong>Shopify Ajax Cart API</strong> con la <strong>Section Rendering API</strong> permite actualizar el carrito asíncronamente y renderizar el markup de la sección devuelto por Liquid sin necesidad de frameworks pesados.';
+        } else {
+          f2.className = 'quiz-feedback incorrect';
+          f2.innerHTML = '<strong>✕ Incorrecto.</strong> La arquitectura nativa de Shopify utiliza la Section Rendering API junto con la Ajax Cart API para refrescar los drawers dinámicamente.';
         }
       }
     });

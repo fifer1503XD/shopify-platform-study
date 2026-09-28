@@ -169,6 +169,32 @@
             <li><a href="#plp-knowledge-check" class="nav-sub-link">Knowledge Check (Quiz)</a></li>
           </ul>
         </li>
+
+        <li class="nav-item">
+          <a href="#modulo-theme-components" class="nav-link">
+            <span style="color: #ec4899; font-weight: 700;">🔍 10. Auditoría de Componentes del Tema</span>
+          </a>
+          <ul class="nav-sub-menu">
+            <li><a href="#theme-anatomia" class="nav-sub-link">1. Anatomía y 7 Directorios</a></li>
+            <li><a href="#theme-herramientas-auditoria" class="nav-sub-link">2. Herramientas: Theme Check & Inspector</a></li>
+            <li><a href="#theme-sections-vs-snippets" class="nav-sub-link">3. Sections vs Snippets ({% render %})</a></li>
+            <li><a href="#theme-interactive-inspector" class="nav-sub-link">4. Explorador de Componentes & Árbol</a></li>
+            <li><a href="#theme-knowledge-check" class="nav-sub-link">5. Knowledge Check (Quiz)</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a href="#modulo-casio-clone" class="nav-link">
+            <span style="color: #60a5fa; font-weight: 700;">⌚ 11. Práctica Final: Clon Casio Colombia</span>
+          </a>
+          <ul class="nav-sub-menu">
+            <li><a href="#casio-auditoria" class="nav-sub-link">1. Auditoría Técnica de la Tienda Real</a></li>
+            <li><a href="#casio-secciones-json" class="nav-sub-link">2. Mapeo de Secciones en index.json</a></li>
+            <li><a href="#casio-liquid-code" class="nav-sub-link">3. Código Liquid de Secciones Clave</a></li>
+            <li><a href="#casio-interactive-simulator" class="nav-sub-link">4. Simulador en Vivo (Desktop / Mobile)</a></li>
+            <li><a href="#casio-knowledge-check" class="nav-sub-link">5. Knowledge Check (Quiz)</a></li>
+          </ul>
+        </li>
       </ul>
     </aside>
 
@@ -204,12 +230,14 @@
             <option value="modulo-exploring-extending-data">Módulo 7: Exploring & Extending Data Model</option>
             <option value="modulo-5-lab">Módulo 8: Laboratorio Sandbox PDP & Metafields</option>
             <option value="modulo-plp-lab">Módulo 9: Lab Práctico: Creación de PLP & Catálogo</option>
+            <option value="modulo-theme-components">Módulo 10: Auditoría de Componentes del Tema</option>
+            <option value="modulo-casio-clone">Módulo 11: Práctica Final: Clon Casio Colombia</option>
           </select>
         </div>
 
         <div class="module-nav-arrows">
           <span id="currentModuleBadge" class="badge-tag" style="background: rgba(149, 191, 71, 0.2); color: var(--brand-shopify);">
-            Módulo 1 de 9
+            Módulo 1 de 11
           </span>
           <button type="button" id="prevModuleBtn" class="mod-arrow-btn" title="Módulo Anterior">
             ← Anterior
@@ -3409,6 +3437,983 @@ class CollectionFilters {
       </section>
 
 
+      <!-- ========================================================= -->
+      <!-- MODULE: 10-theme-components-audit.html -->
+      <!-- ========================================================= -->
+      <section class="module-section" id="modulo-theme-components">
+        <div class="section-header">
+          <span class="section-badge" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);">Módulo 10 • Arquitectura & Auditoría</span>
+          <h2 class="section-title">10. Anatomía y Auditoría de Componentes en un Tema Shopify</h2>
+        </div>
+
+        <p>
+          Antes de modificar, refactorizar o construir sobre un tema existente de Shopify (como Dawn, Horizon o un tema a medida), un desarrollador senior debe saber <strong>auditar qué componentes existen, cómo se comunican entre sí y dónde residen las fuentes de verdad</strong>. En este módulo aprenderás a mapear la estructura completa de un tema Online Store 2.0, inspeccionar dependencias entre secciones y snippets, diagnosticar deuda técnica con Shopify CLI y optimizar la carga del árbol de renderizado.
+        </p>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC: ANATOMÍA Y DIRECTORIOS DE UN TEMA OS 2.0       -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="theme-anatomia">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+            </svg>
+            1. Anatomía Estructural de un Tema en Shopify Online Store 2.0
+          </h3>
+
+          <p>
+            Un tema de Shopify consta estrictamente de 7 directorios raíz obligatorios. Cada uno cumple una función específica dentro del ciclo de vida del renderizado:
+          </p>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Directorio</th>
+                  <th>Archivos Típicos</th>
+                  <th>Responsabilidad & Ciclo de Vida</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>layout/</code></td>
+                  <td><code>theme.liquid</code>, <code>password.liquid</code></td>
+                  <td>El contenedor HTML global (&lt;head&gt;, scripts principales, &lt;body&gt;). Inyecta obligatoriamente <code>{{ content_for_header }}</code> en el head y <code>{{ content_for_layout }}</code> en el body.</td>
+                </tr>
+                <tr>
+                  <td><code>templates/</code></td>
+                  <td><code>index.json</code>, <code>product.json</code>, <code>collection.json</code>, <code>cart.json</code></td>
+                  <td>Plantillas JSON que definen qué secciones y en qué orden se renderizan en cada tipo de página. También almacenan los settings específicos de cada sección en esa página.</td>
+                </tr>
+                <tr>
+                  <td><code>sections/</code></td>
+                  <td><code>header.liquid</code>, <code>main-product.liquid</code>, <code>footer.liquid</code></td>
+                  <td>Componentes de bloque autónomos. Poseen su propio <code>{% schema %}</code> con configuración editable desde el Theme Editor, soporte para bloques reordenables (<code>blocks</code>) y presets.</td>
+                </tr>
+                <tr>
+                  <td><code>snippets/</code></td>
+                  <td><code>card-product.liquid</code>, <code>price.liquid</code>, <code>icon-cart.liquid</code></td>
+                  <td>Componentes atómicos reutilizables sin schema propio. Se invocan mediante <code>{% render 'nombre-snippet', prop: valor %}</code> con un scope de variables aislado.</td>
+                </tr>
+                <tr>
+                  <td><code>assets/</code></td>
+                  <td><code>theme.js</code>, <code>base.css</code>, <code>product-form.js</code></td>
+                  <td>Archivos estáticos (JavaScript, CSS, imágenes, SVG, fuentes). Se cargan en el frontend mediante el filtro de Liquid <code>{{ 'archivo.js' | asset_url | script_tag }}</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>config/</code></td>
+                  <td><code>settings_schema.json</code>, <code>settings_data.json</code></td>
+                  <td><code>settings_schema.json</code> define el panel de configuración global del tema (colores, tipografía, redes sociales). <code>settings_data.json</code> almacena los valores reales guardados por el comerciante.</td>
+                </tr>
+                <tr>
+                  <td><code>locales/</code></td>
+                  <td><code>es.json</code>, <code>en.default.json</code></td>
+                  <td>Archivos de traducción para internacionalización (i18n). Sus cadenas se consumen en Liquid con el filtro <code>{{ 'general.cart.title' | t }}</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC: HERRAMIENTAS DE AUDITORÍA Y DIAGNÓSTICO         -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="theme-herramientas-auditoria">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+            2. Herramientas de Auditoría e Inspección Técnica
+          </h3>
+
+          <!-- Audit Method 1 -->
+          <div class="lab-instruction-card">
+            <div class="lab-step-number">A</div>
+            <div class="lab-step-body">
+              <h4>Shopify Theme Check (Linter Oficial en CLI)</h4>
+              <p>
+                <strong>Theme Check</strong> es el analizador estático oficial de Shopify para Liquid y JSON. Detecta errores de sintaxis, violaciones de rendimiento, snippets no referenciados (código muerto) y llamadas deprecadas a <code>{% include %}</code>:
+              </p>
+              <div class="code-block-wrapper">
+                <div class="code-block-header">
+                  <span>Terminal: Ejecutar Auditoría Estática de Tema</span>
+                  <button class="copy-btn" data-clipboard-target="#cli-theme-check">Copiar</button>
+                </div>
+                <pre><code class="language-bash" id="cli-theme-check"># Ejecutar análisis estático en la raíz del tema
+shopify theme check
+
+# Ejecutar con corrección automática de errores detectables
+shopify theme check --auto-correct
+
+# Analizar rendimiento de Liquid específicamente
+shopify theme check --category liquid,performance</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Audit Method 2 -->
+          <div class="lab-instruction-card">
+            <div class="lab-step-number">B</div>
+            <div class="lab-step-body">
+              <h4>Shopify Theme Inspector for Chrome (Flamegraphs de Liquid)</h4>
+              <p>
+                Extensión oficial para DevTools que mide el tiempo de ejecución en milisegundos que tarda cada sección y snippet en renderizarse en los servidores de Shopify antes de enviar el HTML al navegador:
+              </p>
+              <ul style="margin: 0.5rem 0 0.5rem 1.25rem; color: var(--text-secondary); line-height: 1.6;">
+                <li>Permite identificar cuellos de botella en bucles Liquid complejos (ej: bucles anidados sobre colecciones o variantes).</li>
+                <li>Muestra un gráfico de cascada (flamegraph) separando el tiempo de procesamiento por archivo.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Audit Method 3 -->
+          <div class="lab-instruction-card">
+            <div class="lab-step-number">C</div>
+            <div class="lab-step-body">
+              <h4>Inspección del DOM y Marcadores de Sección</h4>
+              <p>
+                Cada sección renderizada por Shopify se envuelve en el navegador con un elemento <code>&lt;div id="shopify-section-[section_id]" class="shopify-section"&gt;</code>. Esto permite abrir el inspector de elementos (F12) y rastrear instantáneamente qué archivo en la carpeta <code>sections/</code> generó cada parte del sitio.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC: DIFERENCIAS DE ARQUITECTURA: SECTIONS VS SNIPPETS-->
+        <!-- ========================================================= -->
+        <div class="content-block" id="theme-sections-vs-snippets">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v1"></path>
+              <path d="M18 8h4a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-4"></path>
+              <circle cx="8" cy="12" r="2"></circle>
+            </svg>
+            3. Secciones vs. Snippets: Reglas de Decisión Arquitectónica
+          </h3>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Criterio</th>
+                  <th>Sections (<code>sections/*.liquid</code>)</th>
+                  <th>Snippets (<code>snippets/*.liquid</code>)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Schema Editable</strong></td>
+                  <td><strong>Sí:</strong> Contiene tag <code>{% schema %}</code> con controles para el Theme Editor.</td>
+                  <td><strong>No:</strong> No puede tener schema propio. Recibe parámetros vía <code>{% render %}</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong>Ámbito de Variables</strong></td>
+                  <td>Tiene acceso al objeto global del template y sus propios <code>section.settings</code>.</td>
+                  <td><strong>Aislado:</strong> No hereda variables locales salvo que se pasen explícitamente como argumentos.</td>
+                </tr>
+                <tr>
+                  <td><strong>Invocación</strong></td>
+                  <td>Vía Template JSON o mediante <code>{% section 'header' %}</code>.</td>
+                  <td>Vía <code>{% render 'card-product', product: item %}</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong>Uso recomendado</strong></td>
+                  <td>Estructuras de layout completas, banners, grids, formularios principales.</td>
+                  <td>Microcomponentes reutilizables: botones, íconos, precios, badges, tarjetas.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout callout-architect">
+            <div class="callout-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+                <polyline points="2 12 12 17 22 12"></polyline>
+              </svg>
+              Por qué `{% include %}` está PROHIBIDO en Temas Modernos
+            </div>
+            <p>
+              El tag antiguo <code>{% include %}</code> introducía variables en el scope global del padre, provocando colisiones de nombres de variables difíciles de depurar y degradando el rendimiento porque el compilador de Liquid no podía optimizar el AST (Abstract Syntax Tree). El tag moderno <code>{% render %}</code> aísla completamente el contexto, permitiendo compilación en paralelo y optimizaciones de caché en los edge servers de Shopify.
+            </p>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC: EXPLORADOR INTERACTIVO DE COMPONENTES DEL TEMA -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="theme-interactive-inspector">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+            4. Explorador Interactivo de Componentes y Árbol de Dependencias
+          </h3>
+
+          <p>
+            Haz clic en cualquiera de los archivos del tema para auditar su función, su estructura interna, sus dependencias y las reglas de buenas prácticas asociadas:
+          </p>
+
+          <div class="practice-lab-container">
+            <div class="lab-header-banner">
+              <div>
+                <span class="lab-badge" style="background: linear-gradient(135deg, #8b5cf6, #ec4899);">
+                  🔍 Theme Component Explorer
+                </span>
+                <h4 style="margin: 0.5rem 0 0 0; color: var(--text-primary);">
+                  Auditor de Arquitectura: Tema Dawn / Horizon OS 2.0
+                </h4>
+              </div>
+              <div class="preset-buttons-group">
+                <button type="button" class="preset-btn" id="auditPresetDawn">📦 Preset Dawn Theme</button>
+                <button type="button" class="preset-btn" id="auditPresetHorizon">🎨 Preset Horizon Theme</button>
+              </div>
+            </div>
+
+            <!-- 2 Columns: File Tree on Left, Inspector on Right -->
+            <div class="lab-grid-layout" style="grid-template-columns: 280px 1fr; gap: 1.5rem;">
+              
+              <!-- Left Tree View -->
+              <div class="theme-tree-panel" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1rem;">
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.75rem;">
+                  Árbol de Archivos del Tema
+                </div>
+
+                <div class="theme-file-tree" id="themeFileTree">
+                  
+                  <!-- layout/ -->
+                  <div class="tree-folder">
+                    <div class="folder-name">📁 layout/</div>
+                    <div class="folder-files">
+                      <button type="button" class="tree-file-btn active" data-file-key="theme.liquid">📄 theme.liquid</button>
+                      <button type="button" class="tree-file-btn" data-file-key="password.liquid">📄 password.liquid</button>
+                    </div>
+                  </div>
+
+                  <!-- templates/ -->
+                  <div class="tree-folder">
+                    <div class="folder-name">📁 templates/</div>
+                    <div class="folder-files">
+                      <button type="button" class="tree-file-btn" data-file-key="index.json">📦 index.json</button>
+                      <button type="button" class="tree-file-btn" data-file-key="product.json">📦 product.json</button>
+                      <button type="button" class="tree-file-btn" data-file-key="collection.json">📦 collection.json</button>
+                    </div>
+                  </div>
+
+                  <!-- sections/ -->
+                  <div class="tree-folder">
+                    <div class="folder-name">📁 sections/</div>
+                    <div class="folder-files">
+                      <button type="button" class="tree-file-btn" data-file-key="header.liquid">🧩 header.liquid</button>
+                      <button type="button" class="tree-file-btn" data-file-key="main-product.liquid">🧩 main-product.liquid</button>
+                      <button type="button" class="tree-file-btn" data-file-key="main-collection.liquid">🧩 main-collection-product-grid.liquid</button>
+                    </div>
+                  </div>
+
+                  <!-- snippets/ -->
+                  <div class="tree-folder">
+                    <div class="folder-name">📁 snippets/</div>
+                    <div class="folder-files">
+                      <button type="button" class="tree-file-btn" data-file-key="card-product.liquid">✂️ card-product.liquid</button>
+                      <button type="button" class="tree-file-btn" data-file-key="facets.liquid">✂️ facets.liquid</button>
+                      <button type="button" class="tree-file-btn" data-file-key="price.liquid">✂️ price.liquid</button>
+                    </div>
+                  </div>
+
+                  <!-- config/ -->
+                  <div class="tree-folder">
+                    <div class="folder-name">📁 config/</div>
+                    <div class="folder-files">
+                      <button type="button" class="tree-file-btn" data-file-key="settings_schema.json">⚙️ settings_schema.json</button>
+                      <button type="button" class="tree-file-btn" data-file-key="settings_data.json">⚙️ settings_data.json</button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Right Inspection Detail Pane -->
+              <div class="theme-inspection-pane" id="themeInspectionPane" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
+                  <div>
+                    <span id="inspectFileTypeBadge" class="badge-tag" style="background: rgba(139, 92, 246, 0.2); color: #c084fc;">Layout Container</span>
+                    <h3 id="inspectFileName" style="margin: 0.4rem 0 0 0; font-size: 1.2rem; color: var(--text-primary); font-family: var(--font-mono);">
+                      layout/theme.liquid
+                    </h3>
+                  </div>
+                  <span id="inspectHealthStatus" style="font-size: 0.8rem; font-weight: 700; color: #10b981; background: rgba(16, 185, 129, 0.1); padding: 0.3rem 0.6rem; border-radius: 4px;">
+                    ✓ Theme Check: Valid
+                  </span>
+                </div>
+
+                <!-- Detail description -->
+                <p id="inspectFileDesc" style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin: 0;">
+                  Es el documento HTML raíz maestro. Define los tags de metadatos, carga fuentes, hojas de estilos base y scripts globales, e inyecta dinámicamente las secciones de cada página.
+                </p>
+
+                <!-- Key hooks / liquid tags -->
+                <div style="background: var(--bg-secondary); border-radius: var(--radius-sm); padding: 1rem; border: 1px solid var(--border-subtle);">
+                  <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; margin-bottom: 0.5rem;">
+                    Etiquetas Liquid Requeridas / Clave
+                  </div>
+                  <div id="inspectKeyTags" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-primary); display: flex; flex-direction: column; gap: 0.3rem;">
+                    <div>• <code>{{ content_for_header }}</code> (Inyección de scripts del core de Shopify y apps)</div>
+                    <div>• <code>{{ content_for_layout }}</code> (Renderiza el template dinámico activo)</div>
+                  </div>
+                </div>
+
+                <!-- Dependencies & Call hierarchy -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div style="background: var(--bg-secondary); border-radius: var(--radius-sm); padding: 0.85rem; border: 1px solid var(--border-subtle);">
+                    <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.4rem;">
+                      Invocado por (Parent caller):
+                    </div>
+                    <div id="inspectCallers" style="font-size: 0.85rem; color: var(--text-secondary);">
+                      Shopify Core Server Router (Directo)
+                    </div>
+                  </div>
+
+                  <div style="background: var(--bg-secondary); border-radius: var(--radius-sm); padding: 0.85rem; border: 1px solid var(--border-subtle);">
+                    <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.4rem;">
+                      Componentes que invoca (Children):
+                    </div>
+                    <div id="inspectChildren" style="font-size: 0.85rem; color: var(--text-secondary);">
+                      <code>sections/header.liquid</code>, <code>sections/footer.liquid</code>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Schema snippet / code preview -->
+                <div class="code-block-wrapper" style="margin-top: 0.5rem;">
+                  <div class="code-block-header">
+                    <span id="inspectCodeTitle">Estructura típica de layout/theme.liquid</span>
+                    <button class="copy-btn" data-clipboard-target="#inspectCodeBlock">Copiar</button>
+                  </div>
+                  <pre><code class="language-liquid" id="inspectCodeBlock">&lt;!doctype html&gt;
+&lt;html class="no-js" lang="{{ request.locale.iso_code }}"&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;meta name="viewport" content="width=device-width,initial-scale=1"&gt;
+    &lt;title&gt;{{ page_title }}&lt;/title&gt;
+
+    {{ content_for_header }}
+
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+    &lt;script src="{{ 'global.js' | asset_url }}" defer="defer"&gt;&lt;/script&gt;
+  &lt;/head&gt;
+
+  &lt;body class="gradient"&gt;
+    {% sections 'header-group' %}
+
+    &lt;main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1"&gt;
+      {{ content_for_layout }}
+    &lt;/main&gt;
+
+    {% sections 'footer-group' %}
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC: KNOWLEDGE CHECK (QUIZ)                          -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="theme-knowledge-check">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            Knowledge Check: Anatomía de Temas y Buenas Prácticas
+          </h3>
+
+          <div class="quiz-container">
+            <!-- Quiz Question 1 -->
+            <div class="quiz-card" id="quiz-theme-q1">
+              <div class="quiz-question">
+                <strong>1. ¿Qué etiqueta de Liquid es obligatoria dentro de <code>layout/theme.liquid</code> para permitir la inyección de los scripts del motor de Shopify y las apps instaladas?</strong>
+              </div>
+              <div class="quiz-options">
+                <label class="quiz-option">
+                  <input type="radio" name="theme_q1" value="a">
+                  <span>A) <code>{{ shopify_scripts }}</code></span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="theme_q1" value="b">
+                  <span>B) <code>{{ content_for_header }}</code></span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="theme_q1" value="c">
+                  <span>C) <code>{% render 'app_injection' %}</code></span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="theme_q1" value="d">
+                  <span>D) <code>{{ content_for_layout }}</code></span>
+                </label>
+              </div>
+              <div class="quiz-feedback" id="feedback-theme-q1"></div>
+            </div>
+
+            <!-- Quiz Question 2 -->
+            <div class="quiz-card" id="quiz-theme-q2">
+              <div class="quiz-question">
+                <strong>2. Al auditar un tema con <code>shopify theme check</code>, encuentras múltiples llamadas a <code>{% include 'snippet' %}</code>. ¿Cuál es la refactorización arquitectónica correcta?</strong>
+              </div>
+              <div class="quiz-options">
+                <label class="quiz-option">
+                  <input type="radio" name="theme_q2" value="a">
+                  <span>A) Reemplazar <code>{% include %}</code> por <code>{% render %}</code> y pasar explícitamente las variables necesarias como parámetros para aislar el scope y optimizar el rendimiento.</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="theme_q2" value="b">
+                  <span>B) Convertir todos los snippets en plantillas JSON dentro de <code>templates/</code>.</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="theme_q2" value="c">
+                  <span>C) Mover el código a <code>assets/</code> y cargarlo con JavaScript asíncrono.</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="theme_q2" value="d">
+                  <span>D) Dejar <code>{% include %}</code> porque tiene acceso a todas las variables globales sin configuración adicional.</span>
+                </label>
+              </div>
+              <div class="quiz-feedback" id="feedback-theme-q2"></div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="btnCheckThemeQuiz" style="margin-top: 1rem;">
+              Validar Respuestas de Auditoría
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================= -->
+      <!-- MODULE: 11-casio-store-clone.html -->
+      <!-- ========================================================= -->
+      <section class="module-section" id="modulo-casio-clone">
+        <div class="section-header">
+          <span class="section-badge" style="background: linear-gradient(135deg, #03164c, #0284c7);">Módulo 11 • Proyecto Práctico Final</span>
+          <h2 class="section-title">11. Práctica Final: Clon Arquitectónico de Tienda Casio Colombia</h2>
+        </div>
+
+        <p>
+          En este proyecto final aplicarás todos los conceptos arquitectónicos aprendidos a lo largo del curso (modelos de datos, metafields, colecciones, filtrado por facetas, componentes modulares OS 2.0 y rendimiento) para <strong>construir el clon de la Homepage de la tienda oficial Casio by Timesquare (Colombia)</strong>.
+        </p>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 1: AUDITORÍA DE ARQUITECTURA DE LA TIENDA REAL   -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="casio-auditoria">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            1. Auditoría Técnica de `casiobytimesquare.co`
+          </h3>
+
+          <p>
+            Al inspeccionar la tienda en producción, identificamos los pilares de su diseño y arquitectura de software:
+          </p>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Aspecto</th>
+                  <th>Configuración Detectada</th>
+                  <th>Propósito de Negocio & UX</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Paleta de Marca</strong></td>
+                  <td>Primary: <code>#03164c</code> (Deep Navy Casio), Dark: <code>#000000</code>, Accent/Sale: <code>#fc6229</code> / <code>#ec0101</code></td>
+                  <td>Transmite solidez japonesa, precisión técnica y confianza oficial de distribuidor autorizado.</td>
+                </tr>
+                <tr>
+                  <td><strong>Tipografía</strong></td>
+                  <td><code>Poppins</code> (Pesos 400, 600, 700, 800)</td>
+                  <td>Geométrica y altamente legible tanto en pantallas móviles como en displays de escritorio.</td>
+                </tr>
+                <tr>
+                  <td><strong>Estructura de Catálogo</strong></td>
+                  <td>Sub-marcas como colecciones madre: <em>G-Shock, Edifice, Vintage, Baby-G, Pro Trek</em></td>
+                  <td>Permite navegación jerárquica directa por estilo de vida (deportivo, urbano, formal, retro).</td>
+                </tr>
+                <tr>
+                  <td><strong>Patrones de Conversión</strong></td>
+                  <td>Sticky Announcement Bar, Badges de Originalidad, Carrito Drawer Ajax, Color Swatches en Cards</td>
+                  <td>Reduce la fricción en el checkout y refuerza la autenticidad frente al mercado de réplicas.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 2: MAPEO DE SECCIONES EN TEMPLATES/INDEX.JSON    -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="casio-secciones-json">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="9" y1="21" x2="9" y2="9"></line>
+            </svg>
+            2. Mapeo de Secciones del Homepage (`templates/index.json`)
+          </h3>
+
+          <p>
+            La página principal se orquesta en <strong>6 secciones Liquid modulares</strong> dentro de <code>templates/index.json</code>:
+          </p>
+
+          <div class="code-block-wrapper">
+            <div class="code-block-header">
+              <span>templates/index.json (Estructura de Secciones Casio)</span>
+              <button class="copy-btn" data-clipboard-target="#json-casio-index">Copiar</button>
+            </div>
+            <pre><code class="language-json" id="json-casio-index">{
+  "sections": {
+    "announcement_bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "text": "🚚 Envíos Gratis a toda Colombia por compras superiores a $200.000 • 100% Originales con Garantía Oficial",
+        "bg_color": "#03164c",
+        "text_color": "#ffffff"
+      }
+    },
+    "hero_slider": {
+      "type": "casio-hero-slider",
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "title": "G-SHOCK 40TH ANNIVERSARY",
+            "subtitle": "Resistencia Absoluta • Estructura Carbon Core Guard",
+            "btn_label": "Ver Colección G-Shock",
+            "btn_link": "/collections/g-shock",
+            "image": "shopify://shop_images/hero-gshock.jpg"
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "title": "CASIO VINTAGE ICONICS",
+            "subtitle": "El clásico digital que nunca pasa de moda",
+            "btn_label": "Descubrir Vintage",
+            "btn_link": "/collections/vintage",
+            "image": "shopify://shop_images/hero-vintage.jpg"
+          }
+        }
+      },
+      "block_order": ["slide_1", "slide_2"]
+    },
+    "brand_grid": {
+      "type": "casio-brand-grid",
+      "settings": {
+        "heading": "Explora por Marcas Icónicas"
+      }
+    },
+    "tabbed_products": {
+      "type": "casio-featured-tabs",
+      "settings": {
+        "heading": "Destacados del Mes",
+        "collection_1": "g-shock-bestsellers",
+        "collection_2": "casio-vintage-classics",
+        "collection_3": "edifice-chronos"
+      }
+    },
+    "trust_badges": {
+      "type": "casio-trust-badges",
+      "settings": {
+        "badge_1_title": "Garantía Oficial Casio",
+        "badge_1_desc": "1 año de garantía directa de fábrica",
+        "badge_2_title": "100% Original",
+        "badge_2_desc": "Distribuidor oficial autorizado en Colombia",
+        "badge_3_title": "Envíos Seguros",
+        "badge_3_desc": "Seguimiento en tiempo real con Servientrega y Coordinadora"
+      }
+    }
+  },
+  "order": [
+    "announcement_bar",
+    "hero_slider",
+    "brand_grid",
+    "tabbed_products",
+    "trust_badges"
+  ]
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 3: CÓDIGO LIQUID DE LAS SECCIONES CLAVE          -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="casio-liquid-code">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+            3. Implementación Liquid de Secciones Clave
+          </h3>
+
+          <!-- Section: Brand Categories Grid -->
+          <div class="code-block-wrapper">
+            <div class="code-block-header">
+              <span>sections/casio-brand-grid.liquid</span>
+              <button class="copy-btn" data-clipboard-target="#liquid-brand-grid">Copiar</button>
+            </div>
+            <pre><code class="language-liquid" id="liquid-brand-grid">&lt;div class="casio-brand-grid-section page-width"&gt;
+  &lt;div class="section-title-wrapper"&gt;
+    &lt;h2 class="casio-section-heading"&gt;{{ section.settings.heading | escape }}&lt;/h2&gt;
+    &lt;span class="casio-section-sub"&gt;Selecciona tu universo Casio favorito&lt;/span&gt;
+  &lt;/div&gt;
+
+  &lt;div class="brand-cards-grid"&gt;
+    {%- for block in section.blocks -%}
+      &lt;a href="{{ block.settings.collection_url }}" class="brand-card" {{ block.shopify_attributes }}&gt;
+        &lt;div class="brand-card-bg" style="background-image: url('{{ block.settings.image | image_url: width: 800 }}');"&gt;&lt;/div&gt;
+        &lt;div class="brand-card-overlay"&gt;
+          &lt;span class="brand-tagline"&gt;{{ block.settings.tagline }}&lt;/span&gt;
+          &lt;h3 class="brand-name"&gt;{{ block.settings.title }}&lt;/h3&gt;
+          &lt;span class="brand-btn"&gt;Explorar Colección &amp;rarr;&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/a&gt;
+    {%- endfor -%}
+  &lt;/div&gt;
+&lt;/div&gt;
+
+{% schema %}
+{
+  "name": "Casio Brand Grid",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Título", "default": "Marcas Oficiales" }
+  ],
+  "blocks": [
+    {
+      "type": "brand_item",
+      "name": "Marca",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Nombre de Marca", "default": "G-SHOCK" },
+        { "type": "text", "id": "tagline", "label": "Subtítulo / Slogan", "default": "Resistencia Absoluta" },
+        { "type": "image_picker", "id": "image", "label": "Foto de Portada" },
+        { "type": "url", "id": "collection_url", "label": "Enlace a Colección" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Casio Brand Grid",
+      "blocks": [
+        { "type": "brand_item", "settings": { "title": "G-SHOCK", "tagline": "Toughness Since 1983" } },
+        { "type": "brand_item", "settings": { "title": "CASIO VINTAGE", "tagline": "Iconos Retro Digitales" } },
+        { "type": "brand_item", "settings": { "title": "EDIFICE", "tagline": "Velocidad e Inteligencia" } },
+        { "type": "brand_item", "settings": { "title": "BABY-G", "tagline": "Estilo Urbano y Resistente" } }
+      ]
+    }
+  ]
+}
+{% endschema %}</code></pre>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 4: SIMULADOR EN VIVO DEL CLON CASIO              -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="casio-interactive-simulator">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+            4. Simulador Sandbox en Vivo: Homepage Casio Colombia
+          </h3>
+
+          <p>
+            A continuación puedes interactuar con el prototipo funcional en vivo del clon de la tienda Casio. Puedes alternar marcas, filtrar pestañas de productos destacados, probar los botones de compra rápida y alternar entre vista Desktop y Mobile.
+          </p>
+
+          <div class="practice-lab-container" style="background: #0b1120; border-color: #1e293b;">
+            
+            <!-- Controls Toolbar -->
+            <div class="lab-header-banner" style="border-bottom-color: #1e293b;">
+              <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <span class="lab-badge" style="background: #03164c; border: 1px solid #3b82f6; color: #60a5fa;">
+                  ⌚ CASIO BY TIMESQUARE CLONE
+                </span>
+                <span style="font-size: 0.85rem; color: #94a3b8;">Simulador Interactivo de Producción</span>
+              </div>
+
+              <div style="display: flex; gap: 0.5rem;">
+                <button type="button" class="preset-btn active" id="casioViewDesktopBtn">🖥️ Desktop</button>
+                <button type="button" class="preset-btn" id="casioViewMobileBtn">📱 Mobile (375px)</button>
+              </div>
+            </div>
+
+            <!-- SIMULATOR SCREEN -->
+            <div class="casio-simulator-frame" id="casioSimulatorFrame">
+              
+              <!-- Announcement Bar -->
+              <div class="casio-announcement-bar">
+                <span>🚚 Envíos Gratis a toda Colombia en órdenes superiores a $200.000 COP • 100% Originales con Garantía Oficial de 1 Año</span>
+              </div>
+
+              <!-- Top Nav Header -->
+              <header class="casio-header">
+                <div class="casio-header-inner">
+                  <div class="casio-logo">
+                    <span class="casio-logo-main">CASIO</span>
+                    <span class="casio-logo-sub">BY TIMESQUARE</span>
+                  </div>
+
+                  <nav class="casio-nav">
+                    <a href="javascript:void(0)" class="casio-nav-link active" data-casio-filter="all">Todas las Marcas</a>
+                    <a href="javascript:void(0)" class="casio-nav-link" data-casio-filter="gshock">G-SHOCK</a>
+                    <a href="javascript:void(0)" class="casio-nav-link" data-casio-filter="vintage">VINTAGE</a>
+                    <a href="javascript:void(0)" class="casio-nav-link" data-casio-filter="edifice">EDIFICE</a>
+                    <a href="javascript:void(0)" class="casio-nav-link" data-casio-filter="babyg">BABY-G</a>
+                  </nav>
+
+                  <div class="casio-header-icons">
+                    <button type="button" class="casio-icon-btn" title="Buscar">🔍</button>
+                    <button type="button" class="casio-icon-btn" title="Favoritos">🤍</button>
+                    <button type="button" class="casio-icon-btn cart-btn" title="Carrito" onclick="alert('🛍️ Carrito Casio:\\n\\n1x Casio Vintage A168WA ($290.000 COP)\\nTotal: $290.000 COP')">
+                      🛒 <span class="cart-badge">1</span>
+                    </button>
+                  </div>
+                </div>
+              </header>
+
+              <!-- Hero Slideshow -->
+              <section class="casio-hero">
+                <div class="casio-hero-content">
+                  <span class="casio-hero-badge">NUEVA COLECCIÓN 2026</span>
+                  <h1 class="casio-hero-title">G-SHOCK 2100 SERIES<br><span style="color: #60a5fa;">CARBON CORE GUARD</span></h1>
+                  <p class="casio-hero-desc">
+                    El icónico diseño octogonal "CasiOak" con bisel de resina reforzado con fibra de carbono y resistencia al agua de 200 metros.
+                  </p>
+                  <div class="casio-hero-btns">
+                    <button type="button" class="casio-btn-primary" onclick="alert('Redirigiendo a colección G-Shock...')">Comprar G-Shock</button>
+                    <button type="button" class="casio-btn-secondary" onclick="alert('Redirigiendo a colección Vintage...')">Ver Casio Vintage</button>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Brand Categories Grid -->
+              <section class="casio-brands-section">
+                <div class="casio-section-header">
+                  <h2>UNIVERSO DE MARCAS CASIO</h2>
+                  <p>Encuentra el reloj diseñado para tu estilo y rendimiento</p>
+                </div>
+
+                <div class="casio-brands-grid">
+                  <!-- G-Shock -->
+                  <div class="casio-brand-box" onclick="document.querySelector('[data-casio-filter=\'gshock\']').click()">
+                    <div class="brand-bg" style="background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80') center/cover;"></div>
+                    <div class="brand-text">
+                      <span class="brand-sub">TOUGHNESS & SPORT</span>
+                      <h3>G-SHOCK</h3>
+                      <span class="brand-action">Explorar &rarr;</span>
+                    </div>
+                  </div>
+
+                  <!-- Vintage -->
+                  <div class="casio-brand-box" onclick="document.querySelector('[data-casio-filter=\'vintage\']').click()">
+                    <div class="brand-bg" style="background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=600&auto=format&fit=crop&q=80') center/cover;"></div>
+                    <div class="brand-text">
+                      <span class="brand-sub">RETRO ICONICS</span>
+                      <h3>CASIO VINTAGE</h3>
+                      <span class="brand-action">Explorar &rarr;</span>
+                    </div>
+                  </div>
+
+                  <!-- Edifice -->
+                  <div class="casio-brand-box" onclick="document.querySelector('[data-casio-filter=\'edifice\']').click()">
+                    <div class="brand-bg" style="background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=600&auto=format&fit=crop&q=80') center/cover;"></div>
+                    <div class="brand-text">
+                      <span class="brand-sub">SPEED & INTELLIGENCE</span>
+                      <h3>EDIFICE</h3>
+                      <span class="brand-action">Explorar &rarr;</span>
+                    </div>
+                  </div>
+
+                  <!-- Baby-G -->
+                  <div class="casio-brand-box" onclick="document.querySelector('[data-casio-filter=\'babyg\']').click()">
+                    <div class="brand-bg" style="background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1533139502658-0198f920d8e8?w=600&auto=format&fit=crop&q=80') center/cover;"></div>
+                    <div class="brand-text">
+                      <span class="brand-sub">URBAN & COMPACT</span>
+                      <h3>BABY-G</h3>
+                      <span class="brand-action">Explorar &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Featured Products Showcase -->
+              <section class="casio-products-showcase">
+                <div class="casio-section-header">
+                  <h2>RELOJES MÁS DESEADOS</h2>
+                  <p>Modelos originales con despacho inmediato en Colombia</p>
+                </div>
+
+                <div class="casio-products-grid" id="casioProductGrid">
+                  <!-- Injected dynamically by casio-clone.js -->
+                </div>
+              </section>
+
+              <!-- Trust & Value Badges -->
+              <section class="casio-trust-section">
+                <div class="casio-trust-grid">
+                  <div class="trust-item">
+                    <span class="trust-icon">🛡️</span>
+                    <div>
+                      <h4>Garantía Oficial Casio</h4>
+                      <p>1 año de respaldo directo en Colombia</p>
+                    </div>
+                  </div>
+                  <div class="trust-item">
+                    <span class="trust-icon">✨</span>
+                    <div>
+                      <h4>100% Originales</h4>
+                      <p>Distribuidor autorizado por Timesquare</p>
+                    </div>
+                  </div>
+                  <div class="trust-item">
+                    <span class="trust-icon">🚚</span>
+                    <div>
+                      <h4>Envíos a Todo el País</h4>
+                      <p>Cobertura nacional con pago seguro</p>
+                    </div>
+                  </div>
+                  <div class="trust-item">
+                    <span class="trust-icon">💳</span>
+                    <div>
+                      <h4>Cuotas sin Interés</h4>
+                      <p>Addi, Mercado Pago y Tarjetas</p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Footer -->
+              <footer class="casio-footer">
+                <div class="casio-footer-inner">
+                  <div>
+                    <div class="casio-logo">
+                      <span class="casio-logo-main" style="color: #fff;">CASIO</span>
+                      <span class="casio-logo-sub" style="color: #94a3b8;">BY TIMESQUARE</span>
+                    </div>
+                    <p style="font-size: 0.8rem; color: #64748b; margin-top: 0.5rem;">
+                      Tienda oficial de relojes Casio en Colombia. Calidad, precisión y resistencia absoluta.
+                    </p>
+                  </div>
+                  <div style="font-size: 0.8rem; color: #64748b;">
+                    &copy; 2026 Casio by Timesquare Clone • Proyecto Educativo Shopify Dev
+                  </div>
+                </div>
+              </footer>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 5: KNOWLEDGE CHECK (QUIZ)                        -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="casio-knowledge-check">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            Knowledge Check: Arquitectura de Tiendas de Relojería y Retail de Alto Tráfico
+          </h3>
+
+          <div class="quiz-container">
+            <!-- Quiz Question 1 -->
+            <div class="quiz-card" id="quiz-casio-q1">
+              <div class="quiz-question">
+                <strong>1. Para un Hero Slider con imágenes de gran tamaño como el de Casio, ¿cuál es la técnica recomendada en Liquid para evitar degradar el LCP (Largest Contentful Paint) en móviles?</strong>
+              </div>
+              <div class="quiz-options">
+                <label class="quiz-option">
+                  <input type="radio" name="casio_q1" value="a">
+                  <span>A) Cargar la imagen desktop en 4K y dejar que CSS la reduzca en el cliente.</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="casio_q1" value="b">
+                  <span>B) Utilizar el tag <code>&lt;picture&gt;</code> con <code>&lt;source media="(max-width: 767px)" srcset="..."&gt;</code> y el filtro <code>image_url</code> con <code>fetchpriority="high"</code> únicamente en el primer slide.</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="casio_q1" value="c">
+                  <span>C) Poner <code>loading="lazy"</code> en todos los slides, incluyendo el primero.</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="casio_q1" value="d">
+                  <span>D) Reemplazar las imágenes por canvas WebGL.</span>
+                </label>
+              </div>
+              <div class="quiz-feedback" id="feedback-casio-q1"></div>
+            </div>
+
+            <!-- Quiz Question 2 -->
+            <div class="quiz-card" id="quiz-casio-q2">
+              <div class="quiz-question">
+                <strong>2. ¿Cómo se debe implementar el carrito lateral (Cart Drawer) de Casio para que actualice cantidades y precios sin recargar la página?</strong>
+              </div>
+              <div class="quiz-options">
+                <label class="quiz-option">
+                  <input type="radio" name="casio_q2" value="a">
+                  <span>A) Con la <strong>Shopify Ajax Cart API</strong> (<code>/cart/add.js</code>, <code>/cart/change.js</code>) y la <strong>Section Rendering API</strong> (<code>?sections=cart-drawer</code>) para recibir el HTML actualizado del servidor en un solo request.</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="casio_q2" value="b">
+                  <span>B) Redirigiendo siempre a <code>/cart</code> con un formulario POST tradicional.</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="casio_q2" value="c">
+                  <span>C) Guardando los productos en una base de datos externa MySQL.</span>
+                </label>
+                <label class="quiz-option">
+                  <input type="radio" name="casio_q2" value="d">
+                  <span>D) Forzando <code>window.location.reload()</code> tras cada clic.</span>
+                </label>
+              </div>
+              <div class="quiz-feedback" id="feedback-casio-q2"></div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="btnCheckCasioQuiz" style="margin-top: 1rem;">
+              Validar Respuestas del Proyecto Casio
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+
     </main>
   </div>
 
@@ -3424,6 +4429,8 @@ class CollectionFilters {
   <script src="scripts/preview-engine.js"></script>
   <script src="scripts/practice-lab.js"></script>
   <script src="scripts/plp-lab.js"></script>
+  <script src="scripts/theme-inspector.js"></script>
+  <script src="scripts/casio-clone.js"></script>
   <script src="scripts/app.js"></script>
 </body>
 </html>

@@ -47,6 +47,8 @@ const footer = `
   <script src="scripts/preview-engine.js"></script>
   <script src="scripts/practice-lab.js"></script>
   <script src="scripts/plp-lab.js"></script>
+  <script src="scripts/theme-inspector.js"></script>
+  <script src="scripts/casio-clone.js"></script>
   <script src="scripts/app.js"></script>
 </body>
 </html>
@@ -74,7 +76,9 @@ const moduleFiles = [
   '06-customizing-themes.html',
   '07-exploring-data-model.html',
   '08-sandbox-practice-lab.html',
-  '09-plp-collection-lab.html'
+  '09-plp-collection-lab.html',
+  '10-theme-components-audit.html',
+  '11-casio-store-clone.html'
 ];
 
 const modulesContent = moduleFiles.map(file => {

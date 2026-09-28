@@ -875,3 +875,548 @@
   color: #111827;
 }
 
+/* ========================================================= */
+/* MODULE 10: THEME COMPONENT INSPECTOR STYLES               */
+/* ========================================================= */
+
+.theme-file-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tree-folder {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.folder-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.folder-files {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-left: 0.75rem;
+  border-left: 1px dashed var(--border-subtle);
+  margin-left: 0.4rem;
+}
+
+.tree-file-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tree-file-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+.tree-file-btn.active {
+  background: rgba(139, 92, 246, 0.15);
+  border-color: rgba(139, 92, 246, 0.4);
+  color: #c084fc;
+  font-weight: 700;
+}
+
+/* ========================================================= */
+/* MODULE 11: CASIO STORE CLONE SIMULATOR STYLES             */
+/* ========================================================= */
+
+.casio-simulator-frame {
+  background: #030712;
+  border-radius: var(--radius-md);
+  border: 1px solid #1f2937;
+  overflow: hidden;
+  transition: max-width 0.35s ease, margin 0.35s ease, box-shadow 0.35s ease;
+  width: 100%;
+}
+
+.casio-simulator-frame.mobile-preview-frame {
+  max-width: 375px;
+  margin: 0 auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 8px #111827;
+  border-radius: 28px;
+}
+
+/* Announcement */
+.casio-announcement-bar {
+  background: #03164c;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.45rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  letter-spacing: 0.02em;
+}
+
+/* Header */
+.casio-header {
+  background: #090e1a;
+  border-bottom: 1px solid #1e293b;
+  padding: 0.85rem 1.5rem;
+}
+
+.casio-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.casio-logo {
+  display: flex;
+  flex-direction: column;
+}
+
+.casio-logo-main {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.casio-logo-sub {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.casio-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  overflow-x: auto;
+}
+
+.casio-nav-link {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.casio-nav-link.active, .casio-nav-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.casio-header-icons {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.casio-icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  position: relative;
+  padding: 0.3rem;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hero */
+.casio-hero {
+  background: linear-gradient(135deg, rgba(3, 22, 76, 0.95), rgba(0, 0, 0, 0.95)), url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1600&auto=format&fit=crop&q=80') center/cover;
+  padding: 3.5rem 1.5rem;
+  border-bottom: 1px solid #1e293b;
+}
+
+.casio-hero-content {
+  max-width: 600px;
+}
+
+.casio-hero-badge {
+  background: rgba(96, 165, 250, 0.2);
+  color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.4);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+.casio-hero-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1.15;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.02em;
+}
+
+.casio-hero-desc {
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.casio-hero-btns {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.casio-btn-primary {
+  background: #3b82f6;
+  color: #ffffff;
+  border: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.75rem 1.4rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.casio-btn-primary:hover {
+  background: #2563eb;
+}
+
+.casio-btn-secondary {
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.75rem 1.4rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.casio-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #fff;
+}
+
+/* Brands Section */
+.casio-brands-section {
+  padding: 2.5rem 1.5rem;
+  border-bottom: 1px solid #1e293b;
+}
+
+.casio-section-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.casio-section-header h2 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.4rem 0;
+  letter-spacing: 0.05em;
+}
+
+.casio-section-header p {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.casio-brands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.casio-brand-box {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid #1e293b;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.casio-brand-box:hover {
+  transform: translateY(-4px);
+  border-color: #3b82f6;
+}
+
+.brand-bg {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.4s ease;
+}
+
+.casio-brand-box:hover .brand-bg {
+  transform: scale(1.08);
+}
+
+.brand-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1rem;
+  z-index: 2;
+}
+
+.brand-sub {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #60a5fa;
+  letter-spacing: 0.1em;
+}
+
+.brand-text h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0.2rem 0;
+}
+
+.brand-action {
+  font-size: 0.75rem;
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+/* Products Showcase */
+.casio-products-showcase {
+  padding: 2.5rem 1.5rem;
+  background: #020617;
+  border-bottom: 1px solid #1e293b;
+}
+
+.casio-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.casio-simulator-frame.mobile-preview-frame .casio-products-grid {
+  grid-template-columns: 1fr;
+}
+
+.casio-product-card {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.casio-product-card:hover {
+  transform: translateY(-3px);
+  border-color: #38bdf8;
+}
+
+.casio-card-img-box {
+  position: relative;
+  background: #1e293b;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.casio-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.casio-product-card:hover .casio-card-img {
+  transform: scale(1.05);
+}
+
+.casio-card-badge {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  z-index: 2;
+  text-transform: uppercase;
+}
+
+.casio-quick-add-btn {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #03164c;
+  color: #fff;
+  border: 1px solid #3b82f6;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.casio-product-card:hover .casio-quick-add-btn {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.casio-card-info {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.casio-card-brand {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #60a5fa;
+  letter-spacing: 0.05em;
+}
+
+.casio-card-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.casio-card-specs {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  margin: 0.2rem 0;
+}
+
+.casio-card-pricing {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.2rem;
+}
+
+.casio-price-now {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #38bdf8;
+}
+
+.casio-price-old {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.casio-card-shipping {
+  font-size: 0.7rem;
+  color: #34d399;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
+/* Trust Section */
+.casio-trust-section {
+  padding: 2rem 1.5rem;
+  background: #090e1a;
+  border-bottom: 1px solid #1e293b;
+}
+
+.casio-trust-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.25rem;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.trust-icon {
+  font-size: 1.5rem;
+}
+
+.trust-item h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.2rem 0;
+}
+
+.trust-item p {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* Footer */
+.casio-footer {
+  background: #030712;
+  padding: 2rem 1.5rem;
+}
+
+.casio-footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+
+
