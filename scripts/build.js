@@ -52,6 +52,7 @@ const footer = `
   <script src="scripts/admin-explorer.js"></script>
   <script src="scripts/rbac-simulator.js"></script>
   <script src="scripts/draft-orders-lab.js"></script>
+  <script src="scripts/cli-emulator.js"></script>
   <script src="scripts/app.js"></script>
 </body>
 </html>
@@ -84,7 +85,8 @@ const moduleFiles = [
   '11-casio-store-clone.html',
   '12-shopify-admin-navigation-guide.html',
   '13-rbac-user-permissions.html',
-  '14-draft-orders-invoicing.html'
+  '14-draft-orders-invoicing.html',
+  '15-shopify-cli-workflow.html'
 ];
 
 const modulesContent = moduleFiles.map(file => {

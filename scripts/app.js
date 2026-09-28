@@ -51,7 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 'modulo-casio-clone', title: '⌚ 11. Práctica Final: Clon Casio Colombia' },
     { id: 'modulo-admin-menus', title: '🖥️ 12. Guía del Shopify Admin & Menús' },
     { id: 'modulo-rbac-roles', title: '🛡️ 13. Role-Based Access Controls (RBAC)' },
-    { id: 'modulo-draft-orders', title: '📋 14. Creación de Draft Orders & Facturación' }
+    { id: 'modulo-draft-orders', title: '📋 14. Creación de Draft Orders & Facturación' },
+    { id: 'modulo-shopify-cli', title: '⚡ 15. Cómo funciona el Shopify CLI' }
   ];
 
   const moduleSections = document.querySelectorAll('.module-section');

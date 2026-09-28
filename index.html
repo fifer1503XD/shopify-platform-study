@@ -237,6 +237,19 @@
             <li><a href="#draft-knowledge-check" class="nav-sub-link">5. Knowledge Check (Quiz)</a></li>
           </ul>
         </li>
+
+        <li class="nav-item">
+          <a href="#modulo-shopify-cli" class="nav-link">
+            <span style="color: #06b6d4; font-weight: 700;">⚡ 15. Cómo funciona el Shopify CLI</span>
+          </a>
+          <ul class="nav-sub-menu">
+            <li><a href="#cli-architecture-overview" class="nav-sub-link">1. Arquitectura & Proxy Local</a></li>
+            <li><a href="#cli-theme-commands" class="nav-sub-link">2. Comandos Esenciales de Temas</a></li>
+            <li><a href="#cli-theme-check-rules" class="nav-sub-link">3. Theme Check & Linters</a></li>
+            <li><a href="#cli-interactive-terminal" class="nav-sub-link">4. Emulador de Terminal CLI</a></li>
+            <li><a href="#cli-knowledge-check" class="nav-sub-link">5. Knowledge Check (Quiz)</a></li>
+          </ul>
+        </li>
       </ul>
     </aside>
 
@@ -277,12 +290,13 @@
             <option value="modulo-admin-menus">Módulo 12: Guía del Shopify Admin & Menús</option>
             <option value="modulo-rbac-roles">Módulo 13: Role-Based Access Controls (RBAC)</option>
             <option value="modulo-draft-orders">Módulo 14: Creación de Draft Orders & Facturación</option>
+            <option value="modulo-shopify-cli">Módulo 15: Cómo funciona el Shopify CLI</option>
           </select>
         </div>
 
         <div class="module-nav-arrows">
           <span id="currentModuleBadge" class="badge-tag" style="background: rgba(149, 191, 71, 0.2); color: var(--brand-shopify);">
-            Módulo 1 de 14
+            Módulo 1 de 15
           </span>
           <button type="button" id="prevModuleBtn" class="mod-arrow-btn" title="Módulo Anterior">
             ← Anterior
@@ -5937,6 +5951,317 @@ mutation SendDraftInvoice($id: ID!, $email: EmailInput) {
       </section>
 
 
+      <!-- ========================================================= -->
+      <!-- MODULE: 15-shopify-cli-workflow.html -->
+      <!-- ========================================================= -->
+      <section class="module-section" id="modulo-shopify-cli">
+        <div class="section-header">
+          <span class="section-badge" style="background: linear-gradient(135deg, #06b6d4, #0284c7);">Módulo 15 • Developer Tooling & CLI</span>
+          <h2 class="section-title">15. Cómo funciona el Shopify CLI: Arquitectura & Flujos de Trabajo</h2>
+        </div>
+
+        <p>
+          El <strong>Shopify CLI (Command-Line Interface)</strong> es la herramienta fundamental en el cinturón de cualquier desarrollador profesional de Shopify. No es un simple script de subida de archivos; es un entorno orquestador que crea servidores de desarrollo locales con Hot Reload, gestiona temas efímeros en la nube, audita la calidad del código Liquid en tiempo real mediante linters, sincroniza cambios con el Theme Editor y permite construir aplicaciones y extensiones modernas basadas en WebAssembly y React.
+        </p>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 1: QUÉ ES Y CÓMO OPERA EL CLI                   -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="cli-architecture-overview">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="4 17 10 11 4 5"></polyline>
+              <line x1="12" y1="19" x2="20" y2="19"></line>
+            </svg>
+            1. Arquitectura Interna: ¿Qué ocurre bajo el capó?
+          </h3>
+
+          <p>
+            Cuando ejecutas un comando como <code>shopify theme dev</code>, el CLI no interpreta el Liquid en tu computadora (porque el motor Liquid y la base de datos de productos viven en la infraestructura distribuida de Shopify). En su lugar, orquesta una arquitectura híbrida:
+          </p>
+
+          <div class="grid-2-col" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.5rem 0;">
+            <div class="feature-card" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid var(--accent-cyan);">
+              <h4 style="color: var(--accent-cyan); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>⚡</span> 1. Servidor Proxy Local & Hot Reload
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                El CLI levanta un servidor local (típicamente en <code>http://127.0.0.1:9292</code>). Al navegar en esta URL, el proxy consulta la tienda real en la nube, pero inyecta en milisegundos tus archivos locales de Liquid, CSS y JavaScript modificados.
+              </p>
+            </div>
+
+            <div class="feature-card" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid var(--brand-shopify);">
+              <h4 style="color: var(--brand-shopify); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>☁️</span> 2. Development Theme (Tema Efímero Oculto)
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                Shopify crea automáticamente un tema privado y temporal en tu tienda de desarrollo denominado <em>"Development (hash)"</em>. Este tema no es visible para los clientes y se vincula únicamente a tu sesión de terminal activa.
+              </p>
+            </div>
+
+            <div class="feature-card" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid var(--accent-purple);">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>🔄</span> 3. Sincronización Bidireccional del Theme Editor
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                El CLI genera un enlace directo al Theme Editor de tu tema de desarrollo. Si un diseñador modifica una configuración visual o un bloque en el navegador, el archivo <code>templates/*.json</code> o <code>config/settings_data.json</code> se descarga automáticamente a tu disco local.
+              </p>
+            </div>
+
+            <div class="feature-card" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid var(--accent-amber);">
+              <h4 style="color: var(--accent-amber); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>🔒</span> 4. Autenticación Segura (OAuth / Headless Tokens)
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                Utiliza un flujo de autenticación seguro basado en navegador con tu cuenta de Shopify Partners o Shopify ID. Genera tokens de sesión efímeros que se refrescan en segundo plano sin exponer API Keys en texto plano.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 2: COMANDOS FUNDAMENTALES DE TEMAS               -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="cli-theme-commands">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            2. Matriz de Comandos Esenciales para Desarrollo de Temas
+          </h3>
+
+          <p>
+            Estos son los comandos principales que utilizarás a diario al construir y desplegar temas:
+          </p>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 28%;">Comando</th>
+                  <th style="width: 42%;">Qué hace</th>
+                  <th style="width: 30%;">Flags Clave & Buenas Prácticas</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>shopify theme dev</code></td>
+                  <td>Inicia el servidor local, sincroniza archivos con el tema de desarrollo efímero y habilita recarga en vivo (Live Reload).</td>
+                  <td><code>--store=tienda.myshopify.com</code><br><code>--theme-editor-sync</code></td>
+                </tr>
+                <tr>
+                  <td><code>shopify theme check</code></td>
+                  <td>Ejecuta el linter estático oficial de Liquid. Detecta errores de sintaxis, objetos obsoletos, problemas de accesibilidad y schemas JSON inválidos.</td>
+                  <td><code>--auto-correct</code><br><code>--category=performance</code></td>
+                </tr>
+                <tr>
+                  <td><code>shopify theme pull</code></td>
+                  <td>Descarga los archivos de un tema remoto a tu directorio local de trabajo.</td>
+                  <td><code>--live</code> (baja el tema publicado)<br><code>--theme=12345678</code></td>
+                </tr>
+                <tr>
+                  <td><code>shopify theme push</code></td>
+                  <td>Sube tu código local a un tema específico en la tienda.</td>
+                  <td><code>--unpublished</code> (crea nuevo tema sin publicar)<br><code>--live</code> ⚠️ (¡Cuidado: sobreescribe prod!)</td>
+                </tr>
+                <tr>
+                  <td><code>shopify theme publish</code></td>
+                  <td>Publica un tema inédito (*unpublished*) convirtiéndolo en el tema principal visible en vivo para los compradores.</td>
+                  <td><code>--theme=12345678</code></td>
+                </tr>
+                <tr>
+                  <td><code>shopify theme package</code></td>
+                  <td>Empaqueta el tema en un archivo <code>.zip</code> optimizado y validado, listo para subir manualmente o distribuir en el Theme Store.</td>
+                  <td>Valida automáticamente con Theme Check antes de empaquetar.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 3: THEME CHECK & CALIDAD DE CÓDIGO               -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="cli-theme-check-rules">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            3. Shopify Theme Check: Linters & Análisis Estático
+          </h3>
+
+          <p>
+            <strong>Theme Check</strong> viene integrado de forma nativa en el CLI. Analiza el código antes de que llegue a producción y previene caídas catastróficas del storefront:
+          </p>
+
+          <div class="code-block-container" style="background: #0f172a; border-radius: var(--radius-md); padding: 1.25rem; border: 1px solid #334155; margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <span style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 700;">
+                CONFIGURACIÓN: .theme-check.yml
+              </span>
+              <button type="button" class="copy-btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">
+                Copiar
+              </button>
+            </div>
+            <pre style="margin: 0; padding: 0; background: transparent;"><code class="language-yaml"># .theme-check.yml - Reglas de Calidad para el Tema
+extends: theme-check:recommended
+
+# Regla de rendimiento: Evitar el tag obsoleto {% include %}
+DeprecatedTag:
+  enabled: true
+  severity: error
+
+# Regla de schemas JSON: Validar que todos los presets y settings tengan traducción o formato correcto
+ValidSchema:
+  enabled: true
+  severity: error
+
+# Regla de accesibilidad: Obligar atributos alt en tags de imagen
+ImgLazyLoading:
+  enabled: true
+  severity: suggestion
+
+# Desactivar advertencias específicas si se requiere
+ParserBlockingScript:
+  enabled: true
+  severity: warning</code></pre>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 4: EMULADOR INTERACTIVO DEL SHOPIFY CLI          -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="cli-interactive-terminal">
+          <h3 class="block-title" style="color: #06b6d4;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="4 17 10 11 4 5"></polyline>
+              <line x1="12" y1="19" x2="20" y2="19"></line>
+            </svg>
+            4. Emulador Interactivo: "Shopify CLI Terminal Sandbox"
+          </h3>
+
+          <p>
+            Haz clic en los comandos rápidos o escribe en la consola para experimentar en tiempo real el flujo de trabajo de un desarrollador de Shopify:
+          </p>
+
+          <!-- Terminal Widget Container -->
+          <div class="cli-terminal-wrapper" style="background: #090d16; border: 1px solid #1e293b; border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); margin-bottom: 1.5rem;">
+            <!-- Terminal Title Bar -->
+            <div style="background: #111827; padding: 0.6rem 1rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1f2937;">
+              <div style="display: flex; align-items: center; gap: 0.4rem;">
+                <span style="width: 11px; height: 11px; border-radius: 50%; background: #ef4444; display: inline-block;"></span>
+                <span style="width: 11px; height: 11px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span>
+                <span style="width: 11px; height: 11px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+                <span style="margin-left: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem; color: #94a3b8;">zsh — shopify-cli-sandbox (v3.65.0)</span>
+              </div>
+              <span class="badge-tag" style="background: rgba(6, 182, 212, 0.15); color: #06b6d4; font-size: 0.68rem;">
+                Store: casio-colombia-dev.myshopify.com
+              </span>
+            </div>
+
+            <!-- Preset Commands Bar -->
+            <div style="background: #0f172a; padding: 0.6rem 1rem; border-bottom: 1px solid #1e293b; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+              <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; margin-right: 0.25rem;">COMANDOS RÁPIDOS:</span>
+              <button type="button" class="cli-cmd-btn" data-cmd="shopify theme dev" style="background: #1e293b; color: #38bdf8; border: 1px solid #334155; border-radius: 4px; padding: 0.25rem 0.6rem; font-family: var(--font-mono); font-size: 0.75rem; cursor: pointer;">
+                shopify theme dev
+              </button>
+              <button type="button" class="cli-cmd-btn" data-cmd="shopify theme check" style="background: #1e293b; color: #a78bfa; border: 1px solid #334155; border-radius: 4px; padding: 0.25rem 0.6rem; font-family: var(--font-mono); font-size: 0.75rem; cursor: pointer;">
+                shopify theme check
+              </button>
+              <button type="button" class="cli-cmd-btn" data-cmd="shopify theme pull --live" style="background: #1e293b; color: #34d399; border: 1px solid #334155; border-radius: 4px; padding: 0.25rem 0.6rem; font-family: var(--font-mono); font-size: 0.75rem; cursor: pointer;">
+                shopify theme pull --live
+              </button>
+              <button type="button" class="cli-cmd-btn" data-cmd="shopify theme push --unpublished" style="background: #1e293b; color: #fbbf24; border: 1px solid #334155; border-radius: 4px; padding: 0.25rem 0.6rem; font-family: var(--font-mono); font-size: 0.75rem; cursor: pointer;">
+                shopify theme push --unpublished
+              </button>
+              <button type="button" id="btnClearCliTerminal" style="background: transparent; color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 4px; padding: 0.25rem 0.6rem; font-size: 0.75rem; cursor: pointer; margin-left: auto;">
+                Limpiar Terminal
+              </button>
+            </div>
+
+            <!-- Terminal Output Window -->
+            <div id="cliTerminalOutput" style="padding: 1.25rem; min-height: 260px; max-height: 380px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; line-height: 1.6; color: #e2e8f0; background: #030712;">
+              <div style="color: #64748b;">
+                # Bienvenido al simulador de Shopify CLI.<br>
+                # Haz clic en uno de los comandos superiores para observar la respuesta del servidor y la arquitectura en acción.
+              </div>
+            </div>
+
+            <!-- CLI Interactive Input Form -->
+            <form id="cliInputForm" style="display: flex; align-items: center; background: #0b0f19; border-top: 1px solid #1f2937; padding: 0.6rem 1rem;">
+              <span style="color: #10b981; font-family: var(--font-mono); font-weight: 700; margin-right: 0.5rem;">➜</span>
+              <span style="color: #38bdf8; font-family: var(--font-mono); margin-right: 0.5rem;">~/my-shopify-theme</span>
+              <input type="text" id="cliInputField" placeholder="Escribe un comando (ej: shopify theme dev)..." autocomplete="off" spellcheck="false" style="flex: 1; background: transparent; border: none; outline: none; color: #ffffff; font-family: var(--font-mono); font-size: 0.82rem;">
+              <button type="submit" class="btn-primary" style="padding: 0.3rem 0.8rem; font-size: 0.75rem; background: var(--brand-shopify); color: #000; border: none; border-radius: 4px; cursor: pointer;">
+                Ejecutar
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 5: KNOWLEDGE CHECK QUIZ                          -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="cli-knowledge-check">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4"></path>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+            5. Knowledge Check: Shopify CLI & Dev Architecture
+          </h3>
+
+          <div class="quiz-card" style="background: var(--bg-surface-elevated); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+            <h4 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.05rem;">
+              1. ¿Dónde se procesa y renderiza el código Liquid cuando ejecutas <code>shopify theme dev</code> en tu computadora local?
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="cli_q1" value="a">
+                <span>En un motor Liquid local embebido en Node.js que simula la base de datos de productos en SQLite.</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="cli_q1" value="b">
+                <span>En los servidores de Shopify en la nube, usando un tema de desarrollo efímero conectado mediante un proxy local.</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="cli_q1" value="c">
+                <span>El navegador del cliente compila el Liquid a WebAssembly en el frontend.</span>
+              </label>
+            </div>
+            <div id="feedback-cli-q1" class="quiz-feedback" style="margin-top: 0.75rem;"></div>
+          </div>
+
+          <div class="quiz-card" style="background: var(--bg-surface-elevated); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+            <h4 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.05rem;">
+              2. Si deseas subir tu código local para que el cliente lo revise sin afectar el tema que está generando ventas en producción, ¿qué comando y flag debes usar?
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="cli_q2" value="a">
+                <span><code>shopify theme push --unpublished</code> (crea o actualiza un tema inédito en modo borrador).</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="cli_q2" value="b">
+                <span><code>shopify theme push --live</code> (despliega directamente al tema publicado en producción).</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="cli_q2" value="c">
+                <span><code>shopify theme delete --all</code> seguido de un pull masivo.</span>
+              </label>
+            </div>
+            <div id="feedback-cli-q2" class="quiz-feedback" style="margin-top: 0.75rem;"></div>
+          </div>
+
+          <button type="button" id="btnCheckCliQuiz" class="btn-secondary" style="padding: 0.75rem 1.5rem; font-weight: 600; cursor: pointer;">
+            Verificar Respuestas del Quiz
+          </button>
+        </div>
+      </section>
+
+
     </main>
   </div>
 
@@ -5957,6 +6282,7 @@ mutation SendDraftInvoice($id: ID!, $email: EmailInput) {
   <script src="scripts/admin-explorer.js"></script>
   <script src="scripts/rbac-simulator.js"></script>
   <script src="scripts/draft-orders-lab.js"></script>
+  <script src="scripts/cli-emulator.js"></script>
   <script src="scripts/app.js"></script>
 </body>
 </html>
