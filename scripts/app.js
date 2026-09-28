@@ -49,7 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 'modulo-plp-lab', title: '🛍️ 9. Lab: Creación de PLP & Catálogo' },
     { id: 'modulo-theme-components', title: '🔍 10. Auditoría de Componentes del Tema' },
     { id: 'modulo-casio-clone', title: '⌚ 11. Práctica Final: Clon Casio Colombia' },
-    { id: 'modulo-admin-menus', title: '🖥️ 12. Guía del Shopify Admin & Menús' }
+    { id: 'modulo-admin-menus', title: '🖥️ 12. Guía del Shopify Admin & Menús' },
+    { id: 'modulo-rbac-roles', title: '🛡️ 13. Role-Based Access Controls (RBAC)' },
+    { id: 'modulo-draft-orders', title: '📋 14. Creación de Draft Orders & Facturación' }
   ];
 
   const moduleSections = document.querySelectorAll('.module-section');

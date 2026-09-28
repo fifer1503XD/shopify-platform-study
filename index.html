@@ -198,12 +198,43 @@
 
         <li class="nav-item">
           <a href="#modulo-admin-menus" class="nav-link">
-            <span style="color: #34d399; font-weight: 700;">🖥️ 12. Guía del Shopify Admin & Menús</span>
+            <span style="color: #34d399; font-weight: 700;">🖥️ 12. Lo que un Dev debe conocer del Admin</span>
           </a>
           <ul class="nav-sub-menu">
-            <li><a href="#admin-desglose-menus" class="nav-sub-link">1. Desglose Menú por Menú (12 Módulos)</a></li>
-            <li><a href="#admin-interactive-explorer" class="nav-sub-link">2. Explorador Interactivo del Admin</a></li>
-            <li><a href="#admin-knowledge-check" class="nav-sub-link">3. Knowledge Check (Quiz)</a></li>
+            <li><a href="#admin-matriz-dev" class="nav-sub-link">1. Matriz: Las 8 Áreas del Dev</a></li>
+            <li><a href="#admin-inventario-pickup" class="nav-sub-link">2. Inventario & Store Pickup (BOPIS)</a></li>
+            <li><a href="#admin-pedidos-webhooks" class="nav-sub-link">3. Pedidos & Webhooks ERP</a></li>
+            <li><a href="#admin-descuentos-functions" class="nav-sub-link">4. Descuentos con Shopify Functions</a></li>
+            <li><a href="#admin-configuracion-limites" class="nav-sub-link">5. Configuración & Límites Dev</a></li>
+            <li><a href="#admin-interactive-explorer" class="nav-sub-link">6. Explorador Interactivo del Admin</a></li>
+            <li><a href="#admin-knowledge-check" class="nav-sub-link">7. Knowledge Check (Quiz)</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a href="#modulo-rbac-roles" class="nav-link">
+            <span style="color: #818cf8; font-weight: 700;">🛡️ 13. Role-Based Access Controls (RBAC)</span>
+          </a>
+          <ul class="nav-sub-menu">
+            <li><a href="#rbac-concept-overview" class="nav-sub-link">1. ¿Qué son los RBAC?</a></li>
+            <li><a href="#rbac-why-enterprise" class="nav-sub-link">2. Los 3 Pilares Enterprise</a></li>
+            <li><a href="#rbac-setup-guide" class="nav-sub-link">3. Configuración Paso a Paso</a></li>
+            <li><a href="#rbac-pos-permissions" class="nav-sub-link">4. Shopify POS Staff Roles & PINs</a></li>
+            <li><a href="#rbac-interactive-lab" class="nav-sub-link">5. Lab: Rol de Customer Service</a></li>
+            <li><a href="#rbac-knowledge-check" class="nav-sub-link">6. Knowledge Check (Quiz)</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a href="#modulo-draft-orders" class="nav-link">
+            <span style="color: #fbbf24; font-weight: 700;">📋 14. Creación de Draft Orders & Facturación</span>
+          </a>
+          <ul class="nav-sub-menu">
+            <li><a href="#draft-concept-overview" class="nav-sub-link">1. ¿Qué es un Draft Order?</a></li>
+            <li><a href="#draft-step-by-step" class="nav-sub-link">2. Flujo Paso a Paso & Custom Items</a></li>
+            <li><a href="#draft-graphql-api" class="nav-sub-link">3. Mutaciones GraphQL & Automatización</a></li>
+            <li><a href="#draft-interactive-lab" class="nav-sub-link">4. Lab: Generador de Borradores & Facturas</a></li>
+            <li><a href="#draft-knowledge-check" class="nav-sub-link">5. Knowledge Check (Quiz)</a></li>
           </ul>
         </li>
       </ul>
@@ -244,12 +275,14 @@
             <option value="modulo-theme-components">Módulo 10: Auditoría de Componentes del Tema</option>
             <option value="modulo-casio-clone">Módulo 11: Práctica Final: Clon Casio Colombia</option>
             <option value="modulo-admin-menus">Módulo 12: Guía del Shopify Admin & Menús</option>
+            <option value="modulo-rbac-roles">Módulo 13: Role-Based Access Controls (RBAC)</option>
+            <option value="modulo-draft-orders">Módulo 14: Creación de Draft Orders & Facturación</option>
           </select>
         </div>
 
         <div class="module-nav-arrows">
           <span id="currentModuleBadge" class="badge-tag" style="background: rgba(149, 191, 71, 0.2); color: var(--brand-shopify);">
-            Módulo 1 de 12
+            Módulo 1 de 14
           </span>
           <button type="button" id="prevModuleBtn" class="mod-arrow-btn" title="Módulo Anterior">
             ← Anterior
@@ -4432,107 +4465,79 @@ shopify theme check --category liquid,performance</code></pre>
       <section class="module-section" id="modulo-admin-menus">
         <div class="section-header">
           <span class="section-badge" style="background: linear-gradient(135deg, #10b981, #047857);">Módulo 12 • Operaciones & Back-Office</span>
-          <h2 class="section-title">12. Guía Exhaustiva del Shopify Admin: Arquitectura de Menús y Navegación</h2>
+          <h2 class="section-title">12. Lo que un Dev debe conocer del Shopify Admin</h2>
         </div>
 
         <p>
-          El <strong>Shopify Admin</strong> es el centro de comando operacional donde convergen la gestión de catálogo, el procesamiento de pedidos, la segmentación de clientes, el contenido personalizado y los canales de venta. Para un desarrollador o arquitecto, entender qué reside en cada menú es vital para saber qué APIs consumir, dónde configurar fuentes de datos dinámicas y cómo asesorar a los comerciantes.
+          El <strong>Shopify Admin</strong> no es solo una interfaz para el comerciante; es la fuente de verdad de la arquitectura de datos, el motor de reglas de negocio y el límite de lo que podemos extender mediante código. Como desarrollador o arquitecto, cada área del panel de administración impacta directamente en cómo construyes el frontend en Liquid, qué APIs consumes y cómo diseñas integraciones backend.
         </p>
 
         <!-- ========================================================= -->
-        <!-- SUBTOPIC 1: DESGLOSE ESTRUCTURAL DE LOS MENÚS             -->
+        <!-- SUBTOPIC 1: MATRIZ FUNDAMENTAL DEL DEV EN EL ADMIN        -->
         <!-- ========================================================= -->
-        <div class="content-block" id="admin-desglose-menus">
+        <div class="content-block" id="admin-matriz-dev">
           <h3 class="block-title">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="9" y1="3" x2="9" y2="21"></line>
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
             </svg>
-            1. Desglose Técnico Menú por Menú
+            1. Matriz: Lo que un Dev debe conocer del Admin
           </h3>
+
+          <p>
+            Esta matriz resume las 8 áreas fundamentales del back-office de Shopify, qué representan a nivel de datos y por qué son críticas para el desarrollo:
+          </p>
 
           <div class="table-container">
             <table class="data-table">
               <thead>
                 <tr>
-                  <th>Menú del Admin</th>
-                  <th>Subsecciones Clave</th>
-                  <th>Qué encuentras y para qué se usa</th>
-                  <th>Entidades API Relacionadas</th>
+                  <th style="width: 25%;">Área</th>
+                  <th style="width: 35%;">Qué es</th>
+                  <th style="width: 40%;">Por qué te importa (Impacto Dev)</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><strong>🔍 Search (⌘K)</strong></td>
-                  <td>Búsqueda Global Omnicanal</td>
-                  <td>Acceso directo a cualquier recurso (productos, clientes, órdenes, páginas de configuración) mediante comandos de teclado rápidos.</td>
-                  <td>GraphQL Search API</td>
+                  <td><strong>Productos y variantes</strong></td>
+                  <td>Opciones, SKU, precio, imágenes, código de barras y estado.</td>
+                  <td><strong>Base de PDP, cards y búsqueda:</strong> Es el modelo de datos que alimenta las fichas de producto, selectores de variantes, precios dinámicos y snippets de catálogo.</td>
                 </tr>
                 <tr>
-                  <td><strong>🏠 Home</strong></td>
-                  <td>Action Feed, Insights, Setup Guide</td>
-                  <td>Panel de bienvenida con métricas en tiempo real del día, tareas pendientes que requieren acción y recomendaciones inteligentes con Shopify Sidekick.</td>
-                  <td>Shop Metrics & Notifications</td>
+                  <td><strong>Colecciones</strong></td>
+                  <td>Manuales o automáticas por reglas lógicas de tags, tipo o precio.</td>
+                  <td><strong>Son las PLP y los filtros:</strong> Estructuran las rutas de catálogo (<code>/collections/{handle}</code>), la paginación Liquid y la taxonomía de navegación.</td>
                 </tr>
                 <tr>
-                  <td><strong>📦 Orders</strong></td>
-                  <td>All Orders, Drafts, Abandoned Checkouts</td>
-                  <td>Gestión integral del ciclo de vida de compras: fulfillment (despacho), captura de pagos, devoluciones, reembolsos y recuperación de carritos no completados.</td>
-                  <td><code>Order</code>, <code>DraftOrder</code>, <code>FulfillmentOrder</code>, <code>Refund</code></td>
+                  <td><strong>Inventario</strong></td>
+                  <td>Stock por ubicación física (Locations), transferencias y estados.</td>
+                  <td><strong>Disponibilidad y retiro en tienda (BOPIS):</strong> Alimenta la verificación de stock en tiempo real en la PDP y el selector de sucursales para Store Pickup.</td>
                 </tr>
                 <tr>
-                  <td><strong>🏷️ Products</strong></td>
-                  <td>Products, Collections, Inventory, Transfers, Gift Cards</td>
-                  <td>Administración del catálogo: variantes, control de existencias multialmacén (locations), colecciones manuales/smart y transferencias de stock entre sucursales.</td>
-                  <td><code>Product</code>, <code>ProductVariant</code>, <code>Collection</code>, <code>InventoryLevel</code></td>
+                  <td><strong>Pedidos y clientes</strong></td>
+                  <td>Órdenes, estados de pago/envío, cuentas y clientes B2B.</td>
+                  <td><strong>Webhooks e integraciones ERP:</strong> Dispara eventos en tiempo real (<code>orders/create</code>, <code>fulfillments</code>) para conectar con SAP, NetSuite o CRMs externos.</td>
                 </tr>
                 <tr>
-                  <td><strong>👤 Customers</strong></td>
-                  <td>Customers, Segments</td>
-                  <td>Base de datos de compradores, historial de compras, perfiles B2B y creación de segmentos dinámicos basados en comportamiento (ej: clientes con más de 3 compras).</td>
-                  <td><code>Customer</code>, <code>Company</code>, <code>CustomerSegment</code></td>
+                  <td><strong>Descuentos</strong></td>
+                  <td>Códigos promocionales y descuentos automáticos por carrito.</td>
+                  <td><strong>Lógica custom con Shopify Functions:</strong> Permite programar reglas complejas de precios (2x1 escalonados, bundle discounts) en WebAssembly sin latencia.</td>
                 </tr>
                 <tr>
-                  <td><strong>📈 Growth</strong></td>
-                  <td>Marketing, Campaigns, Automations</td>
-                  <td>Hub de adquisición y retención: creación de campañas con Shopify Email, integraciones publicitarias (Meta, Google, TikTok) y automatizaciones de flujos de marketing.</td>
-                  <td><code>MarketingActivity</code>, <code>MarketingCampaign</code></td>
+                  <td><strong>Contenido</strong></td>
+                  <td>Metaobjetos, páginas institucionales, menús y archivos CDN.</td>
+                  <td><strong>Datos estructurados para el theme:</strong> Expone entidades relacionales en Liquid (<code>shop.metaobjects</code>) para lookbooks, tablas de tallas y diseñadores.</td>
                 </tr>
                 <tr>
-                  <td><strong>🎟️ Discounts</strong></td>
-                  <td>Codes, Automatic Discounts</td>
-                  <td>Estrategias de precios promocionales: montos fijos, porcentajes, Buy X Get Y (BXGY) y envío gratis. Soporte para reglas avanzadas con <strong>Shopify Functions</strong>.</td>
-                  <td><code>DiscountCodeNode</code>, <code>DiscountAutomaticNode</code></td>
+                  <td><strong>Tienda online</strong></td>
+                  <td>Themes, Theme Editor visual, páginas, navegación y preferencias.</td>
+                  <td><strong>Donde vive tu código Liquid:</strong> El entorno de plantillas JSON, secciones modulares, snippets atómicos y assets de JavaScript/CSS.</td>
                 </tr>
                 <tr>
-                  <td><strong>📂 Content</strong></td>
-                  <td>Metaobjects, Files</td>
-                  <td>El CMS desacoplado de Shopify: definición e instanciación de <strong>Metaobjects</strong> (tablas de datos personalizadas) y repositorio CDN central de archivos, imágenes y PDFs.</td>
-                  <td><code>Metaobject</code>, <code>MetaobjectDefinition</code>, <code>File</code></td>
-                </tr>
-                <tr>
-                  <td><strong>🌍 Markets</strong></td>
-                  <td>Primary Market, International Markets, Preferences</td>
-                  <td>Configuración de comercio transfronterizo: monedas locales automáticas (FX), listas de precios diferenciadas por país, dominios locales y cálculo de aranceles.</td>
-                  <td><code>Market</code>, <code>PriceList</code>, <code>Country</code></td>
-                </tr>
-                <tr>
-                  <td><strong>📊 Analytics</strong></td>
-                  <td>Dashboards, Reports, Live View</td>
-                  <td>Inteligencia de negocios: informes financieros, tasas de conversión, fuentes de tráfico, valor promedio del pedido (AOV) y visualizador 3D en tiempo real de visitas.</td>
-                  <td>Shopify Analytics & Reporting API</td>
-                </tr>
-                <tr>
-                  <td><strong>🛍️ Online Store</strong></td>
-                  <td>Themes, Blog Posts, Pages, Navigation, Preferences</td>
-                  <td>El frontend web de la tienda: editor visual de temas OS 2.0, artículos de blog, páginas institucionales, menús de navegación y configuración SEO/Pixel global.</td>
-                  <td><code>Theme</code>, <code>Article</code>, <code>Page</code>, <code>Menu</code></td>
-                </tr>
-                <tr>
-                  <td><strong>🧩 Apps</strong></td>
-                  <td>Installed Apps, App Store, Sales Channels</td>
-                  <td>Directorio de extensiones y aplicaciones instaladas. Permite gestionar Theme App Extensions, webhooks y herramientas de terceros.</td>
-                  <td><code>AppInstallation</code>, <code>WebhookSubscription</code></td>
+                  <td><strong>Configuración</strong></td>
+                  <td>Checkout, pasarelas de pago, zonas de envío, apps e impuestos.</td>
+                  <td><strong>Límites de lo que puedes cambiar:</strong> Conocer las restricciones de la plataforma (Checkout Extensibility vs Checkout.liquid cerrado, OAuth scopes y pasarelas).</td>
                 </tr>
               </tbody>
             </table>
@@ -4540,7 +4545,205 @@ shopify theme check --category liquid,performance</code></pre>
         </div>
 
         <!-- ========================================================= -->
-        <!-- SUBTOPIC 2: SIMULADOR INTERACTIVO DEL SHOPIFY ADMIN MENU  -->
+        <!-- SUBTOPIC 2: INVENTARIO MULTIALMACÉN & STORE PICKUP        -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="admin-inventario-pickup">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            2. Inventario Multialmacén & Retiro en Tienda (Store Pickup / BOPIS)
+          </h3>
+
+          <p>
+            Shopify normaliza el inventario separando el producto de sus ubicaciones físicas. Cada punto de venta o almacén es una entidad <code>Location</code>, y el stock de cada variante se rastrea mediante <code>InventoryLevel</code>.
+          </p>
+
+          <div class="lab-instruction-card">
+            <div class="lab-step-number">📦</div>
+            <div class="lab-step-body">
+              <h4>Implementación de Disponibilidad de Retiro en Tienda en Liquid (`store-availability.liquid`)</h4>
+              <p>
+                Shopify ofrece un objeto nativo en Liquid llamado <code>variant.store_availabilities</code> que permite renderizar si el producto seleccionado está disponible para recogida inmediata en sucursales cercanas:
+              </p>
+              <div class="code-block-wrapper">
+                <div class="code-block-header">
+                  <span>snippets/pickup-availability.liquid</span>
+                  <button class="copy-btn" data-clipboard-target="#liquid-pickup-code">Copiar</button>
+                </div>
+                <pre><code class="language-liquid" id="liquid-pickup-code">{%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+
+&lt;div class="pickup-availability-container"&gt;
+  {%- if pick_up_availabilities.size &gt; 0 -%}
+    &lt;div class="pickup-header"&gt;
+      &lt;span class="pickup-icon"&gt;🏬&lt;/span&gt;
+      &lt;div&gt;
+        &lt;p class="pickup-title"&gt;Disponible para retiro en tienda hoy&lt;/p&gt;
+        &lt;p class="pickup-subtitle"&gt;Normalmente listo en 2 horas&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;ul class="pickup-stores-list"&gt;
+      {%- for availability in pick_up_availabilities -%}
+        &lt;li class="store-item"&gt;
+          &lt;strong&gt;{{ availability.location.name }}&lt;/strong&gt;
+          &lt;span class="{% if availability.available %}in-stock{% else %}out-stock{% endif %}"&gt;
+            {% if availability.available %}✓ Stock disponible{% else %}✕ No disponible en esta sede{% endif %}
+          &lt;/span&gt;
+          &lt;span class="store-address"&gt;{{ availability.location.address.city }}, {{ availability.location.address.country }}&lt;/span&gt;
+        &lt;/li&gt;
+      {%- endfor -%}
+    &lt;/ul&gt;
+  {%- endif -%}
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 3: PEDIDOS, CLIENTES & WEBHOOKS ERP              -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="admin-pedidos-webhooks">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 16 12 12 8 16"></polyline>
+              <line x1="12" y1="12" x2="12" y2="21"></line>
+              <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
+            </svg>
+            3. Pedidos, Clientes y Arquitectura de Webhooks para Integraciones ERP
+          </h3>
+
+          <p>
+            Cuando una tienda escala, el procesamiento de pedidos y la actualización de clientes se delega a sistemas externos (SAP, NetSuite, Salesforce). Los desarrolladores deben diseñar consumidores de <strong>Webhooks idempotentes</strong> para evitar procesar órdenes duplicadas.
+          </p>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Tópico de Webhook</th>
+                  <th>Momento de Disparo</th>
+                  <th>Payload Clave & Acción en ERP</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>orders/paid</code></td>
+                  <td>Cuando la pasarela confirma el pago del checkout.</td>
+                  <td>Generar factura fiscal, decrementar stock contable y reservar líneas de producto.</td>
+                </tr>
+                <tr>
+                  <td><code>orders/fulfilled</code></td>
+                  <td>Cuando el operador logístico asigna número de guía (tracking).</td>
+                  <td>Notificar al cliente vía SMS/WhatsApp y sincronizar estado en el sistema de transporte.</td>
+                </tr>
+                <tr>
+                  <td><code>customers/create</code></td>
+                  <td>Registro de un nuevo comprador en la tienda.</td>
+                  <td>Crear registro en CRM (HubSpot/Klaviyo) y asociar programa de lealtad.</td>
+                </tr>
+                <tr>
+                  <td><code>refunds/create</code></td>
+                  <td>Devolución parcial o total ejecutada en el Admin.</td>
+                  <td>Emitir nota de crédito contable y ajustar inventario retornado.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 4: DESCUENTOS & SHOPIFY FUNCTIONS                -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="admin-descuentos-functions">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            4. Descuentos y Lógica Personalizada con Shopify Functions
+          </h3>
+
+          <p>
+            Shopify permite crear descuentos mediante el Admin (códigos y reglas estándar) o mediante <strong>Shopify Functions</strong> (código compilado a WebAssembly que corre en los servidores de Shopify durante el checkout en menos de 5ms):
+          </p>
+
+          <div class="callout callout-architect">
+            <div class="callout-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+                <polyline points="2 12 12 17 22 12"></polyline>
+              </svg>
+              Admin Discounts vs Shopify Functions
+            </div>
+            <p>
+              Mientras que los descuentos del admin se limitan a combinaciones sencillas (monto fijo, porcentaje, 2x1), <strong>Shopify Functions (Discount API &amp; Cart Transform API)</strong> te permite programar:
+            </p>
+            <ul style="margin: 0.5rem 0 0 1.25rem; color: var(--text-secondary); line-height: 1.6;">
+              <li>Descuentos escalonados por nivel de lealtad almacenado en un Metafield del cliente.</li>
+              <li>Empaquetado dinámico de productos (Bundles personalizados) que descuentan ítems individuales en inventario.</li>
+              <li>Reordenamiento o renombrado de métodos de pago y tarifas de envío en tiempo real según el código postal.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 5: CONFIGURACIÓN & LÍMITES ARQUITECTÓNICOS       -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="admin-configuracion-limites">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            5. Configuración del Admin y Límites de lo que un Dev Puede Modificar
+          </h3>
+
+          <p>
+            En la sección <strong>Settings (Configuración)</strong> residen las restricciones de infraestructura y seguridad de Shopify:
+          </p>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Configuración</th>
+                  <th>Qué controla</th>
+                  <th>Límites y Reglas de Desarrollo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Checkout</strong></td>
+                  <td>Páginas de pago, información de contacto, propinas y direcciones.</td>
+                  <td><strong>Checkout Extensibility:</strong> En tiendas Plus ya no se edita <code>checkout.liquid</code>. Toda personalización se realiza con <strong>Checkout UI Extensions</strong> en React/TypeScript dentro de un sandbox seguro. En planes estándar, solo se edita branding (colores y logo).</td>
+                </tr>
+                <tr>
+                  <td><strong>Payments (Pasarelas)</strong></td>
+                  <td>Shopify Payments, Mercado Pago, Stripe, PayPal y medios manuales.</td>
+                  <td>No puedes inyectar scripts personalizados en los campos de tarjeta de crédito (cumplimiento estricto PCI-DSS Nivel 1). Los pagos externos deben procesarse mediante Hosted Payment SDK o Payment Customization Functions.</td>
+                </tr>
+                <tr>
+                  <td><strong>Shipping & Delivery</strong></td>
+                  <td>Zonas de envío, tarifas fijas, cálculo por transportadora (Carrier Service).</td>
+                  <td>Para cálculo dinámico en tiempo real se debe implementar una <strong>CarrierService API</strong> o una Function de Delivery Customization.</td>
+                </tr>
+                <tr>
+                  <td><strong>Apps & Sales Channels</strong></td>
+                  <td>Permisos de API (Scopes) y credenciales de Custom Apps.</td>
+                  <td>Toda app debe declarar estrictamente los scopes requeridos (ej. <code>read_products</code>, <code>write_orders</code>) y gestionar el token de forma segura sin exponerlo en el frontend.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 6: SIMULADOR INTERACTIVO DEL SHOPIFY ADMIN MENU  -->
         <!-- ========================================================= -->
         <div class="content-block" id="admin-interactive-explorer">
           <h3 class="block-title">
@@ -4549,7 +4752,7 @@ shopify theme check --category liquid,performance</code></pre>
               <line x1="8" y1="21" x2="16" y2="21"></line>
               <line x1="12" y1="17" x2="12" y2="21"></line>
             </svg>
-            2. Explorador Interactivo del Menú Shopify Admin
+            6. Explorador Interactivo del Menú Shopify Admin
           </h3>
 
           <p>
@@ -4726,7 +4929,7 @@ shopify theme check --category liquid,performance</code></pre>
         </div>
 
         <!-- ========================================================= -->
-        <!-- SUBTOPIC 3: KNOWLEDGE CHECK (QUIZ)                        -->
+        <!-- SUBTOPIC 7: KNOWLEDGE CHECK (QUIZ)                        -->
         <!-- ========================================================= -->
         <div class="content-block" id="admin-knowledge-check">
           <h3 class="block-title">
@@ -4737,7 +4940,7 @@ shopify theme check --category liquid,performance</code></pre>
               <line x1="16" y1="17" x2="8" y2="17"></line>
               <polyline points="10 9 9 9 8 9"></polyline>
             </svg>
-            Knowledge Check: Operaciones del Admin y Gobernanza de Datos
+            7. Knowledge Check: Operaciones del Admin y Gobernanza de Datos
           </h3>
 
           <div class="quiz-container">
@@ -4802,6 +5005,938 @@ shopify theme check --category liquid,performance</code></pre>
       </section>
 
 
+      <!-- ========================================================= -->
+      <!-- MODULE: 13-rbac-user-permissions.html -->
+      <!-- ========================================================= -->
+      <section class="module-section" id="modulo-rbac-roles">
+        <div class="section-header">
+          <span class="section-badge" style="background: linear-gradient(135deg, #6366f1, #4338ca);">Módulo 13 • Seguridad & Gobernanza Enterprise</span>
+          <h2 class="section-title">13. Role-Based Access Controls (RBAC) en Shopify Admin</h2>
+        </div>
+
+        <p>
+          En una organización en crecimiento, cada integrante del equipo desempeña responsabilidades específicas: desde especialistas en atención al cliente y cajeros en sucursales físicas, hasta desarrolladores frontend, redactores de contenido y directores financieros. Administrar los permisos usuario por usuario de manera manual no solo es ineficiente y propenso a errores humanos críticos, sino que representa una vulnerabilidad de seguridad inaceptable en entornos de nivel corporativo.
+        </p>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 1: QUÉ ES RBAC EN SHOPIFY ADMIN                 -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="rbac-concept-overview">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            1. ¿Qué son los Role-Based Access Controls (RBAC)?
+          </h3>
+
+          <p>
+            <strong>Role-Based Access Control (RBAC)</strong> es un mecanismo de autorización que asigna permisos de acceso al sistema a <em>roles abstractos</em> en lugar de a cuentas de usuario individuales. Los usuarios reciben uno o más roles según su función laboral, heredando automáticamente las capacidades y restricciones asociadas a dicho rol.
+          </p>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 25%;">Dimensión</th>
+                  <th style="width: 37%;">Gestión Tradicional (Permisos 1 a 1)</th>
+                  <th style="width: 38%;">Control de Acceso por Roles (RBAC)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Asignación</strong></td>
+                  <td>Se seleccionan casillas de permisos cuenta por cuenta al crear cada usuario.</td>
+                  <td>Se asocia el usuario a un rol preconfigurado (ej: <em>Customer Support</em>, <em>Catalog Merchandiser</em>).</td>
+                </tr>
+                <tr>
+                  <td><strong>Mantenimiento</strong></td>
+                  <td>Si cambia una política, se deben editar decenas o cientos de usuarios manualmente.</td>
+                  <td>Se actualiza la definición del rol una sola vez y se propaga instantáneamente a todos los usuarios vinculados.</td>
+                </tr>
+                <tr>
+                  <td><strong>Escala Multi-tienda</strong></td>
+                  <td>Permisos dispersos y desalineados entre tiendas regionales (ej. US, EU, MX, B2B).</td>
+                  <td>Los roles se gestionan a nivel de <strong>Organization Settings</strong> y se sincronizan entre múltiples tiendas.</td>
+                </tr>
+                <tr>
+                  <td><strong>Riesgo de Seguridad</strong></td>
+                  <td>Alto riesgo de "Permission Creep" (usuarios que acumulan permisos obsoletos con el tiempo).</td>
+                  <td>Cumplimiento estricto del <strong>Principle of Least Privilege (PoLP)</strong> y auditoría centralizada.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="alert-box note">
+            <div class="alert-icon">💡</div>
+            <div class="alert-content">
+              <strong>Principle of Least Privilege (Principio de Menor Privilegio):</strong>
+              En arquitectura de seguridad, cada usuario, sistema o API token debe tener únicamente el conjunto mínimo indispensable de privilegios necesarios para realizar su tarea asignada, ni un permiso más. RBAC es la herramienta fundamental para implementar este principio en el ecosistema Shopify.
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 2: POR QUÉ USAR RBAC EN SHOPIFY                 -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="rbac-why-enterprise">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            2. ¿Por qué implementar RBAC? Los 3 Pilares
+          </h3>
+
+          <div class="grid-2-col" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.5rem 0;">
+            <div class="feature-card" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid var(--accent-cyan);">
+              <h4 style="color: var(--accent-cyan); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>🔄</span> 1. Actualización Uniforme (Uniform Updating)
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                Cuando la empresa introduce una nueva funcionalidad (por ejemplo, gestión de borradores de pedidos o vista de metaobjetos de marketing), no necesitas ingresar a 50 perfiles de colaboradores. Modificas el rol una sola vez y todas las cuentas se actualizan en simultáneo de forma determinística.
+              </p>
+            </div>
+
+            <div class="feature-card" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid var(--brand-shopify);">
+              <h4 style="color: var(--brand-shopify); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>⚡</span> 2. Eficiencia & Onboarding Acelerado
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                Reducción drástica del tiempo de alta y baja de colaboradores o agencias. Al contratar 10 nuevos agentes de atención al cliente, simplemente se les asigna el rol <em>"Customer Service"</em> al enviar la invitación por email, garantizando acceso inmediato y sin errores de configuración.
+              </p>
+            </div>
+
+            <div class="feature-card" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid var(--accent-purple);">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>📈</span> 3. Escalabilidad Multi-tienda & Gobernanza
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                En corporaciones con tiendas de expansión internacional, marcas múltiples o tiendas B2B mayoristas independientes bajo una misma organización de Shopify Plus, los roles se definen a nivel organizacional y pueden aplicarse granularmente a tiendas específicas según el alcance del usuario.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 3: CONFIGURACIÓN PASO A PASO DE UN ROL           -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="rbac-setup-guide">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            3. Creación y Configuración Paso a Paso de Roles
+          </h3>
+
+          <p>
+            El flujo para configurar un nuevo rol en el panel de administración sigue una jerarquía clara:
+          </p>
+
+          <div class="steps-flow-container" style="background: var(--bg-surface-elevated); padding: 1.5rem; border-radius: var(--radius-lg); margin-bottom: 1.5rem;">
+            <div class="step-item" style="display: flex; gap: 1rem; margin-bottom: 1.25rem;">
+              <div class="step-number" style="background: var(--brand-shopify); color: #000; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">1</div>
+              <div>
+                <strong style="color: var(--text-primary); font-size: 1rem;">Navegación al Menú de Roles</strong>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">
+                  En el Shopify Admin, haz clic en el engranaje de <code>Settings</code> (esquina inferior izquierda) &gt; <code>Users and permissions</code> (o <code>Users</code>) &gt; pestaña <code>Roles</code> &gt; botón <code>Add role</code>. (En organizaciones Shopify Plus: <code>Organization settings &gt; Users &gt; Roles</code>).
+                </p>
+              </div>
+            </div>
+
+            <div class="step-item" style="display: flex; gap: 1rem; margin-bottom: 1.25rem;">
+              <div class="step-number" style="background: var(--brand-shopify); color: #000; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">2</div>
+              <div>
+                <strong style="color: var(--text-primary); font-size: 1rem;">Nombre y Descripción Semántica del Rol</strong>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">
+                  Asigna un nombre descriptivo y claro (ej. <em>"Customer Service Specialist"</em>, <em>"Copywriter & Content Editor"</em>, <em>"Logistics & Fulfillment Team"</em>).
+                </p>
+              </div>
+            </div>
+
+            <div class="step-item" style="display: flex; gap: 1rem; margin-bottom: 1.25rem;">
+              <div class="step-number" style="background: var(--brand-shopify); color: #000; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">3</div>
+              <div>
+                <strong style="color: var(--text-primary); font-size: 1rem;">Selección de Permisos: Categoría vs. Permisos Granulares</strong>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">
+                  Shopify ofrece dos niveles de control:
+                </p>
+                <ul style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem; margin-left: 1.25rem; line-height: 1.6;">
+                  <li><strong>Checkbox de Categoría Principal:</strong> Al marcar la casilla de nivel superior (ej. <code>Products</code>), se conceden automáticamente todos los sub-permisos (Ver, Crear/Editar, Exportar, Eliminar).</li>
+                  <li><strong>Permisos Granulares:</strong> Puedes desglosar la categoría y seleccionar únicamente las capacidades permitidas (ej. Solo <em>"View products"</em> sin permitir crear ni modificar precios).</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="step-item" style="display: flex; gap: 1rem;">
+              <div class="step-number" style="background: var(--brand-shopify); color: #000; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">4</div>
+              <div>
+                <strong style="color: var(--text-primary); font-size: 1rem;">Asignación de Tiendas y Usuarios</strong>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">
+                  Guarda el rol. Luego, al invitar o editar usuarios, selecciona el rol creado y especifica a qué tiendas de la organización tendrá acceso esa persona con dicho rol.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 4: SHOPIFY POINT OF SALE (POS) ROLES             -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="rbac-pos-permissions">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+            4. Permisos y Roles en Shopify Point of Sale (POS)
+          </h3>
+
+          <p>
+            El personal de tiendas físicas suele requerir interacción directa con la app <strong>Shopify POS</strong> (en tablets o lectores de tarjetas), pero no necesita acceso al Shopify Admin web completo. Para ello, Shopify cuenta con un sistema de roles y PINs de seguridad específicos para POS:
+          </p>
+
+          <div class="grid-2-col" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; margin: 1.25rem 0;">
+            <div class="feature-box" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-top: 3px solid var(--accent-amber);">
+              <h4 style="color: var(--accent-amber); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>🔢</span> Staff PINs & Bloqueo de Terminal
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                Cada miembro del personal de venta en salón utiliza un código PIN de 4 a 6 dígitos para autenticarse en el POS. Esto permite registrar exactamente qué vendedor cobró cada transacción y calcular comisiones o auditar el flujo de caja sin compartir credenciales.
+              </p>
+            </div>
+
+            <div class="feature-box" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-top: 3px solid #ec4899;">
+              <h4 style="color: #ec4899; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>🛡️</span> Permisos Sensibles de Caja y Manager Overrides
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                Puedes restringir acciones de alto impacto a cajeros estándar, tales como:
+              </p>
+              <ul style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem; margin-left: 1.25rem; line-height: 1.5;">
+                <li><strong>Descuentos manuales de línea o carrito (Custom Discounts)</strong></li>
+                <li><strong>Emisión de reembolsos físicos o devoluciones sin ticket</strong></li>
+                <li><strong>Apertura y cierre manual del cajón de dinero (Cash Drawer Tracking)</strong></li>
+                <li><strong>Override por PIN de Administrador/Manager en tiempo real</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 5: INTERACTIVE LAB - NOW IT'S YOUR TURN          -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="rbac-interactive-lab">
+          <h3 class="block-title" style="color: #10b981;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+            </svg>
+            5. Práctica Interactiva: "Now It's Your Turn!" — Diseñando el Rol de Customer Service
+          </h3>
+
+          <p>
+            <strong>Misión de Arquitectura:</strong> Configura el rol de <em>"Customer Service Specialist"</em> cumpliendo estrictamente con los requerimientos de la auditoría de seguridad:
+          </p>
+
+          <div class="mission-brief-card" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1.5rem;">
+            <h4 style="color: #10b981; margin-bottom: 0.75rem;">📋 Requisitos de la Actividad:</h4>
+            <ul style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; margin-left: 1.25rem;">
+              <li><strong>Draft Orders (Borradores de Pedido):</strong> Permitir <code>Create and edit draft orders</code> (para tomar pedidos telefónicos o generar cotizaciones).</li>
+              <li><strong>Customers (Clientes):</strong> Permitir <code>Create and edit customers</code> (para registrar o actualizar datos de contacto de clientes).</li>
+              <li><strong>Products (Productos):</strong> Permitir únicamente <code>View products</code> (pueden consultar precios y disponibilidad, pero <strong>NO</strong> deben poder modificar precios, agregar productos ni alterar inventario).</li>
+              <li><strong>Analytics / Settings / Finances:</strong> Acceso <code>Denegado (None)</code> por seguridad financiera.</li>
+            </ul>
+          </div>
+
+          <!-- Interactive Role Builder Widget -->
+          <div class="rbac-simulator-container" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+              <div>
+                <span class="badge-tag" style="background: rgba(99, 102, 241, 0.2); color: #818cf8;">Shopify Admin • Roles & Permissions Builder</span>
+                <h4 style="font-size: 1.2rem; margin-top: 0.25rem;">Configurador de Rol: <span id="rbacRoleNameDisplay" style="color: var(--text-primary);">Customer Service Specialist</span></h4>
+              </div>
+              <button type="button" id="btnResetRbacLab" class="btn-secondary" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">
+                🔄 Reiniciar Configuración
+              </button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+              <!-- Permissions Tree Selector -->
+              <div class="rbac-permission-tree" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <h5 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                  <span>⚙️</span> Selecciona los Permisos del Rol:
+                </h5>
+
+                <!-- Group 1: Draft Orders -->
+                <div class="perm-group" style="margin-bottom: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.75rem;">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <label style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">
+                      📝 Draft Orders (Borradores de Pedido)
+                    </label>
+                  </div>
+                  <div style="margin-top: 0.5rem; margin-left: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permDraftView" class="rbac-perm-checkbox" data-cat="draft_orders" data-perm="view">
+                      <span>Ver borradores de pedido (View)</span>
+                    </label>
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permDraftCreateEdit" class="rbac-perm-checkbox" data-cat="draft_orders" data-perm="create_edit">
+                      <span>Crear y editar borradores (Create & Edit)</span>
+                    </label>
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permDraftDelete" class="rbac-perm-checkbox" data-cat="draft_orders" data-perm="delete">
+                      <span>Eliminar borradores de pedido (Delete)</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Group 2: Customers -->
+                <div class="perm-group" style="margin-bottom: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.75rem;">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <label style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">
+                      👥 Customers (Clientes)
+                    </label>
+                  </div>
+                  <div style="margin-top: 0.5rem; margin-left: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permCustView" class="rbac-perm-checkbox" data-cat="customers" data-perm="view">
+                      <span>Ver clientes y perfiles (View)</span>
+                    </label>
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permCustCreateEdit" class="rbac-perm-checkbox" data-cat="customers" data-perm="create_edit">
+                      <span>Crear y editar clientes (Create & Edit)</span>
+                    </label>
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permCustExport" class="rbac-perm-checkbox" data-cat="customers" data-perm="export_pii">
+                      <span>Exportar datos PII en CSV (Export)</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Group 3: Products -->
+                <div class="perm-group" style="margin-bottom: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.75rem;">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <label style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">
+                      📦 Products & Inventory (Productos)
+                    </label>
+                  </div>
+                  <div style="margin-top: 0.5rem; margin-left: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permProdView" class="rbac-perm-checkbox" data-cat="products" data-perm="view">
+                      <span>Ver catálogo y variantes (View products)</span>
+                    </label>
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permProdCreateEdit" class="rbac-perm-checkbox" data-cat="products" data-perm="create_edit">
+                      <span>Crear/editar productos y precios (Edit)</span>
+                    </label>
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permProdDelete" class="rbac-perm-checkbox" data-cat="products" data-perm="delete">
+                      <span>Eliminar productos (Delete)</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Group 4: Settings & Finances -->
+                <div class="perm-group">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <label style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">
+                      🔒 Settings & Financials (Configuración & Finanzas)
+                    </label>
+                  </div>
+                  <div style="margin-top: 0.5rem; margin-left: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permSettingsView" class="rbac-perm-checkbox" data-cat="settings" data-perm="view">
+                      <span>Ver configuración de pagos y apps</span>
+                    </label>
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permFinancesView" class="rbac-perm-checkbox" data-cat="finances" data-perm="view">
+                      <span>Ver reportes financieros y liquidaciones</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Live Simulator & GraphQL Payload Preview -->
+              <div class="rbac-live-preview" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="background: #0f172a; border-radius: var(--radius-md); padding: 1.25rem; border: 1px solid #334155; flex: 1;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                    <span style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--brand-shopify); font-weight: 700;">
+                      LIVE GRAPHQL MUTATION (Admin API)
+                    </span>
+                    <span id="rbacPermCountBadge" class="badge-tag" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-size: 0.7rem;">
+                      0 permisos activos
+                    </span>
+                  </div>
+                  <pre style="margin: 0; padding: 0; background: transparent;"><code class="language-json" id="rbacPayloadCode" style="font-size: 0.78rem; line-height: 1.4;">{
+  "input": {
+    "name": "Customer Service Specialist",
+    "description": "Manages customer records and creates draft orders.",
+    "permissions": []
+  }
+}</code></pre>
+                </div>
+
+                <!-- Simulation Viewport: What the user actually sees in Admin -->
+                <div style="background: var(--bg-surface-elevated); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                  <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">
+                    Simulación de Menú Visible para el Usuario con este Rol:
+                  </span>
+                  <div id="rbacMenuSimulatedList" style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <span class="badge-tag" style="background: rgba(148, 163, 184, 0.1); color: #94a3b8;">Home (Inicio)</span>
+                  </div>
+                </div>
+
+                <!-- Validation Action Button -->
+                <button type="button" id="btnValidateRbacRole" class="btn-primary" style="width: 100%; padding: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--brand-shopify); color: #000; border: none; border-radius: var(--radius-md); cursor: pointer;">
+                  <span>✓</span> Validar y Asignar Rol de Customer Service
+                </button>
+              </div>
+            </div>
+
+            <!-- Feedback Message Container -->
+            <div id="rbacValidationFeedback" class="quiz-feedback-box" style="display: none; margin-top: 1.5rem;"></div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 6: KNOWLEDGE CHECK QUIZ                          -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="rbac-knowledge-check">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4"></path>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+            6. Knowledge Check: RBAC & Staff Governance
+          </h3>
+
+          <div class="quiz-card" style="background: var(--bg-surface-elevated); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+            <h4 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.05rem;">
+              1. Si un rol tiene habilitado el checkbox principal de "Products", ¿qué capacidades adquieren los usuarios vinculados?
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="rbac_q1" value="a">
+                <span>Únicamente pueden ver los productos en modo lectura, sin ver el inventario.</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="rbac_q1" value="b">
+                <span>Todos los permisos de la categoría: ver, crear, editar, eliminar y exportar productos y variantes.</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="rbac_q1" value="c">
+                <span>Solo adquieren permisos si se configuran además reglas de liquidación en Shopify Payments.</span>
+              </label>
+            </div>
+            <div id="feedback-rbac-q1" class="quiz-feedback" style="margin-top: 0.75rem;"></div>
+          </div>
+
+          <div class="quiz-card" style="background: var(--bg-surface-elevated); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+            <h4 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.05rem;">
+              2. ¿Cuál es el método principal para que un cajero desbloquee el terminal de Shopify POS y registre sus ventas físicas?
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="rbac_q2" value="a">
+                <span>Autenticación de dos factores (2FA) por SMS en cada transacción de venta.</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="rbac_q2" value="b">
+                <span>Ingreso de un Staff PIN personalizado de 4 a 6 dígitos asignado a su rol de POS.</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="rbac_q2" value="c">
+                <span>Iniciando sesión con la cuenta de Shopify Partner de la agencia desarrolladora.</span>
+              </label>
+            </div>
+            <div id="feedback-rbac-q2" class="quiz-feedback" style="margin-top: 0.75rem;"></div>
+          </div>
+
+          <button type="button" id="btnCheckRbacQuiz" class="btn-secondary" style="padding: 0.75rem 1.5rem; font-weight: 600; cursor: pointer;">
+            Verificar Respuestas del Quiz
+          </button>
+        </div>
+      </section>
+
+
+      <!-- ========================================================= -->
+      <!-- MODULE: 14-draft-orders-invoicing.html -->
+      <!-- ========================================================= -->
+      <section class="module-section" id="modulo-draft-orders">
+        <div class="section-header">
+          <span class="section-badge" style="background: linear-gradient(135deg, #f59e0b, #d97706);">Módulo 14 • Ventas & Operaciones B2B</span>
+          <h2 class="section-title">14. Creación y Gestión de Draft Orders en Shopify Admin</h2>
+        </div>
+
+        <p>
+          Los <strong>Draft Orders (Borradores de Pedido)</strong> son uno de los motores operativos más potentes y versátiles del back-office de Shopify. Permiten al equipo de soporte, ventas corporativas y desarrolladores crear órdenes manuales en nombre de clientes, sortear el flujo regular del storefront, cotizar ventas mayoristas (B2B), agregar productos personalizados fuera de catálogo y enviar enlaces de facturación directa con pasarela de pago protegida.
+        </p>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 1: QUÉ ES UN DRAFT ORDER Y CASOS DE USO         -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="draft-concept-overview">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            1. ¿Qué es un Draft Order y cuándo utilizarlo?
+          </h3>
+
+          <p>
+            A diferencia de una orden estándar generada en el checkout público por el comprador, un <strong>Draft Order</strong> se origina en el panel de administración o mediante la <strong>DraftOrder API (GraphQL / REST)</strong>. Permite estructurar una cotización antes de que se convierta en una venta formal (<code>Order</code>).
+          </p>
+
+          <div class="grid-2-col" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.5rem 0;">
+            <div class="feature-card" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid var(--accent-amber);">
+              <h4 style="color: var(--accent-amber); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>📞</span> 1. Pedidos Telefónicos & Customer Support
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                Cuando un cliente experimenta dificultades técnicas en la pasarela o prefiere cerrar la compra por llamada/WhatsApp, el agente crea el borrador con los productos requeridos y le despacha una factura con link de pago seguro en 1 clic.
+              </p>
+            </div>
+
+            <div class="feature-card" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid var(--brand-shopify);">
+              <h4 style="color: var(--brand-shopify); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>🏢</span> 2. Ventas Mayoristas & B2B Invoicing
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                Para cotizaciones corporativas de alto volumen con términos de pago especiales (Net 30, Net 60), descuentos por volumen ad-hoc y tarifas de flete logístico negociadas que no existen en el storefront público.
+              </p>
+            </div>
+
+            <div class="feature-card" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid var(--accent-cyan);">
+              <h4 style="color: var(--accent-cyan); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>✨</span> 3. Productos a Medida (Custom Items)
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                Permite cobrar por servicios especiales (ej. "Grabado láser conmemorativo", "Mano de obra técnica", "Garantía extendida") creando un ítem con precio y peso arbitrarios sin necesidad de crear un producto en el catálogo permanente.
+              </p>
+            </div>
+
+            <div class="feature-card" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid #ec4899;">
+              <h4 style="color: #ec4899; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>🏷️</span> 4. Descuentos y Precios Excepcionales
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                Aplicación de descuentos de cortesía en porcentaje o monto fijo directamente en la línea de producto o sobre el total, sin tener que crear un código de cupón público que otros usuarios puedan descubrir.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 2: ANATOMÍA Y FLUJO PASO A PASO                 -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="draft-step-by-step">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            2. Anatomía y Flujo Paso a Paso en el Shopify Admin
+          </h3>
+
+          <p>
+            Para crear un borrador desde el panel de control:
+          </p>
+
+          <div class="steps-flow-container" style="background: var(--bg-surface-elevated); padding: 1.5rem; border-radius: var(--radius-lg); margin-bottom: 1.5rem;">
+            <div class="step-item" style="display: flex; gap: 1rem; margin-bottom: 1.25rem;">
+              <div class="step-number" style="background: var(--accent-amber); color: #000; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">1</div>
+              <div>
+                <strong style="color: var(--text-primary); font-size: 1rem;">Navegación a Orders &gt; Drafts</strong>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">
+                  En el menú lateral del Admin, abre la sección <code>Orders</code> y selecciona <code>Drafts</code>. Haz clic en el botón superior derecho <code>Create order</code> (o <code>Crear borrador de pedido</code>).
+                </p>
+              </div>
+            </div>
+
+            <div class="step-item" style="display: flex; gap: 1rem; margin-bottom: 1.25rem;">
+              <div class="step-number" style="background: var(--accent-amber); color: #000; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">2</div>
+              <div>
+                <strong style="color: var(--text-primary); font-size: 1rem;">Selección de Productos vs. Custom Items</strong>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">
+                  Puedes combinar dos tipos de elementos en el pedido:
+                </p>
+                <ul style="color: var(--text-secondary); font-size: 0.88rem; margin-top: 0.4rem; margin-left: 1.25rem; line-height: 1.6;">
+                  <li><strong>Productos del catálogo existente:</strong> Se buscan por título o SKU y descuentan inventario una vez confirmada la orden o al presionar <em>"Reserve items"</em>.</li>
+                  <li><strong>Add custom item (Ítem personalizado):</strong> Define un nombre, precio unitario, cantidad, si requiere envío y peso específico para envíos. Ideal para presupuestos a medida.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="step-item" style="display: flex; gap: 1rem; margin-bottom: 1.25rem;">
+              <div class="step-number" style="background: var(--accent-amber); color: #000; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">3</div>
+              <div>
+                <strong style="color: var(--text-primary); font-size: 1rem;">Asignación de Cliente, Envío e Impuestos</strong>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">
+                  En el panel derecho, vincula un perfil de cliente existente o crea uno nuevo con su correo y teléfono. Shopify calculará automáticamente las tarifas de envío e impuestos según la dirección de entrega, o te permitirá ingresar una tarifa de flete manual personalizada (ej. <em>"Flete Express Bodega $0 - Cortesía"</em>).
+                </p>
+              </div>
+            </div>
+
+            <div class="step-item" style="display: flex; gap: 1rem;">
+              <div class="step-number" style="background: var(--accent-amber); color: #000; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">4</div>
+              <div>
+                <strong style="color: var(--text-primary); font-size: 1rem;">Envío de Factura (Send Invoice) o Cobro Inmediato</strong>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">
+                  Una vez armado el borrador, cuentas con 3 caminos para procesar el pago:
+                </p>
+                <ul style="color: var(--text-secondary); font-size: 0.88rem; margin-top: 0.4rem; margin-left: 1.25rem; line-height: 1.6;">
+                  <li><strong>Send invoice (Enviar factura):</strong> Despacha un correo electrónico corporativo con un botón <em>"Completar tu compra"</em> que redirige al cliente al checkout oficial con los datos pre-cargados.</li>
+                  <li><strong>Collect payment (Cobrar con tarjeta):</strong> El agente ingresa los datos de tarjeta de crédito suministrados por teléfono de forma segura.</li>
+                  <li><strong>Mark as paid (Marcar como pagado):</strong> Para órdenes abonadas por transferencia bancaria directa, efectivo contra entrega o cheque.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 3: GRAPHQL ADMIN API & AUTOMATION               -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="draft-graphql-api">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+            3. Automatización Backend con Shopify GraphQL Admin API
+          </h3>
+
+          <p>
+            En proyectos de arquitectura Headless o integraciones con CRMs (HubSpot, Salesforce) y ERPs (SAP, Odoo), los borradores de pedidos se generan y facturan mediante mutaciones de GraphQL.
+          </p>
+
+          <div class="code-block-container" style="background: #0f172a; border-radius: var(--radius-md); padding: 1.25rem; border: 1px solid #334155; margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <span style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--accent-amber); font-weight: 700;">
+                MUTATION: draftOrderCreate & draftOrderInvoiceSend (GraphQL)
+              </span>
+              <button type="button" class="copy-btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">
+                Copiar
+              </button>
+            </div>
+            <pre style="margin: 0; padding: 0; background: transparent;"><code class="language-graphql"># 1. Crear el borrador con ítems de catálogo + Custom Item + Descuento
+mutation CreateCustomDraftOrder($input: DraftOrderInput!) {
+  draftOrderCreate(input: $input) {
+    draftOrder {
+      id
+      name
+      totalPriceSet {
+        shopMoney {
+          amount
+          currencyCode
+        }
+      }
+      invoiceUrl
+      status
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+
+# 2. Variables de Entrada (Payload)
+# {
+#   "input": {
+#     "customerId": "gid://shopify/Customer/7829103948",
+#     "lineItems": [
+#       {
+#         "variantId": "gid://shopify/ProductVariant/4492109849",
+#         "quantity": 2
+#       },
+#       {
+#         "title": "Grabado Láser Personalizado (Custom Item)",
+#         "originalUnitPrice": "35000.00",
+#         "quantity": 1,
+#         "requiresShipping": false
+#       }
+#     ],
+#     "appliedDiscount": {
+#       "title": "Cortesía Preventa VIP",
+#       "value": 10.0,
+#       "valueType": "PERCENTAGE"
+#     }
+#   }
+# }
+
+# 3. Disparar el envío de factura transaccional por email
+mutation SendDraftInvoice($id: ID!, $email: EmailInput) {
+  draftOrderInvoiceSend(id: $id, email: $email) {
+    draftOrder {
+      id
+      status
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 4: INTERACTIVE LAB - NOW IT'S YOUR TURN          -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="draft-interactive-lab">
+          <h3 class="block-title" style="color: #10b981;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            4. Práctica Interactiva: "Now It's Your Turn!" — Generador de Draft Orders & Facturas
+          </h3>
+
+          <p>
+            <strong>Escenario de Práctica:</strong> Un cliente VIP solicita vía telefónica la compra de un reloj Casio de catálogo más un servicio adicional de <em>"Grabado Láser de Iniciales"</em> (Custom Item) y un descuento de cortesía del 15%. Construye el borrador de pedido, calcula los totales y dispara la factura por email.
+          </p>
+
+          <!-- Interactive Draft Order Builder Widget -->
+          <div class="draft-order-simulator-container" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+              <div>
+                <span class="badge-tag" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">Shopify Admin • Draft Orders Console</span>
+                <h4 style="font-size: 1.2rem; margin-top: 0.25rem;">Borrador: <span id="draftOrderNumberBadge" style="color: var(--brand-shopify);">#DRAFT-1042</span></h4>
+              </div>
+              <button type="button" id="btnResetDraftLab" class="btn-secondary" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">
+                🔄 Restablecer Borrador
+              </button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1.5rem;">
+              <!-- Left Column: Draft Order Configuration -->
+              <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                <!-- Step 1: Products & Custom Items -->
+                <div style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                  <h5 style="color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.95rem; display: flex; align-items: center; justify-content: space-between;">
+                    <span>📦 1. Artículos del Pedido</span>
+                    <button type="button" id="btnAddCustomItemBtn" class="btn-secondary" style="font-size: 0.75rem; padding: 0.2rem 0.6rem; border-color: var(--accent-cyan); color: var(--accent-cyan);">
+                      + Agregar Custom Item
+                    </button>
+                  </h5>
+
+                  <div id="draftLineItemsList" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <!-- Line Item 1 (Catalog) -->
+                    <div class="draft-line-item" style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.05);">
+                      <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 1.5rem;">⌚</span>
+                        <div>
+                          <strong style="font-size: 0.88rem; color: var(--text-primary); display: block;">Casio Vintage Digital A168WA</strong>
+                          <span style="font-size: 0.75rem; color: var(--text-secondary);">SKU: CAS-VNTG-SILVER • $189.000 COP</span>
+                        </div>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="number" id="qtyCatalogItem" value="1" min="1" max="10" style="width: 50px; padding: 0.3rem; background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px; text-align: center;">
+                        <span style="font-size: 0.85rem; font-weight: 700; color: var(--brand-shopify); min-width: 90px; text-align: right;" id="lineTotalCatalog">$189.000</span>
+                      </div>
+                    </div>
+
+                    <!-- Custom Item Container (Initially hidden or active) -->
+                    <div id="customItemRow" style="display: flex; align-items: center; justify-content: space-between; background: rgba(6, 182, 212, 0.08); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px dashed var(--accent-cyan);">
+                      <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 1.5rem;">✨</span>
+                        <div>
+                          <strong style="font-size: 0.88rem; color: var(--accent-cyan); display: block;">Grabado Láser de Iniciales (Custom)</strong>
+                          <span style="font-size: 0.75rem; color: var(--text-secondary);">Ítem fuera de catálogo • $35.000 COP</span>
+                        </div>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="number" id="qtyCustomItem" value="1" min="0" max="5" style="width: 50px; padding: 0.3rem; background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px; text-align: center;">
+                        <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-cyan); min-width: 90px; text-align: right;" id="lineTotalCustom">$35.000</span>
+                        <button type="button" id="btnRemoveCustomItem" style="background: transparent; border: none; color: #ef4444; cursor: pointer; font-size: 1rem;" title="Eliminar ítem">×</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 2: Discounts & Shipping -->
+                <div style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                  <h5 style="color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.95rem;">
+                    🏷️ 2. Descuentos y Flete
+                  </h5>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                      <label style="font-size: 0.8rem; color: var(--text-secondary); display: block; margin-bottom: 0.3rem;">Descuento (%)</label>
+                      <select id="draftDiscountSelect" style="width: 100%; padding: 0.45rem; background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px;">
+                        <option value="0">Sin descuento (0%)</option>
+                        <option value="10">10% Cortesía Soporte</option>
+                        <option value="15" selected>15% Preventa VIP</option>
+                        <option value="20">20% Venta Mayorista</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label style="font-size: 0.8rem; color: var(--text-secondary); display: block; margin-bottom: 0.3rem;">Tarifa de Envío</label>
+                      <select id="draftShippingSelect" style="width: 100%; padding: 0.45rem; background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px;">
+                        <option value="0">Envío Gratis ($0 COP)</option>
+                        <option value="12000" selected>Flete Estándar ($12.000 COP)</option>
+                        <option value="25000">Flete Express 24h ($25.000 COP)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 3: Customer Information -->
+                <div style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                  <h5 style="color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.95rem;">
+                    👤 3. Datos del Cliente & Email
+                  </h5>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                      <label style="font-size: 0.8rem; color: var(--text-secondary); display: block; margin-bottom: 0.3rem;">Nombre Completo</label>
+                      <input type="text" id="draftCustomerName" value="Laura Martínez" style="width: 100%; padding: 0.45rem; background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px;">
+                    </div>
+                    <div>
+                      <label style="font-size: 0.8rem; color: var(--text-secondary); display: block; margin-bottom: 0.3rem;">Email del Destinatario</label>
+                      <input type="email" id="draftCustomerEmail" value="laura.martinez@ejemplo.com" style="width: 100%; padding: 0.45rem; background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px;">
+                    </div>
+                  </div>
+                  <div style="margin-top: 0.75rem;">
+                    <label style="font-size: 0.8rem; color: var(--text-secondary); display: block; margin-bottom: 0.3rem;">Mensaje personalizado en la Factura</label>
+                    <input type="text" id="draftCustomMessage" value="¡Hola Laura! Adjuntamos tu cotización con grabado láser y 15% OFF de cortesía." style="width: 100%; padding: 0.45rem; background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px;">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Column: Live Invoicing & Checkout Preview -->
+              <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <!-- Summary Card -->
+                <div style="background: #0f172a; border-radius: var(--radius-md); padding: 1.25rem; border: 1px solid #334155;">
+                  <span style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--accent-amber); font-weight: 700;">
+                    RESUMEN DE FACTURACIÓN (LIVE TOTALS)
+                  </span>
+
+                  <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.88rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                      <span>Subtotal de Artículos:</span>
+                      <span id="draftSummarySubtotal" style="color: var(--text-primary);">$224.000 COP</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: #10b981;">
+                      <span id="draftSummaryDiscountLabel">Descuento aplicado (15%):</span>
+                      <span id="draftSummaryDiscountAmount">-$33.600 COP</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                      <span>Envío / Flete:</span>
+                      <span id="draftSummaryShipping">$12.000 COP</span>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 0.75rem;">
+                    <span style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">Total a Cobrar:</span>
+                    <span id="draftSummaryGrandTotal" style="font-size: 1.35rem; font-weight: 800; color: var(--brand-shopify);">$202.400 COP</span>
+                  </div>
+                </div>
+
+                <!-- Invoice Email Preview Box -->
+                <div style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); flex: 1;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">
+                      📧 Preview del Email Transaccional de Factura
+                    </span>
+                    <span class="badge-tag" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-size: 0.7rem;">
+                      Ready to Send
+                    </span>
+                  </div>
+
+                  <div style="background: #ffffff; color: #1e293b; padding: 1rem; border-radius: var(--radius-sm); font-size: 0.82rem; line-height: 1.5;">
+                    <div style="font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.4rem; margin-bottom: 0.5rem;">
+                      De: Tienda Casio Colombia &lt;orders@casiostore.co&gt;<br>
+                      Para: <span id="previewEmailTo" style="color: #4338ca;">laura.martinez@ejemplo.com</span>
+                    </div>
+                    <p id="previewEmailBody" style="margin-bottom: 0.75rem; color: #334155;">
+                      ¡Hola Laura! Adjuntamos tu cotización con grabado láser y 15% OFF de cortesía.
+                    </p>
+                    <div style="text-align: center; margin: 0.75rem 0;">
+                      <span style="display: inline-block; background: #008060; color: #ffffff; font-weight: 700; padding: 0.5rem 1.25rem; border-radius: 4px; text-decoration: none; font-size: 0.85rem;">
+                        Completar tu compra (<span id="previewBtnTotal">$202.400 COP</span>) →
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Action Button -->
+                <button type="button" id="btnSendDraftInvoice" class="btn-primary" style="width: 100%; padding: 0.85rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--accent-amber); color: #000; border: none; border-radius: var(--radius-md); cursor: pointer; font-size: 0.95rem;">
+                  <span>✉️</span> Enviar Factura por Email & Simular Pago
+                </button>
+              </div>
+            </div>
+
+            <!-- Feedback Success/Error Box -->
+            <div id="draftOrderFeedback" class="quiz-feedback-box" style="display: none; margin-top: 1.5rem;"></div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 5: KNOWLEDGE CHECK QUIZ                          -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="draft-knowledge-check">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4"></path>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+            5. Knowledge Check: Draft Orders & Custom Items
+          </h3>
+
+          <div class="quiz-card" style="background: var(--bg-surface-elevated); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+            <h4 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.05rem;">
+              1. Si agregas un "Custom Item" (ítem personalizado) a un Draft Order, ¿qué ocurre con el catálogo de productos de tu tienda?
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="draft_q1" value="a">
+                <span>Se crea automáticamente un nuevo producto visible en la tienda online con estado "Draft".</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="draft_q1" value="b">
+                <span>El ítem solo existe dentro de ese pedido específico y NO se agrega como producto a tu catálogo permanente.</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="draft_q1" value="c">
+                <span>Se requiere obligatoriamente asignarle un SKU existente de un producto físico para poder facturarlo.</span>
+              </label>
+            </div>
+            <div id="feedback-draft-q1" class="quiz-feedback" style="margin-top: 0.75rem;"></div>
+          </div>
+
+          <div class="quiz-card" style="background: var(--bg-surface-elevated); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+            <h4 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.05rem;">
+              2. ¿Qué acción permite al comerciante reservar stock del inventario para un cliente antes de que este efectúe el pago de su factura?
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="draft_q2" value="a">
+                <span>Utilizar la opción "Reserve items" (Reservar artículos) en el borrador de pedido.</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="draft_q2" value="b">
+                <span>Duplicar la colección y ocultarla del menú de navegación.</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="draft_q2" value="c">
+                <span>Modificar el archivo <code>settings_data.json</code> en el código del tema.</span>
+              </label>
+            </div>
+            <div id="feedback-draft-q2" class="quiz-feedback" style="margin-top: 0.75rem;"></div>
+          </div>
+
+          <button type="button" id="btnCheckDraftQuiz" class="btn-secondary" style="padding: 0.75rem 1.5rem; font-weight: 600; cursor: pointer;">
+            Verificar Respuestas del Quiz
+          </button>
+        </div>
+      </section>
+
+
     </main>
   </div>
 
@@ -4820,6 +5955,8 @@ shopify theme check --category liquid,performance</code></pre>
   <script src="scripts/theme-inspector.js"></script>
   <script src="scripts/casio-clone.js"></script>
   <script src="scripts/admin-explorer.js"></script>
+  <script src="scripts/rbac-simulator.js"></script>
+  <script src="scripts/draft-orders-lab.js"></script>
   <script src="scripts/app.js"></script>
 </body>
 </html>

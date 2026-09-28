@@ -1,107 +1,79 @@
       <section class="module-section" id="modulo-admin-menus">
         <div class="section-header">
           <span class="section-badge" style="background: linear-gradient(135deg, #10b981, #047857);">Módulo 12 • Operaciones & Back-Office</span>
-          <h2 class="section-title">12. Guía Exhaustiva del Shopify Admin: Arquitectura de Menús y Navegación</h2>
+          <h2 class="section-title">12. Lo que un Dev debe conocer del Shopify Admin</h2>
         </div>
 
         <p>
-          El <strong>Shopify Admin</strong> es el centro de comando operacional donde convergen la gestión de catálogo, el procesamiento de pedidos, la segmentación de clientes, el contenido personalizado y los canales de venta. Para un desarrollador o arquitecto, entender qué reside en cada menú es vital para saber qué APIs consumir, dónde configurar fuentes de datos dinámicas y cómo asesorar a los comerciantes.
+          El <strong>Shopify Admin</strong> no es solo una interfaz para el comerciante; es la fuente de verdad de la arquitectura de datos, el motor de reglas de negocio y el límite de lo que podemos extender mediante código. Como desarrollador o arquitecto, cada área del panel de administración impacta directamente en cómo construyes el frontend en Liquid, qué APIs consumes y cómo diseñas integraciones backend.
         </p>
 
         <!-- ========================================================= -->
-        <!-- SUBTOPIC 1: DESGLOSE ESTRUCTURAL DE LOS MENÚS             -->
+        <!-- SUBTOPIC 1: MATRIZ FUNDAMENTAL DEL DEV EN EL ADMIN        -->
         <!-- ========================================================= -->
-        <div class="content-block" id="admin-desglose-menus">
+        <div class="content-block" id="admin-matriz-dev">
           <h3 class="block-title">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="9" y1="3" x2="9" y2="21"></line>
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
             </svg>
-            1. Desglose Técnico Menú por Menú
+            1. Matriz: Lo que un Dev debe conocer del Admin
           </h3>
+
+          <p>
+            Esta matriz resume las 8 áreas fundamentales del back-office de Shopify, qué representan a nivel de datos y por qué son críticas para el desarrollo:
+          </p>
 
           <div class="table-container">
             <table class="data-table">
               <thead>
                 <tr>
-                  <th>Menú del Admin</th>
-                  <th>Subsecciones Clave</th>
-                  <th>Qué encuentras y para qué se usa</th>
-                  <th>Entidades API Relacionadas</th>
+                  <th style="width: 25%;">Área</th>
+                  <th style="width: 35%;">Qué es</th>
+                  <th style="width: 40%;">Por qué te importa (Impacto Dev)</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><strong>🔍 Search (⌘K)</strong></td>
-                  <td>Búsqueda Global Omnicanal</td>
-                  <td>Acceso directo a cualquier recurso (productos, clientes, órdenes, páginas de configuración) mediante comandos de teclado rápidos.</td>
-                  <td>GraphQL Search API</td>
+                  <td><strong>Productos y variantes</strong></td>
+                  <td>Opciones, SKU, precio, imágenes, código de barras y estado.</td>
+                  <td><strong>Base de PDP, cards y búsqueda:</strong> Es el modelo de datos que alimenta las fichas de producto, selectores de variantes, precios dinámicos y snippets de catálogo.</td>
                 </tr>
                 <tr>
-                  <td><strong>🏠 Home</strong></td>
-                  <td>Action Feed, Insights, Setup Guide</td>
-                  <td>Panel de bienvenida con métricas en tiempo real del día, tareas pendientes que requieren acción y recomendaciones inteligentes con Shopify Sidekick.</td>
-                  <td>Shop Metrics & Notifications</td>
+                  <td><strong>Colecciones</strong></td>
+                  <td>Manuales o automáticas por reglas lógicas de tags, tipo o precio.</td>
+                  <td><strong>Son las PLP y los filtros:</strong> Estructuran las rutas de catálogo (<code>/collections/{handle}</code>), la paginación Liquid y la taxonomía de navegación.</td>
                 </tr>
                 <tr>
-                  <td><strong>📦 Orders</strong></td>
-                  <td>All Orders, Drafts, Abandoned Checkouts</td>
-                  <td>Gestión integral del ciclo de vida de compras: fulfillment (despacho), captura de pagos, devoluciones, reembolsos y recuperación de carritos no completados.</td>
-                  <td><code>Order</code>, <code>DraftOrder</code>, <code>FulfillmentOrder</code>, <code>Refund</code></td>
+                  <td><strong>Inventario</strong></td>
+                  <td>Stock por ubicación física (Locations), transferencias y estados.</td>
+                  <td><strong>Disponibilidad y retiro en tienda (BOPIS):</strong> Alimenta la verificación de stock en tiempo real en la PDP y el selector de sucursales para Store Pickup.</td>
                 </tr>
                 <tr>
-                  <td><strong>🏷️ Products</strong></td>
-                  <td>Products, Collections, Inventory, Transfers, Gift Cards</td>
-                  <td>Administración del catálogo: variantes, control de existencias multialmacén (locations), colecciones manuales/smart y transferencias de stock entre sucursales.</td>
-                  <td><code>Product</code>, <code>ProductVariant</code>, <code>Collection</code>, <code>InventoryLevel</code></td>
+                  <td><strong>Pedidos y clientes</strong></td>
+                  <td>Órdenes, estados de pago/envío, cuentas y clientes B2B.</td>
+                  <td><strong>Webhooks e integraciones ERP:</strong> Dispara eventos en tiempo real (<code>orders/create</code>, <code>fulfillments</code>) para conectar con SAP, NetSuite o CRMs externos.</td>
                 </tr>
                 <tr>
-                  <td><strong>👤 Customers</strong></td>
-                  <td>Customers, Segments</td>
-                  <td>Base de datos de compradores, historial de compras, perfiles B2B y creación de segmentos dinámicos basados en comportamiento (ej: clientes con más de 3 compras).</td>
-                  <td><code>Customer</code>, <code>Company</code>, <code>CustomerSegment</code></td>
+                  <td><strong>Descuentos</strong></td>
+                  <td>Códigos promocionales y descuentos automáticos por carrito.</td>
+                  <td><strong>Lógica custom con Shopify Functions:</strong> Permite programar reglas complejas de precios (2x1 escalonados, bundle discounts) en WebAssembly sin latencia.</td>
                 </tr>
                 <tr>
-                  <td><strong>📈 Growth</strong></td>
-                  <td>Marketing, Campaigns, Automations</td>
-                  <td>Hub de adquisición y retención: creación de campañas con Shopify Email, integraciones publicitarias (Meta, Google, TikTok) y automatizaciones de flujos de marketing.</td>
-                  <td><code>MarketingActivity</code>, <code>MarketingCampaign</code></td>
+                  <td><strong>Contenido</strong></td>
+                  <td>Metaobjetos, páginas institucionales, menús y archivos CDN.</td>
+                  <td><strong>Datos estructurados para el theme:</strong> Expone entidades relacionales en Liquid (<code>shop.metaobjects</code>) para lookbooks, tablas de tallas y diseñadores.</td>
                 </tr>
                 <tr>
-                  <td><strong>🎟️ Discounts</strong></td>
-                  <td>Codes, Automatic Discounts</td>
-                  <td>Estrategias de precios promocionales: montos fijos, porcentajes, Buy X Get Y (BXGY) y envío gratis. Soporte para reglas avanzadas con <strong>Shopify Functions</strong>.</td>
-                  <td><code>DiscountCodeNode</code>, <code>DiscountAutomaticNode</code></td>
+                  <td><strong>Tienda online</strong></td>
+                  <td>Themes, Theme Editor visual, páginas, navegación y preferencias.</td>
+                  <td><strong>Donde vive tu código Liquid:</strong> El entorno de plantillas JSON, secciones modulares, snippets atómicos y assets de JavaScript/CSS.</td>
                 </tr>
                 <tr>
-                  <td><strong>📂 Content</strong></td>
-                  <td>Metaobjects, Files</td>
-                  <td>El CMS desacoplado de Shopify: definición e instanciación de <strong>Metaobjects</strong> (tablas de datos personalizadas) y repositorio CDN central de archivos, imágenes y PDFs.</td>
-                  <td><code>Metaobject</code>, <code>MetaobjectDefinition</code>, <code>File</code></td>
-                </tr>
-                <tr>
-                  <td><strong>🌍 Markets</strong></td>
-                  <td>Primary Market, International Markets, Preferences</td>
-                  <td>Configuración de comercio transfronterizo: monedas locales automáticas (FX), listas de precios diferenciadas por país, dominios locales y cálculo de aranceles.</td>
-                  <td><code>Market</code>, <code>PriceList</code>, <code>Country</code></td>
-                </tr>
-                <tr>
-                  <td><strong>📊 Analytics</strong></td>
-                  <td>Dashboards, Reports, Live View</td>
-                  <td>Inteligencia de negocios: informes financieros, tasas de conversión, fuentes de tráfico, valor promedio del pedido (AOV) y visualizador 3D en tiempo real de visitas.</td>
-                  <td>Shopify Analytics & Reporting API</td>
-                </tr>
-                <tr>
-                  <td><strong>🛍️ Online Store</strong></td>
-                  <td>Themes, Blog Posts, Pages, Navigation, Preferences</td>
-                  <td>El frontend web de la tienda: editor visual de temas OS 2.0, artículos de blog, páginas institucionales, menús de navegación y configuración SEO/Pixel global.</td>
-                  <td><code>Theme</code>, <code>Article</code>, <code>Page</code>, <code>Menu</code></td>
-                </tr>
-                <tr>
-                  <td><strong>🧩 Apps</strong></td>
-                  <td>Installed Apps, App Store, Sales Channels</td>
-                  <td>Directorio de extensiones y aplicaciones instaladas. Permite gestionar Theme App Extensions, webhooks y herramientas de terceros.</td>
-                  <td><code>AppInstallation</code>, <code>WebhookSubscription</code></td>
+                  <td><strong>Configuración</strong></td>
+                  <td>Checkout, pasarelas de pago, zonas de envío, apps e impuestos.</td>
+                  <td><strong>Límites de lo que puedes cambiar:</strong> Conocer las restricciones de la plataforma (Checkout Extensibility vs Checkout.liquid cerrado, OAuth scopes y pasarelas).</td>
                 </tr>
               </tbody>
             </table>
@@ -109,7 +81,205 @@
         </div>
 
         <!-- ========================================================= -->
-        <!-- SUBTOPIC 2: SIMULADOR INTERACTIVO DEL SHOPIFY ADMIN MENU  -->
+        <!-- SUBTOPIC 2: INVENTARIO MULTIALMACÉN & STORE PICKUP        -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="admin-inventario-pickup">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            2. Inventario Multialmacén & Retiro en Tienda (Store Pickup / BOPIS)
+          </h3>
+
+          <p>
+            Shopify normaliza el inventario separando el producto de sus ubicaciones físicas. Cada punto de venta o almacén es una entidad <code>Location</code>, y el stock de cada variante se rastrea mediante <code>InventoryLevel</code>.
+          </p>
+
+          <div class="lab-instruction-card">
+            <div class="lab-step-number">📦</div>
+            <div class="lab-step-body">
+              <h4>Implementación de Disponibilidad de Retiro en Tienda en Liquid (`store-availability.liquid`)</h4>
+              <p>
+                Shopify ofrece un objeto nativo en Liquid llamado <code>variant.store_availabilities</code> que permite renderizar si el producto seleccionado está disponible para recogida inmediata en sucursales cercanas:
+              </p>
+              <div class="code-block-wrapper">
+                <div class="code-block-header">
+                  <span>snippets/pickup-availability.liquid</span>
+                  <button class="copy-btn" data-clipboard-target="#liquid-pickup-code">Copiar</button>
+                </div>
+                <pre><code class="language-liquid" id="liquid-pickup-code">{%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+
+&lt;div class="pickup-availability-container"&gt;
+  {%- if pick_up_availabilities.size &gt; 0 -%}
+    &lt;div class="pickup-header"&gt;
+      &lt;span class="pickup-icon"&gt;🏬&lt;/span&gt;
+      &lt;div&gt;
+        &lt;p class="pickup-title"&gt;Disponible para retiro en tienda hoy&lt;/p&gt;
+        &lt;p class="pickup-subtitle"&gt;Normalmente listo en 2 horas&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;ul class="pickup-stores-list"&gt;
+      {%- for availability in pick_up_availabilities -%}
+        &lt;li class="store-item"&gt;
+          &lt;strong&gt;{{ availability.location.name }}&lt;/strong&gt;
+          &lt;span class="{% if availability.available %}in-stock{% else %}out-stock{% endif %}"&gt;
+            {% if availability.available %}✓ Stock disponible{% else %}✕ No disponible en esta sede{% endif %}
+          &lt;/span&gt;
+          &lt;span class="store-address"&gt;{{ availability.location.address.city }}, {{ availability.location.address.country }}&lt;/span&gt;
+        &lt;/li&gt;
+      {%- endfor -%}
+    &lt;/ul&gt;
+  {%- endif -%}
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 3: PEDIDOS, CLIENTES & WEBHOOKS ERP              -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="admin-pedidos-webhooks">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 16 12 12 8 16"></polyline>
+              <line x1="12" y1="12" x2="12" y2="21"></line>
+              <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
+            </svg>
+            3. Pedidos, Clientes y Arquitectura de Webhooks para Integraciones ERP
+          </h3>
+
+          <p>
+            Cuando una tienda escala, el procesamiento de pedidos y la actualización de clientes se delega a sistemas externos (SAP, NetSuite, Salesforce). Los desarrolladores deben diseñar consumidores de <strong>Webhooks idempotentes</strong> para evitar procesar órdenes duplicadas.
+          </p>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Tópico de Webhook</th>
+                  <th>Momento de Disparo</th>
+                  <th>Payload Clave & Acción en ERP</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>orders/paid</code></td>
+                  <td>Cuando la pasarela confirma el pago del checkout.</td>
+                  <td>Generar factura fiscal, decrementar stock contable y reservar líneas de producto.</td>
+                </tr>
+                <tr>
+                  <td><code>orders/fulfilled</code></td>
+                  <td>Cuando el operador logístico asigna número de guía (tracking).</td>
+                  <td>Notificar al cliente vía SMS/WhatsApp y sincronizar estado en el sistema de transporte.</td>
+                </tr>
+                <tr>
+                  <td><code>customers/create</code></td>
+                  <td>Registro de un nuevo comprador en la tienda.</td>
+                  <td>Crear registro en CRM (HubSpot/Klaviyo) y asociar programa de lealtad.</td>
+                </tr>
+                <tr>
+                  <td><code>refunds/create</code></td>
+                  <td>Devolución parcial o total ejecutada en el Admin.</td>
+                  <td>Emitir nota de crédito contable y ajustar inventario retornado.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 4: DESCUENTOS & SHOPIFY FUNCTIONS                -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="admin-descuentos-functions">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            4. Descuentos y Lógica Personalizada con Shopify Functions
+          </h3>
+
+          <p>
+            Shopify permite crear descuentos mediante el Admin (códigos y reglas estándar) o mediante <strong>Shopify Functions</strong> (código compilado a WebAssembly que corre en los servidores de Shopify durante el checkout en menos de 5ms):
+          </p>
+
+          <div class="callout callout-architect">
+            <div class="callout-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+                <polyline points="2 12 12 17 22 12"></polyline>
+              </svg>
+              Admin Discounts vs Shopify Functions
+            </div>
+            <p>
+              Mientras que los descuentos del admin se limitan a combinaciones sencillas (monto fijo, porcentaje, 2x1), <strong>Shopify Functions (Discount API &amp; Cart Transform API)</strong> te permite programar:
+            </p>
+            <ul style="margin: 0.5rem 0 0 1.25rem; color: var(--text-secondary); line-height: 1.6;">
+              <li>Descuentos escalonados por nivel de lealtad almacenado en un Metafield del cliente.</li>
+              <li>Empaquetado dinámico de productos (Bundles personalizados) que descuentan ítems individuales en inventario.</li>
+              <li>Reordenamiento o renombrado de métodos de pago y tarifas de envío en tiempo real según el código postal.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 5: CONFIGURACIÓN & LÍMITES ARQUITECTÓNICOS       -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="admin-configuracion-limites">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            5. Configuración del Admin y Límites de lo que un Dev Puede Modificar
+          </h3>
+
+          <p>
+            En la sección <strong>Settings (Configuración)</strong> residen las restricciones de infraestructura y seguridad de Shopify:
+          </p>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Configuración</th>
+                  <th>Qué controla</th>
+                  <th>Límites y Reglas de Desarrollo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Checkout</strong></td>
+                  <td>Páginas de pago, información de contacto, propinas y direcciones.</td>
+                  <td><strong>Checkout Extensibility:</strong> En tiendas Plus ya no se edita <code>checkout.liquid</code>. Toda personalización se realiza con <strong>Checkout UI Extensions</strong> en React/TypeScript dentro de un sandbox seguro. En planes estándar, solo se edita branding (colores y logo).</td>
+                </tr>
+                <tr>
+                  <td><strong>Payments (Pasarelas)</strong></td>
+                  <td>Shopify Payments, Mercado Pago, Stripe, PayPal y medios manuales.</td>
+                  <td>No puedes inyectar scripts personalizados en los campos de tarjeta de crédito (cumplimiento estricto PCI-DSS Nivel 1). Los pagos externos deben procesarse mediante Hosted Payment SDK o Payment Customization Functions.</td>
+                </tr>
+                <tr>
+                  <td><strong>Shipping & Delivery</strong></td>
+                  <td>Zonas de envío, tarifas fijas, cálculo por transportadora (Carrier Service).</td>
+                  <td>Para cálculo dinámico en tiempo real se debe implementar una <strong>CarrierService API</strong> o una Function de Delivery Customization.</td>
+                </tr>
+                <tr>
+                  <td><strong>Apps & Sales Channels</strong></td>
+                  <td>Permisos de API (Scopes) y credenciales de Custom Apps.</td>
+                  <td>Toda app debe declarar estrictamente los scopes requeridos (ej. <code>read_products</code>, <code>write_orders</code>) y gestionar el token de forma segura sin exponerlo en el frontend.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 6: SIMULADOR INTERACTIVO DEL SHOPIFY ADMIN MENU  -->
         <!-- ========================================================= -->
         <div class="content-block" id="admin-interactive-explorer">
           <h3 class="block-title">
@@ -118,7 +288,7 @@
               <line x1="8" y1="21" x2="16" y2="21"></line>
               <line x1="12" y1="17" x2="12" y2="21"></line>
             </svg>
-            2. Explorador Interactivo del Menú Shopify Admin
+            6. Explorador Interactivo del Menú Shopify Admin
           </h3>
 
           <p>
@@ -295,7 +465,7 @@
         </div>
 
         <!-- ========================================================= -->
-        <!-- SUBTOPIC 3: KNOWLEDGE CHECK (QUIZ)                        -->
+        <!-- SUBTOPIC 7: KNOWLEDGE CHECK (QUIZ)                        -->
         <!-- ========================================================= -->
         <div class="content-block" id="admin-knowledge-check">
           <h3 class="block-title">
@@ -306,7 +476,7 @@
               <line x1="16" y1="17" x2="8" y2="17"></line>
               <polyline points="10 9 9 9 8 9"></polyline>
             </svg>
-            Knowledge Check: Operaciones del Admin y Gobernanza de Datos
+            7. Knowledge Check: Operaciones del Admin y Gobernanza de Datos
           </h3>
 
           <div class="quiz-container">

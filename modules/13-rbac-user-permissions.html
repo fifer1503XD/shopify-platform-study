@@ -1,0 +1,450 @@
+      <section class="module-section" id="modulo-rbac-roles">
+        <div class="section-header">
+          <span class="section-badge" style="background: linear-gradient(135deg, #6366f1, #4338ca);">Módulo 13 • Seguridad & Gobernanza Enterprise</span>
+          <h2 class="section-title">13. Role-Based Access Controls (RBAC) en Shopify Admin</h2>
+        </div>
+
+        <p>
+          En una organización en crecimiento, cada integrante del equipo desempeña responsabilidades específicas: desde especialistas en atención al cliente y cajeros en sucursales físicas, hasta desarrolladores frontend, redactores de contenido y directores financieros. Administrar los permisos usuario por usuario de manera manual no solo es ineficiente y propenso a errores humanos críticos, sino que representa una vulnerabilidad de seguridad inaceptable en entornos de nivel corporativo.
+        </p>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 1: QUÉ ES RBAC EN SHOPIFY ADMIN                 -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="rbac-concept-overview">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            1. ¿Qué son los Role-Based Access Controls (RBAC)?
+          </h3>
+
+          <p>
+            <strong>Role-Based Access Control (RBAC)</strong> es un mecanismo de autorización que asigna permisos de acceso al sistema a <em>roles abstractos</em> en lugar de a cuentas de usuario individuales. Los usuarios reciben uno o más roles según su función laboral, heredando automáticamente las capacidades y restricciones asociadas a dicho rol.
+          </p>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 25%;">Dimensión</th>
+                  <th style="width: 37%;">Gestión Tradicional (Permisos 1 a 1)</th>
+                  <th style="width: 38%;">Control de Acceso por Roles (RBAC)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Asignación</strong></td>
+                  <td>Se seleccionan casillas de permisos cuenta por cuenta al crear cada usuario.</td>
+                  <td>Se asocia el usuario a un rol preconfigurado (ej: <em>Customer Support</em>, <em>Catalog Merchandiser</em>).</td>
+                </tr>
+                <tr>
+                  <td><strong>Mantenimiento</strong></td>
+                  <td>Si cambia una política, se deben editar decenas o cientos de usuarios manualmente.</td>
+                  <td>Se actualiza la definición del rol una sola vez y se propaga instantáneamente a todos los usuarios vinculados.</td>
+                </tr>
+                <tr>
+                  <td><strong>Escala Multi-tienda</strong></td>
+                  <td>Permisos dispersos y desalineados entre tiendas regionales (ej. US, EU, MX, B2B).</td>
+                  <td>Los roles se gestionan a nivel de <strong>Organization Settings</strong> y se sincronizan entre múltiples tiendas.</td>
+                </tr>
+                <tr>
+                  <td><strong>Riesgo de Seguridad</strong></td>
+                  <td>Alto riesgo de "Permission Creep" (usuarios que acumulan permisos obsoletos con el tiempo).</td>
+                  <td>Cumplimiento estricto del <strong>Principle of Least Privilege (PoLP)</strong> y auditoría centralizada.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="alert-box note">
+            <div class="alert-icon">💡</div>
+            <div class="alert-content">
+              <strong>Principle of Least Privilege (Principio de Menor Privilegio):</strong>
+              En arquitectura de seguridad, cada usuario, sistema o API token debe tener únicamente el conjunto mínimo indispensable de privilegios necesarios para realizar su tarea asignada, ni un permiso más. RBAC es la herramienta fundamental para implementar este principio en el ecosistema Shopify.
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 2: POR QUÉ USAR RBAC EN SHOPIFY                 -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="rbac-why-enterprise">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            2. ¿Por qué implementar RBAC? Los 3 Pilares
+          </h3>
+
+          <div class="grid-2-col" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.5rem 0;">
+            <div class="feature-card" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid var(--accent-cyan);">
+              <h4 style="color: var(--accent-cyan); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>🔄</span> 1. Actualización Uniforme (Uniform Updating)
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                Cuando la empresa introduce una nueva funcionalidad (por ejemplo, gestión de borradores de pedidos o vista de metaobjetos de marketing), no necesitas ingresar a 50 perfiles de colaboradores. Modificas el rol una sola vez y todas las cuentas se actualizan en simultáneo de forma determinística.
+              </p>
+            </div>
+
+            <div class="feature-card" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid var(--brand-shopify);">
+              <h4 style="color: var(--brand-shopify); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>⚡</span> 2. Eficiencia & Onboarding Acelerado
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                Reducción drástica del tiempo de alta y baja de colaboradores o agencias. Al contratar 10 nuevos agentes de atención al cliente, simplemente se les asigna el rol <em>"Customer Service"</em> al enviar la invitación por email, garantizando acceso inmediato y sin errores de configuración.
+              </p>
+            </div>
+
+            <div class="feature-card" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid var(--accent-purple);">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>📈</span> 3. Escalabilidad Multi-tienda & Gobernanza
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                En corporaciones con tiendas de expansión internacional, marcas múltiples o tiendas B2B mayoristas independientes bajo una misma organización de Shopify Plus, los roles se definen a nivel organizacional y pueden aplicarse granularmente a tiendas específicas según el alcance del usuario.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 3: CONFIGURACIÓN PASO A PASO DE UN ROL           -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="rbac-setup-guide">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            3. Creación y Configuración Paso a Paso de Roles
+          </h3>
+
+          <p>
+            El flujo para configurar un nuevo rol en el panel de administración sigue una jerarquía clara:
+          </p>
+
+          <div class="steps-flow-container" style="background: var(--bg-surface-elevated); padding: 1.5rem; border-radius: var(--radius-lg); margin-bottom: 1.5rem;">
+            <div class="step-item" style="display: flex; gap: 1rem; margin-bottom: 1.25rem;">
+              <div class="step-number" style="background: var(--brand-shopify); color: #000; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">1</div>
+              <div>
+                <strong style="color: var(--text-primary); font-size: 1rem;">Navegación al Menú de Roles</strong>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">
+                  En el Shopify Admin, haz clic en el engranaje de <code>Settings</code> (esquina inferior izquierda) &gt; <code>Users and permissions</code> (o <code>Users</code>) &gt; pestaña <code>Roles</code> &gt; botón <code>Add role</code>. (En organizaciones Shopify Plus: <code>Organization settings &gt; Users &gt; Roles</code>).
+                </p>
+              </div>
+            </div>
+
+            <div class="step-item" style="display: flex; gap: 1rem; margin-bottom: 1.25rem;">
+              <div class="step-number" style="background: var(--brand-shopify); color: #000; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">2</div>
+              <div>
+                <strong style="color: var(--text-primary); font-size: 1rem;">Nombre y Descripción Semántica del Rol</strong>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">
+                  Asigna un nombre descriptivo y claro (ej. <em>"Customer Service Specialist"</em>, <em>"Copywriter & Content Editor"</em>, <em>"Logistics & Fulfillment Team"</em>).
+                </p>
+              </div>
+            </div>
+
+            <div class="step-item" style="display: flex; gap: 1rem; margin-bottom: 1.25rem;">
+              <div class="step-number" style="background: var(--brand-shopify); color: #000; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">3</div>
+              <div>
+                <strong style="color: var(--text-primary); font-size: 1rem;">Selección de Permisos: Categoría vs. Permisos Granulares</strong>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">
+                  Shopify ofrece dos niveles de control:
+                </p>
+                <ul style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem; margin-left: 1.25rem; line-height: 1.6;">
+                  <li><strong>Checkbox de Categoría Principal:</strong> Al marcar la casilla de nivel superior (ej. <code>Products</code>), se conceden automáticamente todos los sub-permisos (Ver, Crear/Editar, Exportar, Eliminar).</li>
+                  <li><strong>Permisos Granulares:</strong> Puedes desglosar la categoría y seleccionar únicamente las capacidades permitidas (ej. Solo <em>"View products"</em> sin permitir crear ni modificar precios).</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="step-item" style="display: flex; gap: 1rem;">
+              <div class="step-number" style="background: var(--brand-shopify); color: #000; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">4</div>
+              <div>
+                <strong style="color: var(--text-primary); font-size: 1rem;">Asignación de Tiendas y Usuarios</strong>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">
+                  Guarda el rol. Luego, al invitar o editar usuarios, selecciona el rol creado y especifica a qué tiendas de la organización tendrá acceso esa persona con dicho rol.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 4: SHOPIFY POINT OF SALE (POS) ROLES             -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="rbac-pos-permissions">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+            4. Permisos y Roles en Shopify Point of Sale (POS)
+          </h3>
+
+          <p>
+            El personal de tiendas físicas suele requerir interacción directa con la app <strong>Shopify POS</strong> (en tablets o lectores de tarjetas), pero no necesita acceso al Shopify Admin web completo. Para ello, Shopify cuenta con un sistema de roles y PINs de seguridad específicos para POS:
+          </p>
+
+          <div class="grid-2-col" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; margin: 1.25rem 0;">
+            <div class="feature-box" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-top: 3px solid var(--accent-amber);">
+              <h4 style="color: var(--accent-amber); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>🔢</span> Staff PINs & Bloqueo de Terminal
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                Cada miembro del personal de venta en salón utiliza un código PIN de 4 a 6 dígitos para autenticarse en el POS. Esto permite registrar exactamente qué vendedor cobró cada transacción y calcular comisiones o auditar el flujo de caja sin compartir credenciales.
+              </p>
+            </div>
+
+            <div class="feature-box" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border-top: 3px solid #ec4899;">
+              <h4 style="color: #ec4899; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>🛡️</span> Permisos Sensibles de Caja y Manager Overrides
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                Puedes restringir acciones de alto impacto a cajeros estándar, tales como:
+              </p>
+              <ul style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem; margin-left: 1.25rem; line-height: 1.5;">
+                <li><strong>Descuentos manuales de línea o carrito (Custom Discounts)</strong></li>
+                <li><strong>Emisión de reembolsos físicos o devoluciones sin ticket</strong></li>
+                <li><strong>Apertura y cierre manual del cajón de dinero (Cash Drawer Tracking)</strong></li>
+                <li><strong>Override por PIN de Administrador/Manager en tiempo real</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 5: INTERACTIVE LAB - NOW IT'S YOUR TURN          -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="rbac-interactive-lab">
+          <h3 class="block-title" style="color: #10b981;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+            </svg>
+            5. Práctica Interactiva: "Now It's Your Turn!" — Diseñando el Rol de Customer Service
+          </h3>
+
+          <p>
+            <strong>Misión de Arquitectura:</strong> Configura el rol de <em>"Customer Service Specialist"</em> cumpliendo estrictamente con los requerimientos de la auditoría de seguridad:
+          </p>
+
+          <div class="mission-brief-card" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1.5rem;">
+            <h4 style="color: #10b981; margin-bottom: 0.75rem;">📋 Requisitos de la Actividad:</h4>
+            <ul style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; margin-left: 1.25rem;">
+              <li><strong>Draft Orders (Borradores de Pedido):</strong> Permitir <code>Create and edit draft orders</code> (para tomar pedidos telefónicos o generar cotizaciones).</li>
+              <li><strong>Customers (Clientes):</strong> Permitir <code>Create and edit customers</code> (para registrar o actualizar datos de contacto de clientes).</li>
+              <li><strong>Products (Productos):</strong> Permitir únicamente <code>View products</code> (pueden consultar precios y disponibilidad, pero <strong>NO</strong> deben poder modificar precios, agregar productos ni alterar inventario).</li>
+              <li><strong>Analytics / Settings / Finances:</strong> Acceso <code>Denegado (None)</code> por seguridad financiera.</li>
+            </ul>
+          </div>
+
+          <!-- Interactive Role Builder Widget -->
+          <div class="rbac-simulator-container" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+              <div>
+                <span class="badge-tag" style="background: rgba(99, 102, 241, 0.2); color: #818cf8;">Shopify Admin • Roles & Permissions Builder</span>
+                <h4 style="font-size: 1.2rem; margin-top: 0.25rem;">Configurador de Rol: <span id="rbacRoleNameDisplay" style="color: var(--text-primary);">Customer Service Specialist</span></h4>
+              </div>
+              <button type="button" id="btnResetRbacLab" class="btn-secondary" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">
+                🔄 Reiniciar Configuración
+              </button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+              <!-- Permissions Tree Selector -->
+              <div class="rbac-permission-tree" style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <h5 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                  <span>⚙️</span> Selecciona los Permisos del Rol:
+                </h5>
+
+                <!-- Group 1: Draft Orders -->
+                <div class="perm-group" style="margin-bottom: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.75rem;">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <label style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">
+                      📝 Draft Orders (Borradores de Pedido)
+                    </label>
+                  </div>
+                  <div style="margin-top: 0.5rem; margin-left: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permDraftView" class="rbac-perm-checkbox" data-cat="draft_orders" data-perm="view">
+                      <span>Ver borradores de pedido (View)</span>
+                    </label>
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permDraftCreateEdit" class="rbac-perm-checkbox" data-cat="draft_orders" data-perm="create_edit">
+                      <span>Crear y editar borradores (Create & Edit)</span>
+                    </label>
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permDraftDelete" class="rbac-perm-checkbox" data-cat="draft_orders" data-perm="delete">
+                      <span>Eliminar borradores de pedido (Delete)</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Group 2: Customers -->
+                <div class="perm-group" style="margin-bottom: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.75rem;">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <label style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">
+                      👥 Customers (Clientes)
+                    </label>
+                  </div>
+                  <div style="margin-top: 0.5rem; margin-left: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permCustView" class="rbac-perm-checkbox" data-cat="customers" data-perm="view">
+                      <span>Ver clientes y perfiles (View)</span>
+                    </label>
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permCustCreateEdit" class="rbac-perm-checkbox" data-cat="customers" data-perm="create_edit">
+                      <span>Crear y editar clientes (Create & Edit)</span>
+                    </label>
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permCustExport" class="rbac-perm-checkbox" data-cat="customers" data-perm="export_pii">
+                      <span>Exportar datos PII en CSV (Export)</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Group 3: Products -->
+                <div class="perm-group" style="margin-bottom: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.75rem;">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <label style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">
+                      📦 Products & Inventory (Productos)
+                    </label>
+                  </div>
+                  <div style="margin-top: 0.5rem; margin-left: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permProdView" class="rbac-perm-checkbox" data-cat="products" data-perm="view">
+                      <span>Ver catálogo y variantes (View products)</span>
+                    </label>
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permProdCreateEdit" class="rbac-perm-checkbox" data-cat="products" data-perm="create_edit">
+                      <span>Crear/editar productos y precios (Edit)</span>
+                    </label>
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permProdDelete" class="rbac-perm-checkbox" data-cat="products" data-perm="delete">
+                      <span>Eliminar productos (Delete)</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Group 4: Settings & Finances -->
+                <div class="perm-group">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <label style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">
+                      🔒 Settings & Financials (Configuración & Finanzas)
+                    </label>
+                  </div>
+                  <div style="margin-top: 0.5rem; margin-left: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permSettingsView" class="rbac-perm-checkbox" data-cat="settings" data-perm="view">
+                      <span>Ver configuración de pagos y apps</span>
+                    </label>
+                    <label style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="checkbox" id="permFinancesView" class="rbac-perm-checkbox" data-cat="finances" data-perm="view">
+                      <span>Ver reportes financieros y liquidaciones</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Live Simulator & GraphQL Payload Preview -->
+              <div class="rbac-live-preview" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="background: #0f172a; border-radius: var(--radius-md); padding: 1.25rem; border: 1px solid #334155; flex: 1;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                    <span style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--brand-shopify); font-weight: 700;">
+                      LIVE GRAPHQL MUTATION (Admin API)
+                    </span>
+                    <span id="rbacPermCountBadge" class="badge-tag" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-size: 0.7rem;">
+                      0 permisos activos
+                    </span>
+                  </div>
+                  <pre style="margin: 0; padding: 0; background: transparent;"><code class="language-json" id="rbacPayloadCode" style="font-size: 0.78rem; line-height: 1.4;">{
+  "input": {
+    "name": "Customer Service Specialist",
+    "description": "Manages customer records and creates draft orders.",
+    "permissions": []
+  }
+}</code></pre>
+                </div>
+
+                <!-- Simulation Viewport: What the user actually sees in Admin -->
+                <div style="background: var(--bg-surface-elevated); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                  <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">
+                    Simulación de Menú Visible para el Usuario con este Rol:
+                  </span>
+                  <div id="rbacMenuSimulatedList" style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <span class="badge-tag" style="background: rgba(148, 163, 184, 0.1); color: #94a3b8;">Home (Inicio)</span>
+                  </div>
+                </div>
+
+                <!-- Validation Action Button -->
+                <button type="button" id="btnValidateRbacRole" class="btn-primary" style="width: 100%; padding: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--brand-shopify); color: #000; border: none; border-radius: var(--radius-md); cursor: pointer;">
+                  <span>✓</span> Validar y Asignar Rol de Customer Service
+                </button>
+              </div>
+            </div>
+
+            <!-- Feedback Message Container -->
+            <div id="rbacValidationFeedback" class="quiz-feedback-box" style="display: none; margin-top: 1.5rem;"></div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBTOPIC 6: KNOWLEDGE CHECK QUIZ                          -->
+        <!-- ========================================================= -->
+        <div class="content-block" id="rbac-knowledge-check">
+          <h3 class="block-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4"></path>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+            6. Knowledge Check: RBAC & Staff Governance
+          </h3>
+
+          <div class="quiz-card" style="background: var(--bg-surface-elevated); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+            <h4 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.05rem;">
+              1. Si un rol tiene habilitado el checkbox principal de "Products", ¿qué capacidades adquieren los usuarios vinculados?
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="rbac_q1" value="a">
+                <span>Únicamente pueden ver los productos en modo lectura, sin ver el inventario.</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="rbac_q1" value="b">
+                <span>Todos los permisos de la categoría: ver, crear, editar, eliminar y exportar productos y variantes.</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="rbac_q1" value="c">
+                <span>Solo adquieren permisos si se configuran además reglas de liquidación en Shopify Payments.</span>
+              </label>
+            </div>
+            <div id="feedback-rbac-q1" class="quiz-feedback" style="margin-top: 0.75rem;"></div>
+          </div>
+
+          <div class="quiz-card" style="background: var(--bg-surface-elevated); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+            <h4 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.05rem;">
+              2. ¿Cuál es el método principal para que un cajero desbloquee el terminal de Shopify POS y registre sus ventas físicas?
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="rbac_q2" value="a">
+                <span>Autenticación de dos factores (2FA) por SMS en cada transacción de venta.</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="rbac_q2" value="b">
+                <span>Ingreso de un Staff PIN personalizado de 4 a 6 dígitos asignado a su rol de POS.</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 0.9rem;">
+                <input type="radio" name="rbac_q2" value="c">
+                <span>Iniciando sesión con la cuenta de Shopify Partner de la agencia desarrolladora.</span>
+              </label>
+            </div>
+            <div id="feedback-rbac-q2" class="quiz-feedback" style="margin-top: 0.75rem;"></div>
+          </div>
+
+          <button type="button" id="btnCheckRbacQuiz" class="btn-secondary" style="padding: 0.75rem 1.5rem; font-weight: 600; cursor: pointer;">
+            Verificar Respuestas del Quiz
+          </button>
+        </div>
+      </section>
